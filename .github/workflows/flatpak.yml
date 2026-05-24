@@ -34,8 +34,8 @@ jobs:
       - name: Install KDE runtime and SDK
         run: |
           flatpak install --noninteractive --or-update \
-            org.kde.Platform//6.8 \
-            org.kde.Sdk//6.8
+            org.kde.Platform//6.10 \
+            org.kde.Sdk//6.10
 
       - name: Build Flatpak
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
