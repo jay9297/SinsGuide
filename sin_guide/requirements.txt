@@ -1,0 +1,8 @@
+PySide6>=6.6.0
+pynput>=1.7.6
+requests>=2.31.0
+python-xlib>=0.33
+pytesseract>=0.3.10
+pytest>=8.0
+pytest-qt>=4.4
+Pillow>=10.0

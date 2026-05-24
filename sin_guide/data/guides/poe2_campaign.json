@@ -1,0 +1,4460 @@
+{
+  "version": "0.1.0",
+  "game": "poe2",
+  "acts": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "steps": [
+    {
+      "id": "a1_the_riverbank_001",
+      "act": 1,
+      "zone": "The Riverbank",
+      "step_number": 1,
+      "description": "Follow the Tutorial and kill the Bloated Miller",
+      "type": "kill",
+      "target": "Bloated Miller",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Clearfell Encampment"
+      }
+    },
+    {
+      "id": "a1_the_clearfell_encampment_002",
+      "act": 1,
+      "zone": "The Clearfell Encampment",
+      "step_number": 2,
+      "description": "Claim your Quest Reward Skill Gem from Renly",
+      "type": "quest_reward",
+      "target": "Renly",
+      "hint": "Check Renly's Shop for any items you can afford",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_clearfell_003",
+      "act": 1,
+      "zone": "Clearfell",
+      "step_number": 3,
+      "description": "(Optional) Loot the Abandoned Stash in the Mysterious Campsite",
+      "type": "loot",
+      "target": "Abandoned Stash",
+      "hint": "Contains an Uncut Skill Gem. Checkpoint nearby to make it easier to spot.",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_clearfell_004",
+      "act": 1,
+      "zone": "Clearfell",
+      "step_number": 4,
+      "description": "(Permanent Buff) Defeat Beira of the Rotten Pack in the Middle North of the zone",
+      "type": "kill",
+      "target": "Beira of the Rotten Pack",
+      "hint": "+10% to Cold Resistance permanent buff",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_clearfell_005",
+      "act": 1,
+      "zone": "Clearfell",
+      "step_number": 5,
+      "description": "Activate the Waypoint and enter the Mud Burrow",
+      "type": "travel",
+      "target": "Mud Burrow",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Mud Burrow"
+      }
+    },
+    {
+      "id": "a1_the_mud_burrow_006",
+      "act": 1,
+      "zone": "The Mud Burrow",
+      "step_number": 6,
+      "description": "(Optional) Kill The Devourer",
+      "type": "kill",
+      "target": "The Devourer",
+      "hint": "Level 2 Uncut Skill Gem Drop",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_mud_burrow_007",
+      "act": 1,
+      "zone": "The Mud Burrow",
+      "step_number": 7,
+      "description": "Portal to Town and Speak to Renly for Uncut Support Gem Quest Reward",
+      "type": "quest_reward",
+      "target": "Renly",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grelwood_008",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 8,
+      "description": "Return to Clearfell via Waypoint and head North East to enter The Grelwood",
+      "type": "travel",
+      "target": "The Grelwood",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Grelwood"
+      }
+    },
+    {
+      "id": "a1_the_grelwood_009",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 9,
+      "description": "(Optional) Areagne's Hut: Flask Upgrades from Cauldron + Kill Areagne for Uncut Support Gem",
+      "type": "kill",
+      "target": "Areagne",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grelwood_010",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 10,
+      "description": "(Optional) Kill Brambleghast: Level 1 Uncut Skill Gem drop",
+      "type": "kill",
+      "target": "Brambleghast",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grelwood_011",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 11,
+      "description": "Activate Tree of Souls Waypoint, enter Grim Tangle and activate Waypoint, return to Grelwood",
+      "type": "travel",
+      "target": "The Grim Tangle",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grelwood_012",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 12,
+      "description": "Enter the Red Vale and activate three Rust Altars",
+      "type": "travel",
+      "target": "The Red Vale",
+      "hint": "Entrance is usually near Brambleghast",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Red Vale"
+      }
+    },
+    {
+      "id": "a1_the_red_vale_013",
+      "act": 1,
+      "zone": "The Red Vale",
+      "step_number": 13,
+      "description": "Kill The Rust King",
+      "type": "kill",
+      "target": "The Rust King",
+      "hint": "Each Altar is located in a broad loop around the zone",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_clearfell_encampment_014",
+      "act": 1,
+      "zone": "The Clearfell Encampment",
+      "step_number": 14,
+      "description": "Portal to Town. Return all three Runed Quest Items to Renly",
+      "type": "quest_reward",
+      "target": "Renly",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grelwood_015",
+      "act": 1,
+      "zone": "The Grelwood",
+      "step_number": 15,
+      "description": "Go to Grelwood via Waypoint. Summon Una and Runed Spike the Tree of Souls",
+      "type": "quest_reward",
+      "target": "Una",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_clearfell_encampment_016",
+      "act": 1,
+      "zone": "The Clearfell Encampment",
+      "step_number": 16,
+      "description": "Waypoint to Town and speak to Una again",
+      "type": "quest_reward",
+      "target": "Una",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grim_tangle_017",
+      "act": 1,
+      "zone": "The Grim Tangle",
+      "step_number": 17,
+      "description": "Return to Grelwood and enter the Grim Tangle",
+      "type": "travel",
+      "target": "The Grim Tangle",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Grim Tangle"
+      }
+    },
+    {
+      "id": "a1_the_grim_tangle_018",
+      "act": 1,
+      "zone": "The Grim Tangle",
+      "step_number": 18,
+      "description": "(Optional) Kill The Rotten Druid: Uncut Support Gem",
+      "type": "kill",
+      "target": "The Rotten Druid",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_grim_tangle_019",
+      "act": 1,
+      "zone": "The Grim Tangle",
+      "step_number": 19,
+      "description": "Enter The Cemetery of the Eternals",
+      "type": "travel",
+      "target": "The Cemetery of the Eternals",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Cemetery of the Eternals"
+      }
+    },
+    {
+      "id": "a1_the_cemetery_of_the_eternals_020",
+      "act": 1,
+      "zone": "The Cemetery of the Eternals",
+      "step_number": 20,
+      "description": "(Optional) Loot the Ancient Ruins Grave Site: Random Ring",
+      "type": "loot",
+      "target": "Ancient Ruins",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_cemetery_of_the_eternals_021",
+      "act": 1,
+      "zone": "The Cemetery of the Eternals",
+      "step_number": 21,
+      "description": "Locate and complete Mausoleum of the Praetor and Tomb of the Consort (in any order)",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_mausoleum_of_the_praetor_022",
+      "act": 1,
+      "zone": "The Mausoleum of the Praetor",
+      "step_number": 22,
+      "description": "(Optional) Loot the Forgotten Riches: Gold and Random Loot",
+      "type": "loot",
+      "target": "Forgotten Riches",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_mausoleum_of_the_praetor_023",
+      "act": 1,
+      "zone": "The Mausoleum of the Praetor",
+      "step_number": 23,
+      "description": "Defeat Draven, Eternal Praetor",
+      "type": "kill",
+      "target": "Draven, Eternal Praetor",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_tomb_of_the_consort_024",
+      "act": 1,
+      "zone": "The Tomb of the Consort",
+      "step_number": 24,
+      "description": "(Optional) Activate the Embattled Trove ambush and defeat Rare Eternal Knight: Uncut Support Gem",
+      "type": "kill",
+      "target": "Eternal Knight",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_tomb_of_the_consort_025",
+      "act": 1,
+      "zone": "The Tomb of the Consort",
+      "step_number": 25,
+      "description": "Kill Asinia, Praetor Consort",
+      "type": "kill",
+      "target": "Asinia, Praetor Consort",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_cemetery_of_the_eternals_026",
+      "act": 1,
+      "zone": "The Cemetery of the Eternals",
+      "step_number": 26,
+      "description": "Return to Cemetery. Once both bosses killed, speak to Lachlann and open Memorial Gate",
+      "type": "quest_reward",
+      "target": "Lachlann",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_cemetery_of_the_eternals_027",
+      "act": 1,
+      "zone": "The Cemetery of the Eternals",
+      "step_number": 27,
+      "description": "Defeat Lachlann of Endless Lament",
+      "type": "kill",
+      "target": "Lachlann of Endless Lament",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_hunting_grounds_028",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 28,
+      "description": "Enter Hunting Grounds, Waypoint to Town and speak to Una",
+      "type": "quest_reward",
+      "target": "Una",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Hunting Grounds"
+      }
+    },
+    {
+      "id": "a1_the_hunting_grounds_029",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 29,
+      "description": "(Permanent Buff) Kill The Crowbell: +2 Passive Skill Points",
+      "type": "kill",
+      "target": "The Crowbell",
+      "hint": "Look for a wooden swing door with obvious arena nearby",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_hunting_grounds_030",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 30,
+      "description": "(Optional) Kill the Dryads at the Dryadic Ritual: Uncut Support Gem",
+      "type": "kill",
+      "target": "Dryads",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_hunting_grounds_031",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 31,
+      "description": "(Optional) Complete the Ritual Site: Level 4 Uncut Skill Gem",
+      "type": "loot",
+      "target": "Ritual Site",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_hunting_grounds_032",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 32,
+      "description": "Enter Freythorn, and activate the Waypoint",
+      "type": "travel",
+      "target": "Freythorn",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Freythorn"
+      }
+    },
+    {
+      "id": "a1_the_hunting_grounds_033",
+      "act": 1,
+      "zone": "The Hunting Grounds",
+      "step_number": 33,
+      "description": "Enter Ogham Village, and activate the Waypoint",
+      "type": "travel",
+      "target": "Ogham Village",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ogham Village"
+      }
+    },
+    {
+      "id": "a1_freythorn_034",
+      "act": 1,
+      "zone": "Freythorn",
+      "step_number": 34,
+      "description": "Return to Town via Waypoint and check Una for Greater Life Flask and Greater Mana Flask if needed",
+      "type": "quest_reward",
+      "target": "Una",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_freythorn_035",
+      "act": 1,
+      "zone": "Freythorn",
+      "step_number": 35,
+      "description": "Locate and complete three Rituals",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_freythorn_036",
+      "act": 1,
+      "zone": "Freythorn",
+      "step_number": 36,
+      "description": "Activate the final Ritual and kill The King in the Mists",
+      "type": "kill",
+      "target": "The King in the Mists",
+      "hint": "You can purchase Items from the Ritual Altar afterwards",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_freythorn_037",
+      "act": 1,
+      "zone": "Freythorn",
+      "step_number": 37,
+      "description": "Activate Gembloom Skull: +30 Spirit and Uncut Spirit Gem",
+      "type": "quest_reward",
+      "target": "Gembloom Skull",
+      "hint": "",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_clearfell_encampment_038",
+      "act": 1,
+      "zone": "The Clearfell Encampment",
+      "step_number": 38,
+      "description": "Portal to Town and speak to Finn for a Quest Reward choice of Ruby/Sapphire/Topaz Charms",
+      "type": "quest_reward",
+      "target": "Finn",
+      "hint": "A Sapphire Charm is recommended for the upcoming final Act 1 boss",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_farmlands_039",
+      "act": 1,
+      "zone": "Ogham Farmlands",
+      "step_number": 39,
+      "description": "Take the Waypoint to Ogham Farmlands",
+      "type": "travel",
+      "target": "Ogham Farmlands",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ogham Farmlands"
+      }
+    },
+    {
+      "id": "a1_ogham_farmlands_040",
+      "act": 1,
+      "zone": "Ogham Farmlands",
+      "step_number": 40,
+      "description": "(Permanent Buff) Find Una's Lute in a ruined hut (behind broken carts)",
+      "type": "loot",
+      "target": "Una's Lute",
+      "hint": "Return Lute to Una in town for +2 Passive Skill Points",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_farmlands_041",
+      "act": 1,
+      "zone": "Ogham Farmlands",
+      "step_number": 41,
+      "description": "(Optional) Kill the Rare Feral Mutt in the Crop Circle: Level 4 Uncut Skill Gem",
+      "type": "kill",
+      "target": "Feral Mutt",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_farmlands_042",
+      "act": 1,
+      "zone": "Ogham Farmlands",
+      "step_number": 42,
+      "description": "Enter Ogham Village",
+      "type": "travel",
+      "target": "Ogham Village",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ogham Village"
+      }
+    },
+    {
+      "id": "a1_ogham_village_043",
+      "act": 1,
+      "zone": "Ogham Village",
+      "step_number": 43,
+      "description": "Locate Renley's Workshop Smithing Tools (Anvil Sign, Large Building)",
+      "type": "loot",
+      "target": "Smithing Tools",
+      "hint": "Only needed on first character per league",
+      "tags": [
+        "league_start_only"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_village_044",
+      "act": 1,
+      "zone": "Ogham Village",
+      "step_number": 44,
+      "description": "Kill The Executioner",
+      "type": "kill",
+      "target": "The Executioner",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_village_045",
+      "act": 1,
+      "zone": "Ogham Village",
+      "step_number": 45,
+      "description": "Free Leitis and proceed to Manor Ramparts",
+      "type": "travel",
+      "target": "The Manor Ramparts",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Manor Ramparts"
+      }
+    },
+    {
+      "id": "a1_the_manor_ramparts_046",
+      "act": 1,
+      "zone": "The Manor Ramparts",
+      "step_number": 46,
+      "description": "Waypoint to town to talk to Leitis: Level 5 Uncut Skill Gem",
+      "type": "quest_reward",
+      "target": "Leitis",
+      "hint": "Good time to turn in Una's Lute, Renley's Tools and do gear management",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_manor_ramparts_047",
+      "act": 1,
+      "zone": "The Manor Ramparts",
+      "step_number": 47,
+      "description": "(Optional) Cut down the Hanged Man at the Gallows: Uncut Support Gem",
+      "type": "loot",
+      "target": "Hanged Man",
+      "hint": "You can click the Hanged Man from downstairs",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_manor_ramparts_048",
+      "act": 1,
+      "zone": "The Manor Ramparts",
+      "step_number": 48,
+      "description": "Enter Ogham Manor",
+      "type": "travel",
+      "target": "Ogham Manor",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ogham Manor"
+      }
+    },
+    {
+      "id": "a1_ogham_manor_049",
+      "act": 1,
+      "zone": "Ogham Manor",
+      "step_number": 49,
+      "description": "(Permanent Buff) Defeat Candlemass: +20 Maximum Life",
+      "type": "kill",
+      "target": "Candlemass",
+      "hint": "",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_ogham_manor_050",
+      "act": 1,
+      "zone": "Ogham Manor",
+      "step_number": 50,
+      "description": "Defeat Count Ogham",
+      "type": "kill",
+      "target": "Count Ogham",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a1_the_clearfell_encampment_051",
+      "act": 1,
+      "zone": "The Clearfell Encampment",
+      "step_number": 51,
+      "description": "Portal to Town and speak to The Hooded One to proceed to Act 2",
+      "type": "quest_reward",
+      "target": "The Hooded One",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_vastiri_outskirts_052",
+      "act": 2,
+      "zone": "Vastiri Outskirts",
+      "step_number": 52,
+      "description": "Kill Rathbreaker",
+      "type": "kill",
+      "target": "Rathbreaker",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ardura Caravan"
+      }
+    },
+    {
+      "id": "a2_ardura_caravan_053",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 53,
+      "description": "Speak to Risu and Asala. Shop and gear up",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Good time to shop and gear up",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_054",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 54,
+      "description": "Use the Desert Map to take the caravan to Mawdun Quarry",
+      "type": "travel",
+      "target": "Mawdun Quarry",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Mawdun Quarry"
+      }
+    },
+    {
+      "id": "a2_mawdun_quarry_055",
+      "act": 2,
+      "zone": "Mawdun Quarry",
+      "step_number": 55,
+      "description": "Proceed through the zone and take the exit to Mawdun Mine",
+      "type": "travel",
+      "target": "Mawdun Mine",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Mawdun Mine"
+      }
+    },
+    {
+      "id": "a2_mawdun_mine_056",
+      "act": 2,
+      "zone": "Mawdun Mine",
+      "step_number": 56,
+      "description": "Kill Rudja, the Dread Engineer",
+      "type": "kill",
+      "target": "Rudja, the Dread Engineer",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_mawdun_mine_057",
+      "act": 2,
+      "zone": "Mawdun Mine",
+      "step_number": 57,
+      "description": "Free Risu from the cage and speak to them",
+      "type": "quest_reward",
+      "target": "Risu",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_058",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 58,
+      "description": "Portal to Town and speak to Risu and Asala",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_059",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 59,
+      "description": "Use the Desert Map to travel to the Halani Gates",
+      "type": "travel",
+      "target": "The Halani Gates",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Halani Gates"
+      }
+    },
+    {
+      "id": "a2_the_halani_gates_060",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 60,
+      "description": "Speak to Asala",
+      "type": "quest_reward",
+      "target": "Asala",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_061",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 61,
+      "description": "Travel to Traitor's Passage via the Desert Map",
+      "type": "travel",
+      "target": "Traitor's Passage",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Traitor's Passage"
+      }
+    },
+    {
+      "id": "a2_traitor's_passage_062",
+      "act": 2,
+      "zone": "Traitor's Passage",
+      "step_number": 62,
+      "description": "(Ascendancy) Locate and open the Ancient Seal",
+      "type": "travel",
+      "target": "",
+      "hint": "Located near a Lore Pillar",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_traitor's_passage_063",
+      "act": 2,
+      "zone": "Traitor's Passage",
+      "step_number": 63,
+      "description": "Defeat Balbala, the Traitor: Balbala's Barya for Trial of Sekhemas",
+      "type": "kill",
+      "target": "Balbala, the Traitor",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_064",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 64,
+      "description": "Exit to the Halani Gates",
+      "type": "travel",
+      "target": "The Halani Gates",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Halani Gates"
+      }
+    },
+    {
+      "id": "a2_the_halani_gates_065",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 65,
+      "description": "Summon Asala and proceed through the zone",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_066",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 66,
+      "description": "(Optional) Kill L'im the Impaler: Level 6 Uncut Skill Gem",
+      "type": "kill",
+      "target": "L'im the Impaler",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_067",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 67,
+      "description": "Defeat Jamanra",
+      "type": "kill",
+      "target": "Jamanra",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_068",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 68,
+      "description": "Run to the sandstorm until prompted to leave, then return to town",
+      "type": "travel",
+      "target": "Ardura Caravan",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ardura Caravan"
+      }
+    },
+    {
+      "id": "a2_ardura_caravan_069",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 69,
+      "description": "Speak to Zarka for a Level 7 Uncut Skill Gem",
+      "type": "quest_reward",
+      "target": "Zarka",
+      "hint": "Start looking for Giant Life Flask and Giant Mana Flask upgrades if level 23",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_trial_of_the_sekhemas_070",
+      "act": 2,
+      "zone": "Trial of the Sekhemas",
+      "step_number": 70,
+      "description": "Travel to the Trial of the Sekhemas via the Desert Map",
+      "type": "travel",
+      "target": "Trial of the Sekhemas",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Trial of the Sekhemas"
+      }
+    },
+    {
+      "id": "a2_trial_of_the_sekhemas_071",
+      "act": 2,
+      "zone": "Trial of the Sekhemas",
+      "step_number": 71,
+      "description": "Speak to Balbala. Place Balbala's Barya and the Urn Relic in the altar",
+      "type": "quest_reward",
+      "target": "Balbala",
+      "hint": "Use an Orb of Augmentation to enhance the Relic if you have one",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_trial_of_the_sekhemas_072",
+      "act": 2,
+      "zone": "Trial of the Sekhemas",
+      "step_number": 72,
+      "description": "Complete the first floor and defeat Rattlecage, the Earthbreaker",
+      "type": "kill",
+      "target": "Rattlecage, the Earthbreaker",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_trial_of_the_sekhemas_073",
+      "act": 2,
+      "zone": "Trial of the Sekhemas",
+      "step_number": 73,
+      "description": "Enter the Treasure Room. Touch the Altar of Ascendancy and loot chests",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Purchase Relics from Balbala if able",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_074",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 74,
+      "description": "Leave the Trial and return to Town",
+      "type": "travel",
+      "target": "Ardura Caravan",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ardura Caravan"
+      }
+    },
+    {
+      "id": "a2_keth_075",
+      "act": 2,
+      "zone": "Keth",
+      "step_number": 75,
+      "description": "Travel to Keth via the Desert Map",
+      "type": "travel",
+      "target": "Keth",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Keth"
+      }
+    },
+    {
+      "id": "a2_keth_076",
+      "act": 2,
+      "zone": "Keth",
+      "step_number": 76,
+      "description": "Kill snake monsters until you find the Kabala Clan Relic",
+      "type": "kill",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_keth_077",
+      "act": 2,
+      "zone": "Keth",
+      "step_number": 77,
+      "description": "(Permanent Buff) Kill Kabala, Constrictor Queen: +2 Passives",
+      "type": "kill",
+      "target": "Kabala, Constrictor Queen",
+      "hint": "Located in the middle of the zone, hiding underground in a pit with a checkpoint",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_keth_078",
+      "act": 2,
+      "zone": "Keth",
+      "step_number": 78,
+      "description": "(Optional) Enter and loot the Abandoned Shrine: Chest with a guaranteed Magic Amulet",
+      "type": "loot",
+      "target": "Abandoned Shrine",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_keth_079",
+      "act": 2,
+      "zone": "Keth",
+      "step_number": 79,
+      "description": "Exit to the Lost City",
+      "type": "travel",
+      "target": "The Lost City",
+      "hint": "Located opposite side to the zone entrance, after a big bridge",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Lost City"
+      }
+    },
+    {
+      "id": "a2_the_lost_city_080",
+      "act": 2,
+      "zone": "The Lost City",
+      "step_number": 80,
+      "description": "(Optional) The Golden Chest: Uncut Spirit Gem",
+      "type": "loot",
+      "target": "Golden Chest",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_lost_city_081",
+      "act": 2,
+      "zone": "The Lost City",
+      "step_number": 81,
+      "description": "(Optional) The Gilded Beetle: Random Ruby, Sapphire, or Emerald Jewel",
+      "type": "loot",
+      "target": "Gilded Beetle",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_lost_city_082",
+      "act": 2,
+      "zone": "The Lost City",
+      "step_number": 82,
+      "description": "Locate and use the exit to the Buried Shrines",
+      "type": "travel",
+      "target": "Buried Shrines",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Buried Shrines"
+      }
+    },
+    {
+      "id": "a2_buried_shrines_083",
+      "act": 2,
+      "zone": "Buried Shrines",
+      "step_number": 83,
+      "description": "(Optional) The Elemental Offering: Choose an Offering to obtain a Resistance Ring",
+      "type": "loot",
+      "target": "",
+      "hint": "Choose Fire if Fire Resistance is low for the upcoming boss fight",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_buried_shrines_084",
+      "act": 2,
+      "zone": "Buried Shrines",
+      "step_number": 84,
+      "description": "(Optional) Open the Guarded Sarcophagus: Uncut Support Gem",
+      "type": "loot",
+      "target": "Guarded Sarcophagus",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_buried_shrines_085",
+      "act": 2,
+      "zone": "Buried Shrines",
+      "step_number": 85,
+      "description": "Defeat Azarian the Forsaken Son",
+      "type": "kill",
+      "target": "Azarian the Forsaken Son",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_buried_shrines_086",
+      "act": 2,
+      "zone": "Buried Shrines",
+      "step_number": 86,
+      "description": "Speak to the Water Goddess and claim The Essence of Water",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_087",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 87,
+      "description": "Portal to Town and speak to Zarka for an Uncut Support Gem",
+      "type": "quest_reward",
+      "target": "Zarka",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_088",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 88,
+      "description": "Travel to the Mastodon Badlands via the Desert Map",
+      "type": "travel",
+      "target": "Mastodon Badlands",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Mastodon Badlands"
+      }
+    },
+    {
+      "id": "a2_mastodon_badlands_089",
+      "act": 2,
+      "zone": "Mastodon Badlands",
+      "step_number": 89,
+      "description": "(Optional) Loot the Shrine of Bones: Uncut Support Gem",
+      "type": "loot",
+      "target": "Shrine of Bones",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_mastodon_badlands_090",
+      "act": 2,
+      "zone": "Mastodon Badlands",
+      "step_number": 90,
+      "description": "Enter The Bone Pits",
+      "type": "travel",
+      "target": "The Bone Pits",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Bone Pits"
+      }
+    },
+    {
+      "id": "a2_the_bone_pits_091",
+      "act": 2,
+      "zone": "The Bone Pits",
+      "step_number": 91,
+      "description": "Kill Monsters until you obtain the Sun Clan Relic",
+      "type": "kill",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_bone_pits_092",
+      "act": 2,
+      "zone": "The Bone Pits",
+      "step_number": 92,
+      "description": "Locate and defeat Iktab and Ekbab",
+      "type": "kill",
+      "target": "Iktab and Ekbab",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_093",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 93,
+      "description": "Portal to Town. Travel to The Valley of Titans via the Desert Map",
+      "type": "travel",
+      "target": "The Valley of the Titans",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Valley of the Titans"
+      }
+    },
+    {
+      "id": "a2_the_valley_of_the_titans_094",
+      "act": 2,
+      "zone": "The Valley of the Titans",
+      "step_number": 94,
+      "description": "Find and click the three ancient seals located by Titans to open the Titan Grotto",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_valley_of_the_titans_095",
+      "act": 2,
+      "zone": "The Valley of the Titans",
+      "step_number": 95,
+      "description": "(Permanent Buff) Locate the Relic Altar near the Waypoint and place the Sun and Kabala Clan Relics",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Choose a buff (can be changed later)",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_valley_of_the_titans_096",
+      "act": 2,
+      "zone": "The Valley of the Titans",
+      "step_number": 96,
+      "description": "Enter the Titan Grotto",
+      "type": "travel",
+      "target": "The Titan Grotto",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Titan Grotto"
+      }
+    },
+    {
+      "id": "a2_the_titan_grotto_097",
+      "act": 2,
+      "zone": "The Titan Grotto",
+      "step_number": 97,
+      "description": "Defeat Zalmarath, the Colossus",
+      "type": "kill",
+      "target": "Zalmarath, the Colossus",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_098",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 98,
+      "description": "Portal to Town and speak to Zarka: Uncut Support Gem",
+      "type": "quest_reward",
+      "target": "Zarka",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_halani_gates_099",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 99,
+      "description": "Travel to the Halani Gates. Use The Horn of the Vastiri at the front of the Caravan",
+      "type": "travel",
+      "target": "The Halani Gates",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Halani Gates"
+      }
+    },
+    {
+      "id": "a2_the_halani_gates_100",
+      "act": 2,
+      "zone": "The Halani Gates",
+      "step_number": 100,
+      "description": "Speak to Asala. Travel to Deshar via Desert Map",
+      "type": "travel",
+      "target": "Deshar",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Deshar"
+      }
+    },
+    {
+      "id": "a2_deshar_101",
+      "act": 2,
+      "zone": "Deshar",
+      "step_number": 101,
+      "description": "(Permanent Buff) Locate the Fallen Dekhara and take the Final Letter",
+      "type": "loot",
+      "target": "",
+      "hint": "Check the base of each round building for the Dekhara",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_deshar_102",
+      "act": 2,
+      "zone": "Deshar",
+      "step_number": 102,
+      "description": "Exit to the Path of Mourning",
+      "type": "travel",
+      "target": "The Path of Mourning",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Path of Mourning"
+      }
+    },
+    {
+      "id": "a2_the_path_of_mourning_103",
+      "act": 2,
+      "zone": "The Path of Mourning",
+      "step_number": 103,
+      "description": "Waypoint to Town. Deliver Final Letter to Shambrin: +2 Passive Points",
+      "type": "quest_reward",
+      "target": "Shambrin",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_path_of_mourning_104",
+      "act": 2,
+      "zone": "The Path of Mourning",
+      "step_number": 104,
+      "description": "(Optional) Shifting Vases event: Uncut Support Gem",
+      "type": "loot",
+      "target": "Shifting Vases",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_path_of_mourning_105",
+      "act": 2,
+      "zone": "The Path of Mourning",
+      "step_number": 105,
+      "description": "Exit to The Spires of Deshar",
+      "type": "travel",
+      "target": "The Spires of Deshar",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Spires of Deshar"
+      }
+    },
+    {
+      "id": "a2_the_spires_of_deshar_106",
+      "act": 2,
+      "zone": "The Spires of Deshar",
+      "step_number": 106,
+      "description": "(Permanent Buff) Activate the Sisters of Garukhan shrine: +10% Lightning Resistance",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_spires_of_deshar_107",
+      "act": 2,
+      "zone": "The Spires of Deshar",
+      "step_number": 107,
+      "description": "Defeat Tor Gul, the Defiler",
+      "type": "kill",
+      "target": "Tor Gul, the Defiler",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_108",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 108,
+      "description": "Portal to Town. Speak to Asala",
+      "type": "quest_reward",
+      "target": "Asala",
+      "hint": "Vendors can sell level 30 key items around here",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_the_dreadnought_109",
+      "act": 2,
+      "zone": "The Dreadnought",
+      "step_number": 109,
+      "description": "Travel to The Dreadnought via Desert Map",
+      "type": "travel",
+      "target": "The Dreadnought",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Dreadnought"
+      }
+    },
+    {
+      "id": "a2_the_dreadnought_110",
+      "act": 2,
+      "zone": "The Dreadnought",
+      "step_number": 110,
+      "description": "Fight your way to the Dreadnought Vanguard exit",
+      "type": "travel",
+      "target": "The Dreadnought Vanguard",
+      "hint": "Final checkpoint has multiple blue monsters you can farm",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Dreadnought Vanguard"
+      }
+    },
+    {
+      "id": "a2_the_dreadnought_vanguard_111",
+      "act": 2,
+      "zone": "The Dreadnought Vanguard",
+      "step_number": 111,
+      "description": "Locate and defeat Jamanra, the Abomination",
+      "type": "kill",
+      "target": "Jamanra, the Abomination",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a2_ardura_caravan_112",
+      "act": 2,
+      "zone": "Ardura Caravan",
+      "step_number": 112,
+      "description": "Speak to the Hooded One and Asala. Travel to Sandswept Marsh in Act 3",
+      "type": "travel",
+      "target": "Sandswept Marsh",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Sandswept Marsh"
+      }
+    },
+    {
+      "id": "a3_sandswept_marsh_113",
+      "act": 3,
+      "zone": "Sandswept Marsh",
+      "step_number": 113,
+      "description": "(Optional) Kill Rootdredge: Level 9 Uncut Skill Gem",
+      "type": "kill",
+      "target": "Rootdredge",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_sandswept_marsh_114",
+      "act": 3,
+      "zone": "Sandswept Marsh",
+      "step_number": 114,
+      "description": "(Optional) Loot Corpse at Hanging Tree: Random Magic Ring",
+      "type": "loot",
+      "target": "Hanging Tree",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_sandswept_marsh_115",
+      "act": 3,
+      "zone": "Sandswept Marsh",
+      "step_number": 115,
+      "description": "(Optional - Highly Recommended) Kill Rare Oroks and Loot Basket in Orok Campsite: Lesser Jeweller's Orb",
+      "type": "loot",
+      "target": "Orok Campsite",
+      "hint": "",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_sandswept_marsh_116",
+      "act": 3,
+      "zone": "Sandswept Marsh",
+      "step_number": 116,
+      "description": "Exit to Ziggurat Encampment (Town)",
+      "type": "travel",
+      "target": "Ziggurat Encampment",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ziggurat Encampment"
+      }
+    },
+    {
+      "id": "a3_ziggurat_encampment_117",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 117,
+      "description": "Speak to Alva and Oswald. Hunt for Flask upgrades and 20% Movespeed Boots",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Good opportunity to shop",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_118",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 118,
+      "description": "Exit to the Jungle Ruins",
+      "type": "travel",
+      "target": "Jungle Ruins",
+      "hint": "Located near the top of town",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Jungle Ruins"
+      }
+    },
+    {
+      "id": "a3_jungle_ruins_119",
+      "act": 3,
+      "zone": "Jungle Ruins",
+      "step_number": 119,
+      "description": "Defeat Silverfist: +2 Passives",
+      "type": "kill",
+      "target": "Silverfist",
+      "hint": "Located within stone ruins",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jungle_ruins_120",
+      "act": 3,
+      "zone": "Jungle Ruins",
+      "step_number": 120,
+      "description": "(Optional) Summon the NPC to the Jungle Grave: Rare Belt",
+      "type": "loot",
+      "target": "Jungle Grave",
+      "hint": "Likely only worth doing if your belt is very bad",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jungle_ruins_121",
+      "act": 3,
+      "zone": "Jungle Ruins",
+      "step_number": 121,
+      "description": "(Optional) Loot the white chest in Gwendolyn Albright's Troubled Campsite",
+      "type": "loot",
+      "target": "",
+      "hint": "Gwendolyn sells high quality armour, check for upgrades",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jungle_ruins_122",
+      "act": 3,
+      "zone": "Jungle Ruins",
+      "step_number": 122,
+      "description": "Activate the Waypoint and Enter the Venom Crypts",
+      "type": "travel",
+      "target": "The Venom Crypts",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Venom Crypts"
+      }
+    },
+    {
+      "id": "a3_the_venom_crypts_123",
+      "act": 3,
+      "zone": "The Venom Crypts",
+      "step_number": 123,
+      "description": "Locate the Den of the Serpent Priestess and Loot the Corpse-snake Venom",
+      "type": "loot",
+      "target": "Corpse-snake Venom",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_124",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 124,
+      "description": "Portal to Town. Give the Corpse-snake Venom to Servi",
+      "type": "quest_reward",
+      "target": "Servi",
+      "hint": "Choose a permanent buff reward. WARNING: This cannot be changed later!",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_infested_barrens_125",
+      "act": 3,
+      "zone": "Infested Barrens",
+      "step_number": 125,
+      "description": "Waypoint to Jungle Ruins. Take the exit to Infested Barrens",
+      "type": "travel",
+      "target": "Infested Barrens",
+      "hint": "Located on one of the outer zone edges (typically opposite the exit to town)",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Infested Barrens"
+      }
+    },
+    {
+      "id": "a3_infested_barrens_126",
+      "act": 3,
+      "zone": "Infested Barrens",
+      "step_number": 126,
+      "description": "Activate the Waypoint and summon Alva",
+      "type": "quest_reward",
+      "target": "Alva",
+      "hint": "Look for a stone platform near the water with the waypoint and a checkpoint nearby",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_infested_barrens_127",
+      "act": 3,
+      "zone": "Infested Barrens",
+      "step_number": 127,
+      "description": "(Optional) Loot the white chest in Sebastian Carroway's Troubled Campsite: Rare Boots",
+      "type": "loot",
+      "target": "",
+      "hint": "This vendor also sells higher-quality weapons",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_infested_barrens_128",
+      "act": 3,
+      "zone": "Infested Barrens",
+      "step_number": 128,
+      "description": "Hug the outside wall to locate the exit to the Azak Bog",
+      "type": "travel",
+      "target": "The Azak Bog",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Azak Bog"
+      }
+    },
+    {
+      "id": "a3_the_azak_bog_129",
+      "act": 3,
+      "zone": "The Azak Bog",
+      "step_number": 129,
+      "description": "Summon and speak to Servi, if needed",
+      "type": "quest_reward",
+      "target": "Servi",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_the_azak_bog_130",
+      "act": 3,
+      "zone": "The Azak Bog",
+      "step_number": 130,
+      "description": "(Optional) Complete the Flameskin Ritual for temporary boost to Fire Resistance and Rarity",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Only needed if your Fire Resistance is very low (below 30-40%)",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_the_azak_bog_131",
+      "act": 3,
+      "zone": "The Azak Bog",
+      "step_number": 131,
+      "description": "(Permanent Buff) Defeat Ignagduk, the Bog Witch: +30 Spirit and Uncut Spirit Gem",
+      "type": "kill",
+      "target": "Ignagduk, the Bog Witch",
+      "hint": "",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_132",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 132,
+      "description": "Portal to town. Speak to Servi to obtain your choice of Charm",
+      "type": "quest_reward",
+      "target": "Servi",
+      "hint": "Thawing is recommended if you don't have one already, otherwise Antidote",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_chimeral_wetlands_133",
+      "act": 3,
+      "zone": "Chimeral Wetlands",
+      "step_number": 133,
+      "description": "Take the Waypoint to Infested Barrens, hug the wall until you locate the exit to Chimeral Wetlands",
+      "type": "travel",
+      "target": "Chimeral Wetlands",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Chimeral Wetlands"
+      }
+    },
+    {
+      "id": "a3_chimeral_wetlands_134",
+      "act": 3,
+      "zone": "Chimeral Wetlands",
+      "step_number": 134,
+      "description": "Enter The Temple of Chaos and activate the waypoint, then return to Chimeral Wetlands",
+      "type": "travel",
+      "target": "The Temple of Chaos",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Temple of Chaos"
+      }
+    },
+    {
+      "id": "a3_chimeral_wetlands_135",
+      "act": 3,
+      "zone": "Chimeral Wetlands",
+      "step_number": 135,
+      "description": "Defeat Xyclucian, the Chimera: Obtain Chimeral Inscribed Ultimatum for Ascendancy",
+      "type": "kill",
+      "target": "Xyclucian, the Chimera",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_chimeral_wetlands_136",
+      "act": 3,
+      "zone": "Chimeral Wetlands",
+      "step_number": 136,
+      "description": "Exit to Jiquani's Machinarium",
+      "type": "travel",
+      "target": "Jiquani's Machinarium",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Jiquani's Machinarium"
+      }
+    },
+    {
+      "id": "a3_jiquani's_machinarium_137",
+      "act": 3,
+      "zone": "Jiquani's Machinarium",
+      "step_number": 137,
+      "description": "Locate a Small Soul Core in one of the two entrance offshoot rooms",
+      "type": "loot",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_machinarium_138",
+      "act": 3,
+      "zone": "Jiquani's Machinarium",
+      "step_number": 138,
+      "description": "Use Soul Core to open the door. Locate an additional Small Soul Core",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_machinarium_139",
+      "act": 3,
+      "zone": "Jiquani's Machinarium",
+      "step_number": 139,
+      "description": "(Permanent Buff) Open the door and kill Blackjaw, the Remnant: +10% Fire Resistance",
+      "type": "kill",
+      "target": "Blackjaw, the Remnant",
+      "hint": "",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_machinarium_140",
+      "act": 3,
+      "zone": "Jiquani's Machinarium",
+      "step_number": 140,
+      "description": "(Optional - Low Priority) use a third Soul Core to unlock and loot the Treasure Vault",
+      "type": "loot",
+      "target": "Treasure Vault",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_machinarium_141",
+      "act": 3,
+      "zone": "Jiquani's Machinarium",
+      "step_number": 141,
+      "description": "Obtain another Small Soul Core. Use Soul Core to open the exit to Jiquani's Sanctum",
+      "type": "travel",
+      "target": "Jiquani's Sanctum",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Jiquani's Sanctum"
+      }
+    },
+    {
+      "id": "a3_jiquani's_sanctum_142",
+      "act": 3,
+      "zone": "Jiquani's Sanctum",
+      "step_number": 142,
+      "description": "Head to the left or right generator and look for a Medium Soul Core",
+      "type": "loot",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_sanctum_143",
+      "act": 3,
+      "zone": "Jiquani's Sanctum",
+      "step_number": 143,
+      "description": "Place Medium Soul Core inside generator",
+      "type": "travel",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_sanctum_144",
+      "act": 3,
+      "zone": "Jiquani's Sanctum",
+      "step_number": 144,
+      "description": "Cut through the middle of the zone to the second generator, looking for another Medium Soul Core",
+      "type": "loot",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_jiquani's_sanctum_145",
+      "act": 3,
+      "zone": "Jiquani's Sanctum",
+      "step_number": 145,
+      "description": "Defeat Jiquani",
+      "type": "kill",
+      "target": "Jiquani",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_146",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 146,
+      "description": "Portal to Town. Speak to Alva and Oswald",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_147",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 147,
+      "description": "Exit to The Drowned City",
+      "type": "travel",
+      "target": "The Drowned City",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Drowned City"
+      }
+    },
+    {
+      "id": "a3_the_drowned_city_148",
+      "act": 3,
+      "zone": "The Drowned City",
+      "step_number": 148,
+      "description": "(Optional) Kill The Devourer of Souls: Uncut Spirit Gem",
+      "type": "kill",
+      "target": "The Devourer of Souls",
+      "hint": "",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_the_drowned_city_149",
+      "act": 3,
+      "zone": "The Drowned City",
+      "step_number": 149,
+      "description": "Enter The Molten Vault",
+      "type": "travel",
+      "target": "The Molten Vault",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Molten Vault"
+      }
+    },
+    {
+      "id": "a3_the_molten_vault_150",
+      "act": 3,
+      "zone": "The Molten Vault",
+      "step_number": 150,
+      "description": "Defeat The Molten King",
+      "type": "kill",
+      "target": "The Molten King",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_the_drowned_city_151",
+      "act": 3,
+      "zone": "The Drowned City",
+      "step_number": 151,
+      "description": "Return to The Drowned City. Enter The Apex of Filth",
+      "type": "travel",
+      "target": "The Apex of Filth",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Apex of Filth"
+      }
+    },
+    {
+      "id": "a3_the_apex_of_filth_152",
+      "act": 3,
+      "zone": "The Apex of Filth",
+      "step_number": 152,
+      "description": "Defeat The Filthlord",
+      "type": "kill",
+      "target": "The Filthlord",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a3_ziggurat_encampment_153",
+      "act": 3,
+      "zone": "Ziggurat Encampment",
+      "step_number": 153,
+      "description": "Portal to Town and speak to The Hooded One to proceed to Act 4",
+      "type": "quest_reward",
+      "target": "The Hooded One",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_154",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 154,
+      "description": "Arrive at Kedge Bay \u2014 Gear Up",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Speak to Tarkleigh and Nessa, shop for upgrades",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_155",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 155,
+      "description": "Kedge Bay Puzzle \u2192 +2 Passives",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Solve the stone tablet puzzle near the docks",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_156",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 156,
+      "description": "Speak to Scripps \u2192 Map Fragment",
+      "type": "quest_reward",
+      "target": "Scripps",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_157",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 157,
+      "description": "Exit \u2192 Isle of Kin",
+      "type": "travel",
+      "target": "Isle of Kin",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Isle of Kin"
+      }
+    },
+    {
+      "id": "a4_isle_of_kin_158",
+      "act": 4,
+      "zone": "Isle of Kin",
+      "step_number": 158,
+      "description": "WP \u2192 Isle of Kin",
+      "type": "travel",
+      "target": "Isle of Kin",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_isle_of_kin_159",
+      "act": 4,
+      "zone": "Isle of Kin",
+      "step_number": 159,
+      "description": "Kill Tidekeeper (Skill Gem)",
+      "type": "kill",
+      "target": "The Tidekeeper",
+      "hint": "Follow the shoreline to the ritual stones",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_isle_of_kin_160",
+      "act": 4,
+      "zone": "Isle of Kin",
+      "step_number": 160,
+      "description": "Find Karui Totem Piece (1/3)",
+      "type": "loot",
+      "target": "Karui Totem",
+      "hint": "Look for a glowing totem fragment near the central island",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_isle_of_kin_161",
+      "act": 4,
+      "zone": "Isle of Kin",
+      "step_number": 161,
+      "description": "Kill Reef Matriarch",
+      "type": "kill",
+      "target": "Reef Matriarch",
+      "hint": "In the coral caves at the far end of the island",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_isle_of_kin_162",
+      "act": 4,
+      "zone": "Isle of Kin",
+      "step_number": 162,
+      "description": "Exit \u2192 Volcanic Warrens",
+      "type": "travel",
+      "target": "Volcanic Warrens",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Volcanic Warrens"
+      }
+    },
+    {
+      "id": "a4_volcanic_warrens_163",
+      "act": 4,
+      "zone": "Volcanic Warrens",
+      "step_number": 163,
+      "description": "WP \u2192 Volcanic Warrens",
+      "type": "travel",
+      "target": "Volcanic Warrens",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_volcanic_warrens_164",
+      "act": 4,
+      "zone": "Volcanic Warrens",
+      "step_number": 164,
+      "description": "Kill Igneous Goliath (+10% Fire Res)",
+      "type": "kill",
+      "target": "Igneous Goliath",
+      "hint": "In the magma chamber, watch for lava geysers",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_volcanic_warrens_165",
+      "act": 4,
+      "zone": "Volcanic Warrens",
+      "step_number": 165,
+      "description": "Loot Smoldering Chest (Ring)",
+      "type": "loot",
+      "target": "Smoldering Chest",
+      "hint": "Behind a wall of flame, use the cooling vents",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_volcanic_warrens_166",
+      "act": 4,
+      "zone": "Volcanic Warrens",
+      "step_number": 166,
+      "description": "Exit \u2192 Kedge Bay (Return)",
+      "type": "travel",
+      "target": "Kedge Bay",
+      "hint": "Take the boat back to town",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kedge Bay"
+      }
+    },
+    {
+      "id": "a4_kedge_bay_167",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 167,
+      "description": "Scripps \u2192 Reward (Skill Gem)",
+      "type": "quest_reward",
+      "target": "Scripps",
+      "hint": "Turn in Map Fragment",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_168",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 168,
+      "description": "Exit \u2192 Whakapanu Island",
+      "type": "travel",
+      "target": "Whakapanu Island",
+      "hint": "Take the southern boat",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Whakapanu Island"
+      }
+    },
+    {
+      "id": "a4_whakapanu_island_169",
+      "act": 4,
+      "zone": "Whakapanu Island",
+      "step_number": 169,
+      "description": "WP \u2192 Whakapanu Island",
+      "type": "travel",
+      "target": "Whakapanu Island",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_whakapanu_island_170",
+      "act": 4,
+      "zone": "Whakapanu Island",
+      "step_number": 170,
+      "description": "Find Karui Totem Piece (2/3)",
+      "type": "loot",
+      "target": "Karui Totem",
+      "hint": "Inside the ruined longhouse on the eastern cliffs",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_whakapanu_island_171",
+      "act": 4,
+      "zone": "Whakapanu Island",
+      "step_number": 171,
+      "description": "Kill Stormcaller (Support Gem)",
+      "type": "kill",
+      "target": "Stormcaller",
+      "hint": "Atop the storm-wracked peak",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_whakapanu_island_172",
+      "act": 4,
+      "zone": "Whakapanu Island",
+      "step_number": 172,
+      "description": "Enter Singing Caverns",
+      "type": "travel",
+      "target": "Singing Caverns",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Singing Caverns"
+      }
+    },
+    {
+      "id": "a4_singing_caverns_173",
+      "act": 4,
+      "zone": "Singing Caverns",
+      "step_number": 173,
+      "description": "WP \u2192 Singing Caverns",
+      "type": "travel",
+      "target": "Singing Caverns",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_singing_caverns_174",
+      "act": 4,
+      "zone": "Singing Caverns",
+      "step_number": 174,
+      "description": "Kill Echo Keeper (Spirit Gem)",
+      "type": "kill",
+      "target": "The Echo Keeper",
+      "hint": "Deep in the resonant chamber, follow the sound",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_singing_caverns_175",
+      "act": 4,
+      "zone": "Singing Caverns",
+      "step_number": 175,
+      "description": "Exit \u2192 Abandoned Prison",
+      "type": "travel",
+      "target": "Abandoned Prison",
+      "hint": "Through the collapsed tunnel at the back",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Abandoned Prison"
+      }
+    },
+    {
+      "id": "a4_abandoned_prison_176",
+      "act": 4,
+      "zone": "Abandoned Prison",
+      "step_number": 176,
+      "description": "WP \u2192 Abandoned Prison",
+      "type": "travel",
+      "target": "Abandoned Prison",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_abandoned_prison_177",
+      "act": 4,
+      "zone": "Abandoned Prison",
+      "step_number": 177,
+      "description": "Free Matiki",
+      "type": "quest_reward",
+      "target": "Matiki",
+      "hint": "In the deepest cell block",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_abandoned_prison_178",
+      "act": 4,
+      "zone": "Abandoned Prison",
+      "step_number": 178,
+      "description": "Kill Warden Craghul",
+      "type": "kill",
+      "target": "Warden Craghul",
+      "hint": "Arena in the central courtyard",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_abandoned_prison_179",
+      "act": 4,
+      "zone": "Abandoned Prison",
+      "step_number": 179,
+      "description": "Enter Solitary Confinement",
+      "type": "travel",
+      "target": "Solitary Confinement",
+      "hint": "Through the warden's office",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Solitary Confinement"
+      }
+    },
+    {
+      "id": "a4_solitary_confinement_180",
+      "act": 4,
+      "zone": "Solitary Confinement",
+      "step_number": 180,
+      "description": "Kill The Forgotten One (+2 Passives)",
+      "type": "kill",
+      "target": "The Forgotten One",
+      "hint": "In the isolation chamber, break all chains to start the fight",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_solitary_confinement_181",
+      "act": 4,
+      "zone": "Solitary Confinement",
+      "step_number": 181,
+      "description": "Loot Prisoner's Stash (Belt)",
+      "type": "loot",
+      "target": "Prisoner's Stash",
+      "hint": "Behind a breakable wall near the entrance",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_solitary_confinement_182",
+      "act": 4,
+      "zone": "Solitary Confinement",
+      "step_number": 182,
+      "description": "Exit \u2192 Kedge Bay (Return)",
+      "type": "travel",
+      "target": "Kedge Bay",
+      "hint": "Escape route through the sewer grate",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kedge Bay"
+      }
+    },
+    {
+      "id": "a4_kedge_bay_183",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 183,
+      "description": "Matiki \u2192 Flask Upgrade",
+      "type": "quest_reward",
+      "target": "Matiki",
+      "hint": "Speak to Matiki in town",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_184",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 184,
+      "description": "Exit \u2192 Shrike Island",
+      "type": "travel",
+      "target": "Shrike Island",
+      "hint": "Take the eastern boat with Matiki",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Shrike Island"
+      }
+    },
+    {
+      "id": "a4_shrike_island_185",
+      "act": 4,
+      "zone": "Shrike Island",
+      "step_number": 185,
+      "description": "WP \u2192 Shrike Island",
+      "type": "travel",
+      "target": "Shrike Island",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_shrike_island_186",
+      "act": 4,
+      "zone": "Shrike Island",
+      "step_number": 186,
+      "description": "Kill Razorwing Broodmother (Gem)",
+      "type": "kill",
+      "target": "Razorwing Broodmother",
+      "hint": "Nest at the top of the island's central spire",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_shrike_island_187",
+      "act": 4,
+      "zone": "Shrike Island",
+      "step_number": 187,
+      "description": "Find Karui Totem Piece (3/3)",
+      "type": "loot",
+      "target": "Karui Totem",
+      "hint": "In the shipwreck graveyard on the northern beach",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_shrike_island_188",
+      "act": 4,
+      "zone": "Shrike Island",
+      "step_number": 188,
+      "description": "Exit \u2192 Eye of Hinekora",
+      "type": "travel",
+      "target": "Eye of Hinekora",
+      "hint": "Enter the great whirlpool portal",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Eye of Hinekora"
+      }
+    },
+    {
+      "id": "a4_eye_of_hinekora_189",
+      "act": 4,
+      "zone": "Eye of Hinekora",
+      "step_number": 189,
+      "description": "Place Karui Totem \u2192 Open Path",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Reassemble the totem at the central altar",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_eye_of_hinekora_190",
+      "act": 4,
+      "zone": "Eye of Hinekora",
+      "step_number": 190,
+      "description": "Kill Hinekora's Wrath",
+      "type": "kill",
+      "target": "Hinekora's Wrath",
+      "hint": "The spirit guardian of the Eye",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_eye_of_hinekora_191",
+      "act": 4,
+      "zone": "Eye of Hinekora",
+      "step_number": 191,
+      "description": "Loot Ancestral Cache (Amulet)",
+      "type": "loot",
+      "target": "Ancestral Cache",
+      "hint": "Behind the boss arena",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_eye_of_hinekora_192",
+      "act": 4,
+      "zone": "Eye of Hinekora",
+      "step_number": 192,
+      "description": "Exit \u2192 Kedge Bay (Return)",
+      "type": "travel",
+      "target": "Kedge Bay",
+      "hint": "Portal activates after boss defeat",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kedge Bay"
+      }
+    },
+    {
+      "id": "a4_kedge_bay_193",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 193,
+      "description": "Scripps \u2192 Charm Reward",
+      "type": "quest_reward",
+      "target": "Scripps",
+      "hint": "Choose a charm \u2014 Topaz (Shock) recommended",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_kedge_bay_194",
+      "act": 4,
+      "zone": "Kedge Bay",
+      "step_number": 194,
+      "description": "Exit \u2192 The Excavation",
+      "type": "travel",
+      "target": "The Excavation",
+      "hint": "Take the newly opened northern path",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Excavation"
+      }
+    },
+    {
+      "id": "a4_the_excavation_195",
+      "act": 4,
+      "zone": "The Excavation",
+      "step_number": 195,
+      "description": "WP \u2192 Excavation Site",
+      "type": "travel",
+      "target": "The Excavation",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_the_excavation_196",
+      "act": 4,
+      "zone": "The Excavation",
+      "step_number": 196,
+      "description": "Kill Ancient Guardian (Support Gem)",
+      "type": "kill",
+      "target": "Ancient Guardian",
+      "hint": "In the buried temple ruins",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_the_excavation_197",
+      "act": 4,
+      "zone": "The Excavation",
+      "step_number": 197,
+      "description": "Exit \u2192 Arastas",
+      "type": "travel",
+      "target": "Arastas",
+      "hint": "Through the excavated tunnel",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Arastas"
+      }
+    },
+    {
+      "id": "a4_arastas_198",
+      "act": 4,
+      "zone": "Arastas",
+      "step_number": 198,
+      "description": "WP \u2192 Arastas",
+      "type": "travel",
+      "target": "Arastas",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_arastas_199",
+      "act": 4,
+      "zone": "Arastas",
+      "step_number": 199,
+      "description": "Kill Earthshaker Totem (Spirit Gem)",
+      "type": "kill",
+      "target": "Earthshaker Totem",
+      "hint": "At the center of the ruined arena",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_arastas_200",
+      "act": 4,
+      "zone": "Arastas",
+      "step_number": 200,
+      "description": "Find Stone Tablet \u2192 +5 Attributes",
+      "type": "loot",
+      "target": "Stone Tablet",
+      "hint": "In the collapsed library wing",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_arastas_201",
+      "act": 4,
+      "zone": "Arastas",
+      "step_number": 201,
+      "description": "Exit \u2192 Ngakanu",
+      "type": "travel",
+      "target": "Ngakanu",
+      "hint": "Through the grand archway",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Ngakanu"
+      }
+    },
+    {
+      "id": "a4_ngakanu_202",
+      "act": 4,
+      "zone": "Ngakanu",
+      "step_number": 202,
+      "description": "Rakiata + Utula \u2192 Gear Up",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Shop vendors, craft, and prepare for the final act 4 boss",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_ngakanu_203",
+      "act": 4,
+      "zone": "Ngakanu",
+      "step_number": 203,
+      "description": "Enter Heart of the Tribe",
+      "type": "travel",
+      "target": "Heart of the Tribe",
+      "hint": "Ascend the great ziggurat",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Heart of the Tribe"
+      }
+    },
+    {
+      "id": "a4_heart_of_the_tribe_204",
+      "act": 4,
+      "zone": "Heart of the Tribe",
+      "step_number": 204,
+      "description": "Clear Ritual Chambers",
+      "type": "travel",
+      "target": "",
+      "hint": "Defeat the tribal champions in each side chamber",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_heart_of_the_tribe_205",
+      "act": 4,
+      "zone": "Heart of the Tribe",
+      "step_number": 205,
+      "description": "Loot Ritual Offering (Jewel)",
+      "type": "loot",
+      "target": "Ritual Offering",
+      "hint": "In the left antechamber after clearing it",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_heart_of_the_tribe_206",
+      "act": 4,
+      "zone": "Heart of the Tribe",
+      "step_number": 206,
+      "description": "Kill Utula, Chieftain of the Karui",
+      "type": "kill",
+      "target": "Utula, Chieftain of the Karui",
+      "hint": "Final act 4 boss. Heavy physical and fire damage. Dodge the slam waves.",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_heart_of_the_tribe_207",
+      "act": 4,
+      "zone": "Heart of the Tribe",
+      "step_number": 207,
+      "description": "Hooded One \u2192 Act 5",
+      "type": "quest_reward",
+      "target": "The Hooded One",
+      "hint": "Speak to the Hooded One after the boss",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a4_ngakanu_208",
+      "act": 4,
+      "zone": "Ngakanu",
+      "step_number": 208,
+      "description": "Rakiata \u2192 Support Gem Reward",
+      "type": "quest_reward",
+      "target": "Rakiata",
+      "hint": "Turn in quest before leaving",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_209",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 209,
+      "description": "Arrive at Holten \u2014 Talk to NPCs",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Speak to Halden and Sigrid in the village",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_210",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 210,
+      "description": "Sigrid \u2192 Buy Greater Runes (20k Gold)",
+      "type": "quest_reward",
+      "target": "Sigrid",
+      "hint": "One-time vendor \u2014 buy Greater Runes if you have gold",
+      "tags": [
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_211",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 211,
+      "description": "Halden \u2192 Skill Gem",
+      "type": "quest_reward",
+      "target": "Halden",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_212",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 212,
+      "description": "Exit \u2192 Wolvenhold Outskirts",
+      "type": "travel",
+      "target": "Wolvenhold",
+      "hint": "Follow the river north out of town",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Wolvenhold"
+      }
+    },
+    {
+      "id": "a5_wolvenhold_213",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 213,
+      "description": "WP \u2192 Wolvenhold",
+      "type": "travel",
+      "target": "Wolvenhold",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_214",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 214,
+      "description": "Kill Frosthowl Pack Leader (Gem)",
+      "type": "kill",
+      "target": "Frosthowl Pack Leader",
+      "hint": "In the northern den, follow the wolf tracks",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_215",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 215,
+      "description": "Find Warden's Journal (Quest)",
+      "type": "loot",
+      "target": "Warden's Journal",
+      "hint": "Inside the ruined watchtower",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_216",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 216,
+      "description": "Kill Owsin, the Dread Warden (+2 Weapon Set Passives)",
+      "type": "kill",
+      "target": "Owsin, the Dread Warden",
+      "hint": "Use his Ledger after defeating him. Fight in the prison courtyard.",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_217",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 217,
+      "description": "Loot Warden's Armory (Weapon)",
+      "type": "loot",
+      "target": "Warden's Armory",
+      "hint": "Unlock with Owsin's Key after defeating him",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_218",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 218,
+      "description": "Enter the Frozen Depths",
+      "type": "travel",
+      "target": "",
+      "hint": "Descend through the cellar trapdoor",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_219",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 219,
+      "description": "Kill Icebound Colossus (Spirit Gem)",
+      "type": "kill",
+      "target": "Icebound Colossus",
+      "hint": "In the frozen cavern beneath Wolvenhold",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_220",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 220,
+      "description": "Find Frost Sigil (1/2)",
+      "type": "loot",
+      "target": "Frost Sigil",
+      "hint": "At the end of the Frozen Depths",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_221",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 221,
+      "description": "Return to Surface \u2192 East Wing",
+      "type": "travel",
+      "target": "",
+      "hint": "Use the lift to return to the surface",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_222",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 222,
+      "description": "Kill Rimecaller (Support Gem)",
+      "type": "kill",
+      "target": "Rimecaller",
+      "hint": "In the eastern tower, use fire to break ice barriers",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_223",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 223,
+      "description": "Find Frost Sigil (2/2)",
+      "type": "loot",
+      "target": "Frost Sigil",
+      "hint": "In the eastern tower's uppermost chamber",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_224",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 224,
+      "description": "Open Frost Gate \u2192 Grand Hall",
+      "type": "travel",
+      "target": "",
+      "hint": "Place both Frost Sigils at the gate",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_225",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 225,
+      "description": "Kill Grand Warden Vossik",
+      "type": "kill",
+      "target": "Grand Warden Vossik",
+      "hint": "Act 5 final boss. Heavy cold damage \u2014 cap cold res if possible. Dodge the ice shard barrage.",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_226",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 226,
+      "description": "Loot Grand Warden's Vault",
+      "type": "loot",
+      "target": "Grand Warden's Vault",
+      "hint": "Behind the boss arena \u2014 contains rare items",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_wolvenhold_227",
+      "act": 5,
+      "zone": "Wolvenhold",
+      "step_number": 227,
+      "description": "Return Portal \u2192 Holten",
+      "type": "travel",
+      "target": "Holten",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Holten"
+      }
+    },
+    {
+      "id": "a5_holten_228",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 228,
+      "description": "Halden \u2192 Support Gem",
+      "type": "quest_reward",
+      "target": "Halden",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_229",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 229,
+      "description": "Sigrid \u2192 Charm Choice",
+      "type": "quest_reward",
+      "target": "Sigrid",
+      "hint": "Antidote charm recommended for upcoming content",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a5_holten_230",
+      "act": 5,
+      "zone": "Holten",
+      "step_number": 230,
+      "description": "Hooded One \u2192 Act 6 (Khari Crossing)",
+      "type": "travel",
+      "target": "The Khari Crossing",
+      "hint": "Speak to the Hooded One to travel south",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Khari Crossing"
+      }
+    },
+    {
+      "id": "a6_the_khari_crossing_231",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 231,
+      "description": "Arrive at Khari Crossing \u2014 Gear Up",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Speak to Aldric and Risu at the caravan camp",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_232",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 232,
+      "description": "Aldric \u2192 Claim +5% Max Life",
+      "type": "quest_reward",
+      "target": "Aldric",
+      "hint": "Use the Molten One's Gift at Skullmaw Stairway (northern area)",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_233",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 233,
+      "description": "Risu \u2192 Skill Gem",
+      "type": "quest_reward",
+      "target": "Risu",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_234",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 234,
+      "description": "Kill Akithi + Anundr \u2192 Return to Risu (+2 Passives)",
+      "type": "kill",
+      "target": "Akithi, The Final Sting & Anundr, the Sandworm",
+      "hint": "Eastern area, small arena near checkpoint. Kill both bosses then report to Risu.",
+      "tags": [
+        "permanent_buff",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_235",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 235,
+      "description": "Loot Caravan Wreckage (Support Gem)",
+      "type": "loot",
+      "target": "Caravan Wreckage",
+      "hint": "Search the destroyed wagons along the eastern pass",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_236",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 236,
+      "description": "Exit \u2192 Qimah",
+      "type": "travel",
+      "target": "Qimah",
+      "hint": "Follow the desert road south",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Qimah"
+      }
+    },
+    {
+      "id": "a6_qimah_237",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 237,
+      "description": "WP \u2192 Qimah",
+      "type": "travel",
+      "target": "Qimah",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_238",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 238,
+      "description": "Speak to Orbala \u2192 Quest",
+      "type": "quest_reward",
+      "target": "Orbala",
+      "hint": "Orbala is near the oasis at the center of town",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_239",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 239,
+      "description": "Orbala's Pillars \u2192 Choose Buff",
+      "type": "quest_reward",
+      "target": "Orbala's Pillars",
+      "hint": "Narrow passage off outer wall. 5% All Ele Resists or +5 Attributes recommended.",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_240",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 240,
+      "description": "Kill Sandreaver Matriarch (Gem)",
+      "type": "kill",
+      "target": "Sandreaver Matriarch",
+      "hint": "In the southern dunes, follow the bone trail",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_241",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 241,
+      "description": "Loot Sunken Temple Cache (Ring)",
+      "type": "loot",
+      "target": "Sunken Temple Cache",
+      "hint": "Half-buried temple in the western sands",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_242",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 242,
+      "description": "Find Orbala's Keystone",
+      "type": "loot",
+      "target": "Orbala's Keystone",
+      "hint": "In the sealed vault beneath the central oasis",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_243",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 243,
+      "description": "Kill Desert Colossus",
+      "type": "kill",
+      "target": "Desert Colossus",
+      "hint": "Awakens when you take the Keystone",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_qimah_244",
+      "act": 6,
+      "zone": "Qimah",
+      "step_number": 244,
+      "description": "Exit \u2192 Sel Khari Sanctuary",
+      "type": "travel",
+      "target": "Sel Khari Sanctuary",
+      "hint": "Use the Keystone on the ancient gate",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Sel Khari Sanctuary"
+      }
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_245",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 245,
+      "description": "WP \u2192 Sel Khari Sanctuary",
+      "type": "travel",
+      "target": "Sel Khari Sanctuary",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_246",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 246,
+      "description": "Find Quest Barya (1/2) \u2192 Free Djinn",
+      "type": "loot",
+      "target": "Altar",
+      "hint": "Left side of the sanctuary \u2014 free the trapped Djinn",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_247",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 247,
+      "description": "Find Quest Barya (2/2) \u2192 Free Djinn",
+      "type": "loot",
+      "target": "Altar",
+      "hint": "Right side of the sanctuary \u2014 free the second Djinn",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_248",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 248,
+      "description": "Choose Djinn Reward",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Rare Jewel or Rare Jewellery \u2014 jewellery usually more valuable",
+      "tags": [
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_249",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 249,
+      "description": "Kill Sanctum Guardian (Spirit Gem)",
+      "type": "kill",
+      "target": "Sanctum Guardian",
+      "hint": "In the inner sanctum, beyond the Djinn altars",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_250",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 250,
+      "description": "Find Hidden Alcove (Support Gem)",
+      "type": "loot",
+      "target": "Hidden Alcove",
+      "hint": "Behind a false wall in the eastern corridor",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_251",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 251,
+      "description": "Kill Khari, the Last Djinn",
+      "type": "kill",
+      "target": "Khari, the Last Djinn",
+      "hint": "Act 6 final boss. Uses lightning and chaos damage. Stay mobile to avoid storms.",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_252",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 252,
+      "description": "Loot Djinn's Hoard (Currency)",
+      "type": "loot",
+      "target": "Djinn's Hoard",
+      "hint": "Treasure room after boss \u2014 contains multiple currency items",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_sel_khari_sanctuary_253",
+      "act": 6,
+      "zone": "Sel Khari Sanctuary",
+      "step_number": 253,
+      "description": "Return \u2192 The Khari Crossing",
+      "type": "travel",
+      "target": "The Khari Crossing",
+      "hint": "Portal opens after boss defeat",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "The Khari Crossing"
+      }
+    },
+    {
+      "id": "a6_the_khari_crossing_254",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 254,
+      "description": "Aldric + Risu \u2192 Support Gems",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Turn in all quests before moving on",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a6_the_khari_crossing_255",
+      "act": 6,
+      "zone": "The Khari Crossing",
+      "step_number": 255,
+      "description": "Hooded One \u2192 Act 7 (Kriar Village)",
+      "type": "travel",
+      "target": "Kriar Village",
+      "hint": "Speak to the Hooded One to journey north",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kriar Village"
+      }
+    },
+    {
+      "id": "a7_kriar_village_256",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 256,
+      "description": "Arrive at Kriar Village \u2014 Gear Up",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Speak to Hilda and Elder Maddox",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_257",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 257,
+      "description": "Hilda \u2192 Skill Gem",
+      "type": "quest_reward",
+      "target": "Hilda",
+      "hint": "Check vendors for gear upgrades \u2014 item levels jump here",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_258",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 258,
+      "description": "Kill Lythara \u2192 Gemcrust Skull (+40 Spirit)",
+      "type": "kill",
+      "target": "Lythara, the Wayward Spear",
+      "hint": "Quest boss in the village outskirts. Consume the Gemcrust Skull after defeating her.",
+      "tags": [
+        "permanent_buff",
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_259",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 259,
+      "description": "Hilda \u2192 Support Gem (after Lythara)",
+      "type": "quest_reward",
+      "target": "Hilda",
+      "hint": "Turn in Lythara quest",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_260",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 260,
+      "description": "Enter Frozen Path \u2192 Glacial Tarn",
+      "type": "travel",
+      "target": "Howling Caves",
+      "hint": "Take the northern trail out of the village",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Howling Caves"
+      }
+    },
+    {
+      "id": "a7_howling_caves_261",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 261,
+      "description": "WP \u2192 Glacial Tarn",
+      "type": "travel",
+      "target": "Howling Caves",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_262",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 262,
+      "description": "Kill Frostbite Goliath (Gem)",
+      "type": "kill",
+      "target": "Frostbite Goliath",
+      "hint": "In the ice chasm \u2014 watch for avalanche traps",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_263",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 263,
+      "description": "Find Frozen Explorer (Quest)",
+      "type": "loot",
+      "target": "Frozen Explorer",
+      "hint": "Examine the frozen corpse for a journal page",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_264",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 264,
+      "description": "Kill Abominable Yeti \u2192 Icy Tusks",
+      "type": "kill",
+      "target": "The Abominable Yeti",
+      "hint": "Side zone off the main path. Loot Icy Tusks after defeating him.",
+      "tags": [
+        "permanent_buff",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_265",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 265,
+      "description": "Enter Howling Depths",
+      "type": "travel",
+      "target": "",
+      "hint": "Descend through the ice tunnel",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_266",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 266,
+      "description": "Kill Echo of Winter (Support Gem)",
+      "type": "kill",
+      "target": "Echo of Winter",
+      "hint": "In the deepest frozen chamber",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_267",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 267,
+      "description": "Find Ancient Keystone",
+      "type": "loot",
+      "target": "Ancient Keystone",
+      "hint": "At the bottom of the Howling Depths",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_268",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 268,
+      "description": "Return to Surface",
+      "type": "travel",
+      "target": "",
+      "hint": "Use the wind tunnel to return to the surface",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_howling_caves_269",
+      "act": 7,
+      "zone": "Howling Caves",
+      "step_number": 269,
+      "description": "Open Ancient Gate \u2192 Kriar Peaks",
+      "type": "travel",
+      "target": "Kriar Peaks",
+      "hint": "Use the Ancient Keystone on the frozen gate",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kriar Peaks"
+      }
+    },
+    {
+      "id": "a7_kriar_peaks_270",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 270,
+      "description": "WP \u2192 Kriar Peaks",
+      "type": "travel",
+      "target": "Kriar Peaks",
+      "hint": "",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_271",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 271,
+      "description": "Kill Storm Roc (Spirit Gem)",
+      "type": "kill",
+      "target": "Storm Roc",
+      "hint": "At the peak's first plateau. Dodge the lightning strikes.",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_272",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 272,
+      "description": "Find Hermit's Cache (Ring)",
+      "type": "loot",
+      "target": "Hermit's Cache",
+      "hint": "In a small cave halfway up the peak",
+      "tags": [
+        "optional"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_273",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 273,
+      "description": "Elder Maddox \u2192 Pick Unique",
+      "type": "quest_reward",
+      "target": "Elder Maddox",
+      "hint": "Top of the cliff \u2014 spirits guide the path. Only one choice \u2014 pick the most valuable for trade.",
+      "tags": [
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_274",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 274,
+      "description": "Kill Avalanche Tyrant (+10% Cold Res)",
+      "type": "kill",
+      "target": "Avalanche Tyrant",
+      "hint": "Near the summit. Permanent +10% Cold Resistance buff.",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_275",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 275,
+      "description": "Ascend to the Summit",
+      "type": "travel",
+      "target": "",
+      "hint": "Climb the final ice wall to the peak",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_276",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 276,
+      "description": "Kill the Frozen Patriarch",
+      "type": "kill",
+      "target": "The Frozen Patriarch",
+      "hint": "Final campaign boss. Massive cold and physical damage. Cap cold resistance. Avoid the ice nova by staying close.",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_277",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 277,
+      "description": "Loot Worldstone Cache",
+      "type": "loot",
+      "target": "Worldstone Cache",
+      "hint": "Behind the boss arena \u2014 guaranteed rare items",
+      "tags": [
+        "optional",
+        "recommended"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_peaks_278",
+      "act": 7,
+      "zone": "Kriar Peaks",
+      "step_number": 278,
+      "description": "Return \u2192 Kriar Village",
+      "type": "travel",
+      "target": "Kriar Village",
+      "hint": "Portal to town after boss",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": {
+        "type": "enter_area",
+        "target_area": "Kriar Village"
+      }
+    },
+    {
+      "id": "a7_kriar_village_279",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 279,
+      "description": "Hilda + Elder Maddox \u2192 Final Rewards",
+      "type": "quest_reward",
+      "target": "",
+      "hint": "Turn in all remaining quests for support gems and items",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_280",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 280,
+      "description": "Aldric \u2192 +2 Passive Points",
+      "type": "quest_reward",
+      "target": "Aldric",
+      "hint": "Must have completed Yeti quest first",
+      "tags": [
+        "permanent_buff"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    },
+    {
+      "id": "a7_kriar_village_281",
+      "act": 7,
+      "zone": "Kriar Village",
+      "step_number": 281,
+      "description": "Hooded One \u2192 Endgame (Maps)",
+      "type": "quest_reward",
+      "target": "The Hooded One",
+      "hint": "Campaign complete! Speak to the Hooded One to unlock the Epilogue and Map Device.",
+      "tags": [
+        "mandatory"
+      ],
+      "next_steps": [],
+      "auto_advance_trigger": null
+    }
+  ]
+}

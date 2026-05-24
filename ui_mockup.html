@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sin's Guide – UI State Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    font-family: 'Segoe UI', Ubuntu, sans-serif;
+    color: #e0e0e0;
+    padding: 24px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #00d4ff;
+    font-size: 22px;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 36px;
+  }
+
+  /* ── Section headings ── */
+  .section-label {
+    color: #888;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 40px 0 14px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #333;
+  }
+
+  /* ── Grid of overlay cards ── */
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: flex-start;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-label {
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+  }
+
+  /* ── THE OVERLAY WIDGET ── */
+  .overlay {
+    --bg-alpha: 0.75;
+    --font-size: 11px;
+    --overlay-width: 220px;
+
+    width: var(--overlay-width);
+    background: rgba(0, 0, 0, var(--bg-alpha));
+    border: 1px solid rgba(255,255,255,0.35);
+    font-family: 'Segoe UI', Ubuntu, sans-serif;
+    font-size: var(--font-size);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 6px 4px 6px;
+    gap: 2px;
+    position: relative;
+  }
+
+  /* Header row */
+  .overlay-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: 2px;
+  }
+  .act-label {
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .drag-handle {
+    width: 14px;
+    height: 14px;
+    background: #00d4ff;
+    cursor: move;
+    flex-shrink: 0;
+  }
+  .btn-icon {
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #ccc;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+
+  /* Step rows */
+  .zone-header {
+    font-size: 10px;
+    color: #888888;
+    padding-top: 2px;
+    padding-bottom: 1px;
+  }
+  .step-row {
+    display: flex;
+    flex-direction: column;
+    padding: 1px 0;
+  }
+  .step-desc {
+    font-size: var(--font-size);
+    line-height: 1.35;
+    word-break: break-word;
+    color: #ffffff;
+  }
+  .step-desc.optional  { color: #cccccc; }
+  .step-desc.perm-buff { color: #00ffff; }
+  .step-hint {
+    font-size: 10px;
+    color: #888888;
+    padding-left: 8px;
+    line-height: 1.3;
+  }
+
+  /* Gem widget */
+  .gem-separator {
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 3px 0;
+  }
+  .gem-header {
+    font-size: 10px;
+    color: #aaaaaa;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .gem-type-label {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .gem-row {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 1.4;
+  }
+  .gem-status-yes   { color: #44cc44; }
+  .gem-status-soon  { color: #cccc44; }
+  .gem-status-no    { color: #cc4444; }
+  .gem-status-unk   { color: #888888; }
+  .gem-name { color: #dddddd; }
+
+  /* Footer labels */
+  .timer-label {
+    font-size: 10px;
+    color: #aaaaaa;
+    text-align: center;
+    padding-top: 2px;
+  }
+  .exp-label {
+    font-size: 10px;
+    text-align: center;
+    padding-bottom: 1px;
+  }
+  .exp-green  { color: #44cc44; }
+  .exp-yellow { color: #cccc44; }
+  .exp-orange { color: #cc8844; }
+  .exp-red    { color: #cc4444; }
+
+  /* Nav buttons */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 2px;
+  }
+  .nav-btn {
+    width: 40px;
+    height: 30px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #cccccc;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .nav-spacer { flex: 1; }
+
+  /* ── Settings panel ── */
+  .settings-panel {
+    width: 340px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    font-family: 'Segoe UI', Ubuntu, sans-serif;
+    font-size: 12px;
+    color: #cccccc;
+    padding: 0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .settings-titlebar {
+    background: #2a2a2a;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+  }
+  .settings-titlebar .close-btn {
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .settings-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .settings-group-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #333;
+  }
+  .settings-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .settings-row label {
+    flex: 1;
+    font-size: 12px;
+    color: #aaa;
+  }
+  .settings-row input[type=range] {
+    width: 100px;
+    accent-color: #00d4ff;
+  }
+  .settings-row .val-badge {
+    font-size: 11px;
+    color: #888;
+    width: 32px;
+    text-align: right;
+  }
+  .settings-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #aaa;
+  }
+  .settings-checkbox-row input { accent-color: #00d4ff; }
+  .settings-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .settings-input-row label { flex: 1; font-size: 12px; color: #aaa; }
+  .settings-input-row input[type=text] {
+    flex: 1.5;
+    background: #111;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 3px 6px;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+  .settings-btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid #333;
+  }
+  .settings-btn {
+    padding: 5px 14px;
+    border: 1px solid #555;
+    background: #2a2a2a;
+    color: #ccc;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .settings-btn.primary {
+    background: #00648a;
+    border-color: #00d4ff;
+    color: #fff;
+  }
+  .settings-browse-btn {
+    font-size: 10px;
+    padding: 3px 8px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #aaa;
+    cursor: pointer;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* ── PoB import prompt ── */
+  .pob-prompt {
+    width: 300px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: 'Segoe UI', Ubuntu, sans-serif;
+    font-size: 12px;
+    color: #ccc;
+  }
+  .pob-titlebar {
+    background: #2a2a2a;
+    padding: 7px 12px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+  }
+  .pob-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pob-body p { font-size: 11px; color: #888; }
+  .pob-body input[type=text] {
+    width: 100%;
+    background: #111;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+  .pob-btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  /* Variant: different transparency levels */
+  .overlay.hi-alpha { background: rgba(0,0,0,0.95); }
+  .overlay.lo-alpha { background: rgba(0,0,0,0.3); }
+
+  /* ── Game-context background ── */
+  .game-bg {
+    background: #0d1117;
+    border: 1px solid #222;
+    padding: 12px;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    border-radius: 3px;
+  }
+  .game-bg-label {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 9px;
+    color: #333;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Divider between big sections */
+  .big-divider {
+    margin: 52px 0 0 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Sin's Guide — UI State Reference</h1>
+<p class="subtitle">All overlay states &amp; panels for design discussion · Path of Exile 2 Campaign Tracker</p>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1 · STEP CONTENT STATES
+     ═══════════════════════════════════════════════ -->
+<div class="section-label">1 · Step Content States</div>
+<div class="grid">
+
+  <!-- 1a: Mandatory step (default) -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row">
+          <span class="step-desc">Kill Rathbreaker</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc">Collect Maraketh Blood</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc">Take waypoint and return to town</span>
+        </div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="exp-label exp-green">● 12-15-18</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Default · Mandatory Steps</div>
+  </div>
+
+  <!-- 1b: Optional step visible -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row">
+          <span class="step-desc">Kill Rathbreaker</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc optional">Pick up any magic flasks</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc optional">Check for a Quicksilver Flask shrine</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc">Take waypoint and return to town</span>
+        </div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="exp-label exp-green">● 12-15-18</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Optional Steps Visible (gray)</div>
+  </div>
+
+  <!-- 1c: Permanent buff step -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">Freythorn</div>
+        <div class="step-row">
+          <span class="step-desc">Enter the Chamber of Heresy</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc perm-buff">★ Cleanse the Altar of Sins (Permanent Buff)</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc">Exit via waypoint</span>
+        </div>
+        <div class="timer-label">00:22:07 | A1 | 00:22:07</div>
+        <div class="exp-label exp-yellow">◕ 16-19 (1 level off)</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Permanent Buff Step (cyan)</div>
+  </div>
+
+  <!-- 1d: Step with hint -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 2</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">Vastiri Desert</div>
+        <div class="step-row">
+          <span class="step-desc">Find the Oasis</span>
+          <span class="step-hint">→ North-east of the waypoint, follow the canyon wall</span>
+        </div>
+        <div class="step-row">
+          <span class="step-desc">Kill Doryani, Vaal Fleshcrafter</span>
+          <span class="step-hint">→ He has a lightning aura — keep moving</span>
+        </div>
+        <div class="timer-label">01:12:44 | A2 | 00:28:31</div>
+        <div class="exp-label exp-orange">◑ 22-25 (2 levels off)</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Steps with Hints (gray sub-label)</div>
+  </div>
+
+  <!-- 1e: Steps across zones -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Mud Flats</div>
+        <div class="step-row">
+          <span class="step-desc">Kill the Caldera Golem</span>
+        </div>
+        <div class="zone-header">The Broken Bridge</div>
+        <div class="step-row">
+          <span class="step-desc">Retrieve the Maraketh Shield</span>
+        </div>
+        <div class="zone-header">Clearfell Settlement</div>
+        <div class="step-row">
+          <span class="step-desc">Talk to Nenet</span>
+        </div>
+        <div class="timer-label">00:11:50 | A1 | 00:11:50</div>
+        <div class="exp-label exp-green">● 8-11-14</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Steps Across Multiple Zones</div>
+  </div>
+
+  <!-- 1f: Empty guide -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">—</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="step-row" style="padding: 8px 0;">
+          <span class="step-desc" style="color:#555; font-style:italic; font-size:10px;">No guide loaded</span>
+        </div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div>
+          <div class="nav-spacer"></div>
+          <div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Empty / No Guide Loaded</div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 · FOOTER LABEL STATES
+     ═══════════════════════════════════════════════ -->
+<div class="section-label big-divider">2 · Timer &amp; EXP Label States</div>
+<div class="grid">
+
+  <!-- 2a: Both visible (default) -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 3</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Azak Bog</div>
+        <div class="step-row"><span class="step-desc">Defeat Jamanra, the Abomination</span></div>
+        <div class="timer-label">02:05:33 | A3 | 00:41:12</div>
+        <div class="exp-label exp-green">● 28-31-34</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Timer + EXP Both Visible</div>
+  </div>
+
+  <!-- 2b: Timer hidden -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 3</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Azak Bog</div>
+        <div class="step-row"><span class="step-desc">Defeat Jamanra, the Abomination</span></div>
+        <div class="exp-label exp-green">● 28-31-34</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Timer Hidden</div>
+  </div>
+
+  <!-- 2c: EXP hidden -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 3</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Azak Bog</div>
+        <div class="step-row"><span class="step-desc">Defeat Jamanra, the Abomination</span></div>
+        <div class="timer-label">02:05:33 | A3 | 00:41:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">EXP Hidden</div>
+  </div>
+
+  <!-- 2d: Both hidden (compact) -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 3</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Azak Bog</div>
+        <div class="step-row"><span class="step-desc">Defeat Jamanra, the Abomination</span></div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Both Hidden (Compact)</div>
+  </div>
+
+  <!-- 2e: EXP colors -->
+  <div class="card" style="gap: 12px;">
+    <div class="card-label" style="margin-bottom:0;">EXP Indicator Colors</div>
+    <div style="display:flex; flex-direction:column; gap:6px; padding:10px 14px; background:#111; border:1px solid #333; border-radius:3px; font-size:12px;">
+      <div class="exp-label exp-green"  style="text-align:left;">● 12-15-18 &nbsp;<span style="color:#555; font-size:10px;">optimal range</span></div>
+      <div class="exp-label exp-yellow" style="text-align:left;">◕ 16-19 (1 level off) &nbsp;<span style="color:#555; font-size:10px;">slightly behind</span></div>
+      <div class="exp-label exp-orange" style="text-align:left;">◑ 22-25 (2 levels off) &nbsp;<span style="color:#555; font-size:10px;">behind</span></div>
+      <div class="exp-label exp-red"    style="text-align:left;">◔ 28+ (3+ levels off) &nbsp;<span style="color:#555; font-size:10px;">far behind</span></div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3 · GEM WIDGET STATES
+     ═══════════════════════════════════════════════ -->
+<div class="section-label big-divider">3 · Gem Widget States</div>
+<div class="grid">
+
+  <!-- 3a: No build imported (prompt) -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker</span></div>
+        <div class="gem-separator"></div>
+        <div class="gem-header">Gems</div>
+        <div class="step-row" style="padding: 4px 0;">
+          <span class="step-desc" style="color:#555; font-style:italic; font-size:10px;">Import build, then scan gems (F5)</span>
+        </div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Gem Widget · No Build Imported</div>
+  </div>
+
+  <!-- 3b: Available + upcoming (no scan) -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">Clearfell Settlement</div>
+        <div class="step-row"><span class="step-desc">Talk to Nenet (gem reward)</span></div>
+        <div class="gem-separator"></div>
+        <div class="gem-header">Gems</div>
+        <div class="gem-type-label">Skill</div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Glacial Bolt</span></div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Lightning Arrow</span></div>
+        <div class="gem-row"><span class="gem-status-soon">~</span><span class="gem-name">Frost Blades (lv 8)</span></div>
+        <div class="gem-type-label">Support</div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Added Fire Damage</span></div>
+        <div class="gem-row"><span class="gem-status-soon">~</span><span class="gem-name">Faster Attacks (lv 10)</span></div>
+        <div class="timer-label">00:09:30 | A1 | 00:09:30</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Gem Widget · Available ✓ + Upcoming ~</div>
+  </div>
+
+  <!-- 3c: Post-scan with needed/missing -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay">
+        <div class="overlay-header">
+          <span class="act-label">Act 2</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Bone Roads</div>
+        <div class="step-row"><span class="step-desc">Reach The Ardura Caravan</span></div>
+        <div class="gem-separator"></div>
+        <div class="gem-header">Gems</div>
+        <div class="gem-type-label">Skill</div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Glacial Bolt</span></div>
+        <div class="gem-row"><span class="gem-status-no">✗</span><span class="gem-name">Lightning Arrow</span></div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Frost Blades</span></div>
+        <div class="gem-type-label">Support</div>
+        <div class="gem-row"><span class="gem-status-no">✗</span><span class="gem-name">Added Fire Damage</span></div>
+        <div class="gem-row"><span class="gem-status-yes">✓</span><span class="gem-name">Faster Attacks</span></div>
+        <div class="gem-row"><span class="gem-status-unk">?</span><span class="gem-name">Fork</span></div>
+        <div class="timer-label">01:02:18 | A2 | 00:18:05</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Gem Widget · Post-OCR Scan (✓/✗/?)</div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4 · OVERLAY APPEARANCE VARIANTS
+     ═══════════════════════════════════════════════ -->
+<div class="section-label big-divider">4 · Appearance Variants</div>
+<div class="grid">
+
+  <!-- 4a: High transparency -->
+  <div class="card">
+    <div class="game-bg" style="background:#1a2a1a;">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay hi-alpha">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker</span></div>
+        <div class="step-row"><span class="step-desc">Take waypoint</span></div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">High Transparency (alpha 0.95)</div>
+  </div>
+
+  <!-- 4b: Low transparency -->
+  <div class="card">
+    <div class="game-bg" style="background:#1a2a1a;">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay lo-alpha">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker</span></div>
+        <div class="step-row"><span class="step-desc">Take waypoint</span></div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Low Transparency (alpha 0.3)</div>
+  </div>
+
+  <!-- 4c: Large font -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="--font-size:16px; --overlay-width: 280px;">
+        <div class="overlay-header">
+          <span class="act-label" style="font-size:16px;">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon" style="width:26px;height:26px;font-size:14px;">⚙</div>
+          <div class="btn-icon" style="width:26px;height:26px;font-size:14px;">📦</div>
+        </div>
+        <div class="zone-header" style="font-size:13px;">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker</span></div>
+        <div class="step-row"><span class="step-desc">Take waypoint to town</span></div>
+        <div class="timer-label" style="font-size:13px;">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row" style="margin-top:4px;">
+          <div class="nav-btn" style="height:36px;font-size:18px;">‹</div><div class="nav-spacer"></div><div class="nav-btn" style="height:36px;font-size:18px;">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Large Font (18px)</div>
+  </div>
+
+  <!-- 4d: Narrow width -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="--overlay-width:160px;">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker and collect the Maraketh Blood</span></div>
+        <div class="step-row"><span class="step-desc">Take waypoint and return to town</span></div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Narrow Width (160px · word-wrap)</div>
+  </div>
+
+  <!-- 4e: Wide width -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="--overlay-width:420px;">
+        <div class="overlay-header">
+          <span class="act-label">Act 1</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header">The Riverbank</div>
+        <div class="step-row"><span class="step-desc">Kill Rathbreaker and collect the Maraketh Blood item</span></div>
+        <div class="step-row"><span class="step-desc">Take waypoint and return to Clearfell Settlement</span></div>
+        <div class="timer-label">00:04:12 | A1 | 00:04:12</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Wide Width (420px · spacious)</div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 5 · SETTINGS PANEL
+     ═══════════════════════════════════════════════ -->
+<div class="section-label big-divider">5 · Settings Panel</div>
+<div class="grid">
+
+  <div class="card">
+    <div class="settings-panel">
+      <div class="settings-titlebar">
+        Settings
+        <span class="close-btn">✕</span>
+      </div>
+      <div class="settings-body">
+
+        <div>
+          <div class="settings-group-label">Overlay Appearance</div>
+          <div class="settings-row">
+            <label>Transparency</label>
+            <input type="range" min="10" max="100" value="75">
+            <span class="val-badge">75%</span>
+          </div>
+          <div class="settings-row">
+            <label>Font Size</label>
+            <input type="range" min="10" max="24" value="12">
+            <span class="val-badge">12px</span>
+          </div>
+          <div class="settings-row">
+            <label>Width</label>
+            <input type="range" min="160" max="600" value="220">
+            <span class="val-badge">220</span>
+          </div>
+          <div class="settings-row">
+            <label>Max Visible Lines</label>
+            <input type="range" min="1" max="12" value="5">
+            <span class="val-badge">5</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="settings-group-label">Display Options</div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox" checked> Show Timer
+          </div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox" checked> Show Effective EXP
+          </div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox" checked> League Start Mode
+          </div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox"> Show Optional Steps
+          </div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox" checked> Pause Timer in Hideout
+          </div>
+          <div class="settings-checkbox-row">
+            <input type="checkbox" checked> Pause Timer on Alt-Tab
+          </div>
+        </div>
+
+        <div>
+          <div class="settings-group-label">Hotkeys</div>
+          <div class="settings-input-row">
+            <label>Previous Step</label>
+            <input type="text" value="F3" style="max-width:70px;">
+          </div>
+          <div class="settings-input-row">
+            <label>Next Step</label>
+            <input type="text" value="F4" style="max-width:70px;">
+          </div>
+          <div class="settings-input-row">
+            <label>Scan Gems</label>
+            <input type="text" value="F5" style="max-width:70px;">
+          </div>
+        </div>
+
+        <div>
+          <div class="settings-group-label">Paths</div>
+          <div class="settings-input-row">
+            <label>Client.txt</label>
+            <input type="text" value="~/.steam/steam/steamapps/..." style="font-size:10px;">
+            <button class="settings-browse-btn">Browse…</button>
+          </div>
+          <div class="settings-input-row">
+            <label>Character Name</label>
+            <input type="text" value="MyExile">
+          </div>
+        </div>
+
+        <div class="settings-btn-row">
+          <button class="settings-btn">Cancel</button>
+          <button class="settings-btn primary">Save</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="card-label">Settings Panel (QDialog)</div>
+  </div>
+
+  <!-- PoB Import prompt -->
+  <div class="card">
+    <div class="pob-prompt">
+      <div class="pob-titlebar">
+        Import Build (PoB / pobb.in)
+        <span class="close-btn" style="color:#666; cursor:pointer;">✕</span>
+      </div>
+      <div class="pob-body">
+        <p>Paste a pobb.in share URL or a raw Path of Building export code to track gem requirements.</p>
+        <input type="text" placeholder="https://pobb.in/…">
+        <div class="pob-btn-row">
+          <button class="settings-btn">Cancel</button>
+          <button class="settings-btn primary">Import</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">PoB Import Prompt (📦 button)</div>
+  </div>
+
+</div><!-- /grid -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 6 · OVERLAY HIDDEN / INACTIVE STATES
+     ═══════════════════════════════════════════════ -->
+<div class="section-label big-divider">6 · System States (Overlay Visibility)</div>
+<div class="grid">
+
+  <!-- Hidden: game not focused -->
+  <div class="card">
+    <div class="game-bg" style="width: 260px; height: 110px; align-items:center; justify-content:center;">
+      <span class="game-bg-label">in-game</span>
+      <span style="color:#333; font-size:11px; font-style:italic;">[ overlay hidden — PoE2 not focused ]</span>
+    </div>
+    <div class="card-label">Overlay Hidden (game not focused)</div>
+  </div>
+
+  <!-- Active zone auto-advance flash -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="border-color: rgba(0,212,255,0.7);">
+        <div class="overlay-header">
+          <span class="act-label" style="color:#00d4ff;">Act 1 ›</span>
+          <div class="drag-handle" style="background:#00ff88;"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header" style="color:#00d4ff;">↳ The Mud Flats (auto-advanced)</div>
+        <div class="step-row"><span class="step-desc">Kill the Caldera Golem</span></div>
+        <div class="step-row"><span class="step-desc">Continue to the Broken Bridge</span></div>
+        <div class="timer-label">00:08:44 | A1 | 00:08:44</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Auto-Advanced (zone enter trigger)</div>
+  </div>
+
+  <!-- Act transition -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="border-color:rgba(255,180,0,0.5);">
+        <div class="overlay-header">
+          <span class="act-label" style="color:#ffb400;">Act 2</span>
+          <div class="drag-handle"></div>
+          <div class="btn-icon">⚙</div>
+          <div class="btn-icon">📦</div>
+        </div>
+        <div class="zone-header" style="color:#ffb400;">— Act 2 Begin —</div>
+        <div class="zone-header">The Bone Roads</div>
+        <div class="step-row"><span class="step-desc">Make your way to The Ardura Caravan</span></div>
+        <div class="timer-label" style="color:#ffb400;">01:01:22 | A2 | 00:00:01</div>
+        <div class="exp-label exp-green">● 22-25-28</div>
+        <div class="nav-row">
+          <div class="nav-btn">‹</div><div class="nav-spacer"></div><div class="nav-btn">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Act Transition (timer split)</div>
+  </div>
+
+  <!-- Hideout / paused -->
+  <div class="card">
+    <div class="game-bg">
+      <span class="game-bg-label">in-game</span>
+      <div class="overlay" style="border-color:rgba(255,255,255,0.15);">
+        <div class="overlay-header">
+          <span class="act-label" style="color:#666;">Act 2</span>
+          <div class="drag-handle" style="background:#444;"></div>
+          <div class="btn-icon" style="color:#555;">⚙</div>
+          <div class="btn-icon" style="color:#555;">📦</div>
+        </div>
+        <div class="zone-header" style="color:#555;">Ardura Caravan (hideout)</div>
+        <div class="step-row"><span class="step-desc" style="color:#555;">Timer paused…</span></div>
+        <div class="timer-label" style="color:#555;">⏸ 01:14:08 | A2 | 00:20:47</div>
+        <div class="nav-row">
+          <div class="nav-btn" style="opacity:0.4;">‹</div><div class="nav-spacer"></div><div class="nav-btn" style="opacity:0.4;">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Hideout · Timer Paused</div>
+  </div>
+
+</div><!-- /grid -->
+
+<div style="height:60px;"></div>
+
+</body>
+</html>

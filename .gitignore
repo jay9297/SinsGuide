@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Packaging
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+# Added by code-review-graph
+.code-review-graph/
+.claude/
+.omc/
+.remember/
+.sisyphus/
+AGENTS.md
+CLAUDE.md
+VISUAL_TESTING_PLAN.md
+.opencode.json
+.mcp.json
