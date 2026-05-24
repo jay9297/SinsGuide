@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Sin's Guide
+Comment=Path of Exile 2 campaign tracker and overlay
+Categories=Game;Utility;
+Exec=sins-guide
+Icon=com.sin_guide.SinsGuide
+Terminal=false
+Type=Application
+StartupNotify=false

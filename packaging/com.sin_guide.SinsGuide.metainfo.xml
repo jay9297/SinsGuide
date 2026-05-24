@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.sin_guide.SinsGuide</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Sin's Guide</name>
+  <summary>Path of Exile 2 campaign tracker and overlay for Linux</summary>
+  <description>
+    <p>
+      A transparent overlay that sits on top of Path of Exile 2 to track your
+      campaign progress in real time. Provides step-by-step zone-level guidance,
+      gem requirement tracking from Path of Building imports, and effective EXP
+      calculations — all without alt-tabbing.
+    </p>
+    <p>Key features:</p>
+    <ul>
+      <li>Step-by-step campaign guide for all 7 acts (281 steps)</li>
+      <li>Zone-aware step filtering with auto-advance via Client.txt</li>
+      <li>Real-time effective EXP using the Mobalytics formula</li>
+      <li>Gem tracking with OCR (Tesseract) and Path of Building import</li>
+      <li>Draggable transparent overlay with configurable appearance</li>
+      <li>Robust Steam Proton prefix auto-discovery</li>
+    </ul>
+  </description>
+  <url type="homepage">https://github.com/jay9297/SinsGuide</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/jay9297/SinsGuide/main/docs/screenshots/overview.png</image>
+      <caption>UI overview showing all overlay states</caption>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="0.1.0" date="2026-05-24"/>
+  </releases>
+  <content_rating type="oars-1.1"/>
+  <launchable type="desktop-id">com.sin_guide.SinsGuide.desktop</launchable>
+</component>

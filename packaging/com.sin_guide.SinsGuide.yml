@@ -1,0 +1,79 @@
+---
+id: com.sin_guide.SinsGuide
+runtime: org.kde.Platform
+runtime-version: '6.8'
+sdk: org.kde.Sdk
+command: sins-guide
+
+finish-args:
+  # X11 for transparent overlay window
+  - --socket=x11
+  # IPC for Qt shared memory
+  - --share=ipc
+  # D-Bus session bus (Qt platform integration)
+  - --socket=session-bus
+  # Wayland fallback (for XWayland Proton)
+  - --socket=wayland
+  # GPU access for screenshot capture (gem OCR)
+  - --device=dri
+  # Steam Proton prefix for Client.txt log parsing
+  - --filesystem=~/.steam:ro
+  - --filesystem=~/.local/share/Steam:ro
+
+modules:
+  # ── Leptonica (Tesseract image processing dependency) ──────────
+  - name: leptonica
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DBUILD_SHARED_LIBS=ON
+    sources:
+      - type: archive
+        url: https://github.com/DanBloomberg/leptonica/releases/download/1.85.0/leptonica-1.85.0.tar.gz
+        sha256: a12fbec2d51bd3be6a6f6647399f58bde1c585c7986350502efc0679b114ce0b
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+      - /lib/cmake
+
+  # ── Tesseract OCR (gem scanning) ───────────────────────────────
+  - name: tesseract
+    buildsystem: autotools
+    config-opts:
+      - --disable-tools
+      - --disable-training-tools
+    sources:
+      - type: archive
+        url: https://github.com/tesseract-ocr/tesseract/archive/5.5.0.tar.gz
+        sha256: 0aef0bad08b69874d03b6a0954623b9ac3be1009ab36af35aa6ffbbd6381bc11
+    post-install:
+      - install -d /app/share/tessdata
+      - curl -Lso /app/share/tessdata/eng.traineddata
+        https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
+    cleanup:
+      - /include
+      - /share/doc
+
+  # ── Python runtime dependencies ────────────────────────────────
+  - name: python3-dependencies
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=${FLATPAK_DEST} --no-build-isolation -r requirements.txt
+    sources:
+      - type: file
+        path: requirements.txt
+
+  # ── Sin's Guide application ────────────────────────────────────
+  - name: sins-guide
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=${FLATPAK_DEST} --no-build-isolation --no-deps .
+      - install -Dm644 packaging/com.sin_guide.SinsGuide.desktop
+        ${FLATPAK_DEST}/share/applications/com.sin_guide.SinsGuide.desktop
+      - install -Dm644 packaging/com.sin_guide.SinsGuide.metainfo.xml
+        ${FLATPAK_DEST}/share/metainfo/com.sin_guide.SinsGuide.metainfo.xml
+      - install -Dm644 packaging/com.sin_guide.SinsGuide.svg
+        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/com.sin_guide.SinsGuide.svg
+    sources:
+      - type: dir
+        path: /
