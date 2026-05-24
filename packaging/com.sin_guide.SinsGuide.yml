@@ -38,9 +38,12 @@ modules:
 
   # ── Tesseract OCR (gem scanning) ───────────────────────────────
   - name: tesseract
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DBUILD_TRAINING_TOOLS=OFF
+    buildsystem: simple
+    build-commands:
+      - mkdir -p _build && cd _build && cmake .. -G"Unix Makefiles"
+        -DCMAKE_INSTALL_PREFIX=/app -DBUILD_TRAINING_TOOLS=OFF
+      - cd _build && make -j$(nproc)
+      - cd _build && make install
     sources:
       - type: archive
         url: https://github.com/tesseract-ocr/tesseract/archive/5.5.0.tar.gz
