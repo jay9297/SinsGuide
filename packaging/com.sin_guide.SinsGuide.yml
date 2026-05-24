@@ -76,4 +76,4 @@ modules:
         ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/com.sin_guide.SinsGuide.svg
     sources:
       - type: dir
-        path: /
+        path: ../
