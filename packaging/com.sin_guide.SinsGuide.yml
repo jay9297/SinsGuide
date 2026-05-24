@@ -59,6 +59,9 @@ modules:
   # ── Python runtime dependencies ────────────────────────────────
   - name: python3-dependencies
     buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
     build-commands:
       - pip3 install --prefix=${FLATPAK_DEST} --no-build-isolation -r requirements.txt
     sources:
