@@ -30,7 +30,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/DanBloomberg/leptonica/releases/download/1.85.0/leptonica-1.85.0.tar.gz
-        sha256: a12fbec2d51bd3be6a6f6647399f58bde1c585c7986350502efc0679b114ce0b
+        sha256: 3745ae3bf271a6801a2292eead83ac926e3a9bc1bf622e9cd4dd0f3786e17205
     cleanup:
       - /include
       - /lib/pkgconfig
@@ -38,14 +38,13 @@ modules:
 
   # ── Tesseract OCR (gem scanning) ───────────────────────────────
   - name: tesseract
-    buildsystem: autotools
+    buildsystem: cmake-ninja
     config-opts:
-      - --disable-tools
-      - --disable-training-tools
+      - -DBUILD_TRAINING_TOOLS=OFF
     sources:
       - type: archive
         url: https://github.com/tesseract-ocr/tesseract/archive/5.5.0.tar.gz
-        sha256: 0aef0bad08b69874d03b6a0954623b9ac3be1009ab36af35aa6ffbbd6381bc11
+        sha256: f2fb34ca035b6d087a42875a35a7a5c4155fa9979c6132365b1e5a28ebc3fc11
     post-install:
       - install -d /app/share/tessdata
       - curl -Lso /app/share/tessdata/eng.traineddata
