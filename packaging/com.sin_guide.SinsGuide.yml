@@ -44,14 +44,14 @@ modules:
         -DCMAKE_INSTALL_PREFIX=/app -DBUILD_TRAINING_TOOLS=OFF
       - cd _build && make -j$(nproc)
       - cd _build && make install
+      - install -d /app/share/tessdata && cp eng.traineddata /app/share/tessdata/
     sources:
       - type: archive
         url: https://github.com/tesseract-ocr/tesseract/archive/5.5.0.tar.gz
         sha256: f2fb34ca035b6d087a42875a35a7a5c4155fa9979c6132365b1e5a28ebc3fc11
-    post-install:
-      - install -d /app/share/tessdata
-      - curl -Lso /app/share/tessdata/eng.traineddata
-        https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
+      - type: file
+        url: https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
+        sha256: daa0c97d651c19fba3b25e81317cd697e9908c8208090c94c3905381c23fc047
     cleanup:
       - /include
       - /share/doc
