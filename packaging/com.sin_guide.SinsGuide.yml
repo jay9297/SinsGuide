@@ -55,6 +55,7 @@ modules:
     cleanup:
       - /include
       - /share/doc
+      - /lib64/libtesseract.a
 
   # ── Python runtime dependencies ────────────────────────────────
   - name: python3-dependencies
