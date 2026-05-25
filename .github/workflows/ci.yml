@@ -49,12 +49,8 @@ jobs:
 
       - name: Coverage threshold check
         run: |
-          # Threshold set after baseline measurement — update this value after Phase 8
-          THRESHOLD=${COVERAGE_THRESHOLD:-0}
-          if [ "$THRESHOLD" -eq 0 ]; then
-            echo "Coverage threshold not yet set — skipping enforcement (baseline measurement pending)"
-            exit 0
-          fi
+          # Baseline: 52% (2026-05-25). Tests added to reach 82%. Threshold: 80%.
+          THRESHOLD=${COVERAGE_THRESHOLD:-80}
           ACTUAL=$(python -c "import xml.etree.ElementTree as ET; print(int(float(ET.parse('coverage.xml').getroot().get('line-rate')) * 100))")
           echo "Coverage: $ACTUAL% (threshold: $THRESHOLD%)"
           if [ "$ACTUAL" -lt "$THRESHOLD" ]; then
