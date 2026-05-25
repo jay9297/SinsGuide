@@ -20,7 +20,7 @@ def make_manager(tmp_path: Path) -> ConfigManager:
 class TestLoadMissingFile:
     def test_creates_defaults_when_no_file(self, tmp_path: Path) -> None:
         # Arrange / Act
-        manager = make_manager(tmp_path)
+        make_manager(tmp_path)
 
         # Assert — config.json was written
         config_file = tmp_path / ".config" / "sin_guide" / "config.json"
@@ -82,7 +82,7 @@ class TestLoadCorruptedJson:
         config_file.write_text("{ this is not valid json !!!")
 
         # Act
-        manager = make_manager(tmp_path)
+        make_manager(tmp_path)
 
         # Assert — backup file was created
         backup = config_dir / "config.json.bak"

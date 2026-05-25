@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import io
-from typing import Any
 
 from PIL import Image
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget

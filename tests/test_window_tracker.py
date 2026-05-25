@@ -1,8 +1,7 @@
 """Tests for WindowTracker — Xlib mocked at import time."""
 from __future__ import annotations
 
-import subprocess
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 

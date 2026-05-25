@@ -2,9 +2,7 @@ import base64
 import re
 import zlib
 from dataclasses import dataclass
-from typing import Any
 
-import requests
 
 
 @dataclass

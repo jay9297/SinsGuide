@@ -1,12 +1,9 @@
 import json
 import logging
-import sys
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
-
 from PySide6.QtCore import Qt, QPoint, QTimer
-from PySide6.QtGui import QFont, QColor, QMouseEvent, QPixmap
+from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,

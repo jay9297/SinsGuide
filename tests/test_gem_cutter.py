@@ -1,7 +1,6 @@
 """Tests for GemCutter — gem availability and build intersection logic."""
 from __future__ import annotations
 
-import pytest
 
 from sin_guide.utils.pob_parser import GemSetup
 

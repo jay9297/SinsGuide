@@ -1,7 +1,6 @@
 """Tests for ExpCalculator — pure math, parametrized branch coverage."""
 from __future__ import annotations
 
-import math
 
 import pytest
 

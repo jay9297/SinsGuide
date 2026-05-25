@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 import pytest
 
-from sin_guide.core.timer import CampaignTimer, TimerState
+from sin_guide.core.timer import CampaignTimer
 
 # Canonical patch target
 _MONO = "sin_guide.core.timer.time.monotonic"
