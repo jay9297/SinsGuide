@@ -30,8 +30,6 @@ build/
 .omc/
 .remember/
 .sisyphus/
-AGENTS.md
-CLAUDE.md
 VISUAL_TESTING_PLAN.md
 .opencode.json
 .mcp.json

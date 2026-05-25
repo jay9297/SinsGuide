@@ -1,0 +1,73 @@
+name: Auto-Merge on Approval
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  automerge:
+    if: |
+      github.event.review.state == 'approved' &&
+      github.event.review.user.login == 'jay9297'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} \
+            --squash --auto \
+            --repo ${{ github.repository }}
+
+  release:
+    needs: automerge
+    # Only cut a release when merging into main (dev→main PRs)
+    if: |
+      github.event.review.state == 'approved' &&
+      github.event.review.user.login == 'jay9297' &&
+      github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js for standard-version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Wait for merge to complete
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          for i in $(seq 1 12); do
+            STATE=$(gh pr view "$PR_NUM" --json state --jq '.state' --repo ${{ github.repository }})
+            if [ "$STATE" = "MERGED" ]; then
+              echo "PR merged, proceeding with release"
+              break
+            fi
+            echo "Waiting for merge... ($i/12)"
+            sleep 10
+          done
+
+      - name: Pull latest main after merge
+        run: git pull origin main
+
+      - name: Tag and release (semver patch bump)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install -g standard-version
+          git config user.name "release-bot"
+          git config user.email "release-bot@users.noreply.github.com"
+          standard-version --release-as patch
+          git push --follow-tags origin main
+          gh release create "$(git describe --tags --abbrev=0)" \
+            --generate-notes \
+            --repo ${{ github.repository }}
