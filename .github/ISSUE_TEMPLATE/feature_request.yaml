@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest a new feature or improvement for Sin's Guide.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! Please describe the feature clearly so it can be scoped and prioritised.
+
+  - type: checkboxes
+    id: duplicates
+    attributes:
+      label: Check for duplicates
+      options:
+        - label: I've searched [existing issues](https://github.com/jay9297/SinsGuide/issues?q=is%3Aissue) and this hasn't been requested yet
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      placeholder: e.g. I often lose track of which act I'm in when the overlay is minimised.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      placeholder: Describe what you'd like to see added or changed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Any workarounds you currently use, or other ways this could be solved.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, mockups, or anything else that helps explain the request.
+    validations:
+      required: false

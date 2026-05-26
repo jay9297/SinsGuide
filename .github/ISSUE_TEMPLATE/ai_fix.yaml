@@ -1,0 +1,50 @@
+name: AI fix request
+description: Report a well-scoped bug or task for the AI agent to fix automatically.
+labels: [ai-fix]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues with this template are automatically picked up by the AI agent when labelled **ai-fix**.
+        Keep the description concrete and focused — the agent works best with a single, well-defined task.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Confirm scope
+      options:
+        - label: This is a single, well-scoped task (not a broad refactor or multi-feature request)
+          required: true
+        - label: I've checked there are no open PRs already addressing this
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to be fixed or done?
+      description: Be specific. Include file names, function names, or error messages where possible.
+      placeholder: |
+        e.g. `sin_guide/overlay/step_renderer.py` crashes with a KeyError when `zone` is None.
+        The fix should guard against a missing zone key before rendering.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How will you know the fix is correct? What should the tests verify?
+      placeholder: |
+        - No KeyError when zone is None
+        - Existing tests still pass
+        - New test covers the None zone case
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Error messages, stack traces, screenshots, or relevant config.
+    validations:
+      required: false
