@@ -204,13 +204,13 @@ a4_ids["ngakanu_01"] = add_step(4, "Ngakanu", "Travel to Ngakanu / Heart of the 
 a4_ids["heart_tribe_01"] = add_step(4, "Heart of the Tribe", "Enter Heart of the Tribe and complete Act 4", "travel", "Heart of the Tribe", "", ["mandatory"], [], {"type": "enter_area", "target_area": "Heart of the Tribe"})
 
 # TODO: Act 5 - Add zone data
-a5_ids = {}
+a5_ids: dict[str, str] = {}
 
 # TODO: Act 6 - Add zone data
-a6_ids = {}
+a6_ids: dict[str, str] = {}
 
 # TODO: Act 7 - Add zone data
-a7_ids = {}
+a7_ids: dict[str, str] = {}
 
 with open("data/guides/poe2_campaign.json", "w") as f:
     json.dump(POE2_GUIDE, f, indent=2)

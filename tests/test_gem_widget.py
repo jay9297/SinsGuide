@@ -1,7 +1,6 @@
 """Tests for GemWidget — gem availability display widget."""
 from __future__ import annotations
 
-import pytest
 from PySide6.QtWidgets import QLabel
 
 from sin_guide.utils.pob_parser import GemSetup

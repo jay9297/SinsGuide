@@ -1,0 +1,78 @@
+name: AI Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    name: ai-review
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify ANTHROPIC_API_KEY is NOT set
+        run: |
+          if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+            echo "::error::ANTHROPIC_API_KEY is set; would override Pro subscription auth and incur PAYG charges"
+            exit 1
+          fi
+
+      - name: Install agent tooling if missing
+        run: |
+          command -v claude || npm install -g @anthropic-ai/claude-code
+          command -v opencode || curl -fsSL https://opencode.ai/install | bash
+
+      - name: Generate diff
+        run: |
+          git diff "origin/${{ github.base_ref }}...HEAD" > /tmp/pr.diff
+          git diff --stat "origin/${{ github.base_ref }}...HEAD" > /tmp/pr.summary
+
+      - name: Run AI review
+        run: |
+          PROMPT=$(cat <<EOF
+          You are a senior Python developer reviewing a Sin's Guide PR.
+          Follow CLAUDE.md. The project is a PoE2 campaign tracker overlay
+          using PySide6 (Qt) on Linux/X11.
+
+          Diff summary:
+          $(cat /tmp/pr.summary)
+
+          Full diff:
+          $(cat /tmp/pr.diff)
+
+          Review checklist:
+          1. Type safety: mypy-clean? Any Any escapes?
+          2. Qt correctness: signal/slot connections cleaned up on widget destroy?
+             Any threading violations (Qt widgets touched off the main thread)?
+          3. X11 dependency: any new code that assumes Wayland-native APIs?
+             XWayland compatibility intact?
+          4. OCR: changes to gem_ocr.py paired with test fixtures?
+          5. Steam discovery: any simplification of steam_discovery.py? If so,
+             flag missing test coverage.
+          6. State management: all settings flow through config.manager?
+             No new module-level mutable state?
+          7. Test coverage: which new code paths lack tests?
+          8. Visual regression: any UI changes — snapshot tests updated?
+          9. Style: PEP 8 / ruff-clean?
+
+          Be specific. Cite file and line numbers. Format as Markdown.
+          Conclude with: APPROVE, REQUEST_CHANGES, or COMMENT.
+          EOF
+          )
+
+          ./scripts/ai-agent.sh "$PROMPT" --mode review --max-turns 20 > /tmp/review.md
+
+      - name: Post review comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file /tmp/review.md

@@ -13,8 +13,9 @@ def render_steps(container: QVBoxLayout, steps, width: int) -> str:
     """
     while container.count():
         child = container.takeAt(0)
-        if child.widget():
-            child.widget().deleteLater()
+        widget = child.widget() if child is not None else None
+        if widget is not None:
+            widget.deleteLater()
 
     current_zone = ""
     for step in steps:

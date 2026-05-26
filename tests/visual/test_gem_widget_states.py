@@ -1,7 +1,6 @@
 """Visual regression tests for GemWidget states."""
 from __future__ import annotations
 
-import pytest
 
 from sin_guide.utils.pob_parser import GemSetup
 

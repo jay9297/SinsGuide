@@ -7,7 +7,6 @@ import tempfile
 from pathlib import Path
 from unittest import mock
 
-import pytest
 
 from sin_guide.utils.steam_discovery import (
     _POE2_APPID,

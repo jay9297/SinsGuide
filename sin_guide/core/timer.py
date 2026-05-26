@@ -59,6 +59,8 @@ class CampaignTimer:
 
     def advance_act(self, character: str):
         if self.state.is_running and not self.state.is_paused:
+            if self.state._act_start_time is None:
+                return
             elapsed = time.monotonic() - self.state._act_start_time
             self.state.act_seconds += elapsed
             self._write_split(character)
@@ -84,7 +86,7 @@ class CampaignTimer:
     def get_display(self) -> str:
         total = self.state.total_seconds
         act = self.state.act_seconds
-        if self.state.is_running and not self.state.is_paused and self.state._start_time:
+        if self.state.is_running and not self.state.is_paused and self.state._start_time and self.state._act_start_time:
             elapsed = time.monotonic() - self.state._start_time
             act_elapsed = time.monotonic() - self.state._act_start_time
             total += elapsed

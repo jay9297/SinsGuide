@@ -1,0 +1,71 @@
+name: CI
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            tesseract-ocr \
+            xvfb \
+            libxcb-cursor0 \
+            libxkbcommon-x11-0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-shape0 \
+            libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
+            libegl1 libopengl0
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r sin_guide/requirements.txt
+          pip install pytest pytest-cov pytest-qt pytest-xvfb ruff mypy
+
+      - name: Lint
+        run: ruff check sin_guide/ tests/
+
+      - name: Type check
+        run: mypy sin_guide/ --ignore-missing-imports
+
+      - name: Unit + functional tests
+        run: xvfb-run -a pytest tests/ -v --cov=sin_guide --cov-report=term-missing --cov-report=xml
+
+      - name: Visual regression tests
+        run: xvfb-run -a pytest tests/visual/ -v
+
+      - name: Coverage threshold check
+        run: |
+          # Baseline: 52% (2026-05-25). Tests added to reach 82%. Threshold: 80%.
+          THRESHOLD=${COVERAGE_THRESHOLD:-80}
+          ACTUAL=$(python -c "import xml.etree.ElementTree as ET; print(int(float(ET.parse('coverage.xml').getroot().get('line-rate')) * 100))")
+          echo "Coverage: $ACTUAL% (threshold: $THRESHOLD%)"
+          if [ "$ACTUAL" -lt "$THRESHOLD" ]; then
+            echo "::error::Coverage $ACTUAL% is below threshold $THRESHOLD%"
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-diffs
+          path: tests/visual/diffs/
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

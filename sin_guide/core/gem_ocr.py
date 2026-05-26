@@ -27,7 +27,7 @@ def preprocess_screenshot(image: Image.Image) -> Image.Image:
     gray = cropped.convert("L")
     binary = gray.point(lambda x: 255 if x > 128 else 0)
     bw, bh = binary.size
-    scaled = binary.resize((bw * 2, bh * 2), Image.LANCZOS)
+    scaled = binary.resize((bw * 2, bh * 2), Image.Resampling.LANCZOS)
 
     return scaled
 

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import io
-from typing import Any
 
 from PIL import Image
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget
@@ -82,8 +80,9 @@ class GemWidget(QWidget):
     def _render(self) -> None:
         while self._content_layout.count():
             child = self._content_layout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
+            widget = child.widget() if child is not None else None
+            if widget is not None:
+                widget.deleteLater()
 
         visible = bool(self._build_gems)
         self._separator.setVisible(visible)
@@ -100,6 +99,7 @@ class GemWidget(QWidget):
             self._render_prompt()
 
     def _render_scan_result(self) -> None:
+        assert self._scan_result is not None
         needed = set(n.lower() for n in self._scan_result.get("needed", []))
         available = self._scan_result.get("available", [])
 
@@ -144,6 +144,7 @@ class GemWidget(QWidget):
                 self._content_layout.addWidget(label)
 
     def _render_level_gems(self) -> None:
+        assert self._player_level is not None
         available = self._cutter.get_available_gems(self._player_level, self._build_gems)
         upcoming = self._cutter.get_upcoming_gems(self._player_level, self._build_gems, horizon=3)
 

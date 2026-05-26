@@ -9,7 +9,6 @@ Regenerate all baselines (first run, or after intentional UI changes):
 """
 from __future__ import annotations
 
-import pytest
 
 from tests.conftest import make_step
 
