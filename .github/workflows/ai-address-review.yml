@@ -1,0 +1,138 @@
+name: AI Address Review Comments
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  address:
+    # Only run on change requests for AI-generated PRs
+    if: |
+      github.event.review.state == 'changes_requested' &&
+      contains(github.event.pull_request.labels.*.name, 'ai-generated')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify ANTHROPIC_API_KEY is NOT set
+        run: |
+          if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+            echo "::error::ANTHROPIC_API_KEY is set; would override Pro subscription auth and incur PAYG charges"
+            exit 1
+          fi
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps + Python deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr xvfb \
+            libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 \
+            libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-shape0 libxcb-sync1 \
+            libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
+            libegl1 libopengl0
+          pip install -r sin_guide/requirements.txt
+          pip install pytest pytest-cov pytest-qt pytest-xvfb ruff mypy
+
+      - name: Install agent tooling if missing
+        run: |
+          command -v claude || npm install -g @anthropic-ai/claude-code
+          command -v opencode || curl -fsSL https://opencode.ai/install | bash
+
+      - name: Collect review feedback
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          REPO=${{ github.repository }}
+
+          # Review body from this submission
+          REVIEW_BODY=$(jq -r '.review.body // ""' "$GITHUB_EVENT_PATH")
+
+          # All inline review comments on the PR
+          gh api "repos/${REPO}/pulls/${PR_NUM}/comments" \
+            --jq '.[] | "File: \(.path) (line \(.line // .original_line))\n\(.body)\n"' \
+            > /tmp/inline_comments.txt
+
+          # General review comments (non-inline)
+          gh api "repos/${REPO}/issues/${PR_NUM}/comments" \
+            --jq '.[] | select(.user.login != "github-actions[bot]") | "\(.user.login): \(.body)\n"' \
+            > /tmp/pr_comments.txt
+
+          # PR diff for context
+          git diff "origin/${{ github.event.pull_request.base.ref }}...HEAD" > /tmp/pr.diff
+          git diff --stat "origin/${{ github.event.pull_request.base.ref }}...HEAD" > /tmp/pr.summary
+
+          # Write combined feedback file
+          {
+            echo "=== Review body ==="
+            echo "$REVIEW_BODY"
+            echo ""
+            echo "=== Inline comments ==="
+            cat /tmp/inline_comments.txt
+            echo ""
+            echo "=== PR comments ==="
+            cat /tmp/pr_comments.txt
+          } > /tmp/review_feedback.txt
+
+      - name: Run AI agent to address feedback
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          REVIEWER="${{ github.event.review.user.login }}"
+
+          PROMPT=$(cat <<EOF
+          You are addressing code review feedback on PR #${PR_NUM} ("${PR_TITLE}") in jay9297/SinsGuide.
+          The review was submitted by @${REVIEWER} requesting changes.
+
+          Follow the rules in CLAUDE.md. Make the minimal correct changes to satisfy the feedback.
+          Add or update tests in tests/. Run the test suite with
+          xvfb-run -a pytest tests/ -v and ensure it passes before finishing.
+          If you change UI rendering, regenerate visual snapshots with pytest --update-snapshots.
+          Do not commit — just make the file changes.
+
+          === PR diff summary ===
+          $(cat /tmp/pr.summary)
+
+          === Review feedback ===
+          $(cat /tmp/review_feedback.txt)
+          EOF
+          )
+
+          ./scripts/ai-agent.sh "$PROMPT" --mode fix --max-turns 40
+
+      - name: Verify tests pass
+        run: xvfb-run -a pytest tests/ -v
+
+      - name: Push fixes and notify
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          REVIEWER="${{ github.event.review.user.login }}"
+
+          git config user.name "ai-agent[bot]"
+          git config user.email "ai-agent@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            gh pr comment "$PR_NUM" \
+              --body "🤖 AI agent reviewed the feedback from @${REVIEWER} but determined no code changes were needed. Please clarify if something was missed."
+          else
+            git commit -m "fix: address review feedback from @${REVIEWER}"
+            git push origin HEAD
+            gh pr comment "$PR_NUM" \
+              --body "🤖 AI agent has addressed the review feedback from @${REVIEWER}. Please re-review."
+          fi
