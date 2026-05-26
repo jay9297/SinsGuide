@@ -33,3 +33,5 @@ build/
 VISUAL_TESTING_PLAN.md
 .opencode.json
 .mcp.json
+docs/development/
+docs/packaging/

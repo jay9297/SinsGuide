@@ -1,8 +1,12 @@
 # Sin's Guide
 
-A Path of Exile 2 campaign tracker and overlay for Linux, inspired by Lailloken's Exile-UI Act Tracker.
+A Path of Exile 2 campaign tracker and overlay for Linux — a Linux port of [Lailloken's Exile-UI](https://github.com/Lailloken/Lailloken-UI) Act Tracker.
 
 Tracks your campaign progress, provides step-by-step zone-level guidance, manages gem requirements from PoB imports, and shows real-time effective EXP — all in a transparent draggable overlay that appears over the game window.
+
+## Acknowledgments
+
+This project is a Linux port of the excellent [Exile-UI](https://github.com/Lailloken/Lailloken-UI) by **Lailloken**. The campaign guide data, zone mappings, gem database, and core tracking logic are all adapted from Exile-UI's Act Tracker — originally written in AHK for Windows — reimplemented in Python with PySide6 for Linux (Steam/Proton). All credit for the original design, guide content, and game data goes to Lailloken and the Exile-UI project.
 
 ## UI Overview
 
