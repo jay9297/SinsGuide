@@ -80,8 +80,9 @@ class GemWidget(QWidget):
     def _render(self) -> None:
         while self._content_layout.count():
             child = self._content_layout.takeAt(0)
-            if child is not None and child.widget() is not None:
-                child.widget().deleteLater()
+            widget = child.widget() if child is not None else None
+            if widget is not None:
+                widget.deleteLater()
 
         visible = bool(self._build_gems)
         self._separator.setVisible(visible)
