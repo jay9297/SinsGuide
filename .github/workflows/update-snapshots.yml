@@ -1,0 +1,55 @@
+name: Update Visual Snapshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-snapshots:
+    name: Regenerate visual baselines
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            tesseract-ocr \
+            xvfb \
+            libxcb-cursor0 \
+            libxkbcommon-x11-0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-shape0 \
+            libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
+            libegl1 libopengl0
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r sin_guide/requirements.txt
+          pip install pytest pytest-qt pytest-xvfb
+
+      - name: Regenerate snapshots
+        run: xvfb-run -a pytest tests/visual/ --update-snapshots -v
+
+      - name: Commit updated snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/visual/snapshots/
+          if git diff --cached --quiet; then
+            echo "No snapshot changes."
+          else
+            git commit -m "chore: regenerate visual snapshots in CI environment"
+            git push
+          fi
