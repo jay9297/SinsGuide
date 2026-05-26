@@ -233,3 +233,15 @@ def pytest_addoption(parser):
         default=False,
         help="Regenerate all visual snapshot baselines.",
     )
+
+
+def pytest_sessionstart(session: pytest.Session) -> None:
+    """Delete stored snapshots before each run so baselines are always fresh."""
+    for png in SNAPSHOTS_DIR.glob("*.png"):
+        png.unlink()
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    """Remove generated snapshots after the run (pass or fail)."""
+    for png in SNAPSHOTS_DIR.glob("*.png"):
+        png.unlink()
