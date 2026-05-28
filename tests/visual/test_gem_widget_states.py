@@ -1,6 +1,7 @@
 """Visual regression tests for GemWidget states."""
 from __future__ import annotations
 
+from PySide6.QtWidgets import QApplication
 
 from sin_guide.utils.pob_parser import GemSetup
 
@@ -8,6 +9,7 @@ from tests.test_gem_widget import GEM_DB
 
 
 def _grab(widget):
+    QApplication.processEvents()
     return widget.grab()
 
 
