@@ -59,7 +59,7 @@ jobs:
             git checkout -b "$BRANCH"
           fi
 
-      - name: Build agent prompt
+      - name: Build plan prompt
         run: |
           ISSUE_BODY=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
 
@@ -70,12 +70,12 @@ jobs:
           NOTE: A previous fix attempt exists on this branch. Prior commits:
           ${PREV_COMMITS}
 
-          Review the existing changes and either build on them or correct them.
-          Do not revert work that is already correct."
+          Take these prior changes into account. Build on correct work; correct
+          anything that is wrong. Do not revert work that is already right."
           fi
 
-          cat > /tmp/fix-prompt.txt << PROMPT_EOF
-          You are resolving GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
+          cat > /tmp/plan-prompt.txt << PROMPT_EOF
+          You are planning the fix for GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
 
           Title: ${{ steps.meta.outputs.issue_title }}
 
@@ -83,15 +83,64 @@ jobs:
           ${ISSUE_BODY}
           ${RETRY_CONTEXT}
 
-          Follow the rules in CLAUDE.md. Make the minimal correct change.
-          Add or update tests in tests/. Do NOT run the test suite yourself.
-          If you change UI rendering, note that snapshot tests may need regeneration.
+          Explore the codebase (read-only), then write a detailed implementation
+          plan that a separate coding agent will execute. Cover:
+          - Which files to change and why
+          - Specific code changes (pseudocode or exact snippets where helpful)
+          - New or updated tests to add under tests/
+          - Edge cases and gotchas to watch for
+
+          Follow the conventions in CLAUDE.md. Keep the plan precise and
+          actionable. Do NOT make any code changes yourself.
+
+          After the plan, choose the best implementation model based on task
+          complexity and end your response with exactly this line:
+          IMPLEMENTATION_MODEL: <slug>
+
+          Available models (best to most conservative):
+          - opencode/mimo-v2.5-free       best reasoning; use for complex or multi-file changes
+          - opencode/deepseek-v4-flash-free  fast; use for focused single-area changes
           PROMPT_EOF
 
-      - name: Run AI agent
+      - name: Generate implementation plan
+        id: plan
         run: |
           source scripts/agent-lib.sh
-          run_agent_with_fallback /tmp/fix-prompt.txt fix 80
+          AGENT_OUTPUT_FILE=/tmp/plan.md \
+            run_agent_with_fallback /tmp/plan-prompt.txt plan 30
+
+          # Extract model recommendation written by Claude (or planning fallback)
+          IMPL_MODEL=$(grep -oP '(?<=IMPLEMENTATION_MODEL:)\s*\K\S+' /tmp/plan.md 2>/dev/null || echo "")
+          echo "impl_model=${IMPL_MODEL}" >> "$GITHUB_OUTPUT"
+          echo "Planning agent chose implementation model: '${IMPL_MODEL}'"
+
+      - name: Build implementation prompt
+        run: |
+          PLAN=$(cat /tmp/plan.md)
+
+          cat > /tmp/impl-prompt.txt << PROMPT_EOF
+          You are implementing the fix for GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
+
+          Title: ${{ steps.meta.outputs.issue_title }}
+
+          Follow the implementation plan below exactly. Make the minimal correct
+          change. Follow the rules in CLAUDE.md. Add or update tests in tests/.
+          Do NOT run the test suite yourself. If you change UI rendering, note
+          that snapshot tests may need regeneration.
+
+          Implementation plan:
+          ${PLAN}
+          PROMPT_EOF
+
+      - name: Execute implementation plan
+        run: |
+          source scripts/agent-lib.sh
+          IMPL_MODEL="${{ steps.plan.outputs.impl_model }}"
+          if [[ -n "$IMPL_MODEL" ]]; then
+            echo "Using planning agent's model recommendation: $IMPL_MODEL"
+            export AGENT_MODEL_OVERRIDE="$IMPL_MODEL"
+          fi
+          run_agent_with_fallback /tmp/impl-prompt.txt implement 80
 
       - name: Commit and push branch
         id: push
@@ -235,7 +284,7 @@ jobs:
             cat "$OUTPUT_FILE" >> /tmp/verify-fix-prompt-current.txt
 
             echo "🤖 Running agent to fix test failures (attempt $ATTEMPT)..."
-            run_agent_with_fallback /tmp/verify-fix-prompt-current.txt fix 20
+            run_agent_with_fallback /tmp/verify-fix-prompt-current.txt implement 20
 
             if git diff --quiet && git diff --cached --quiet; then
               echo "::error::Agent produced no changes — cannot recover from test failures"

@@ -83,7 +83,10 @@ run_agent_with_fallback() {
       local exit_code=0
       ./scripts/ai-agent.sh "$task" \
         --mode "$mode" \
-        --max-turns "$max_turns" || exit_code=$?
+        --max-turns "$max_turns" \
+        ${AGENT_OUTPUT_FILE:+--output-file "${AGENT_OUTPUT_FILE}"} \
+        ${AGENT_MODEL_OVERRIDE:+--model "${AGENT_MODEL_OVERRIDE}"} \
+        || exit_code=$?
 
       case $exit_code in
         0)
