@@ -74,6 +74,10 @@ jobs:
           anything that is wrong. Do not revert work that is already right."
           fi
 
+          # Fetch the live model list so Claude picks from what is actually available.
+          AVAILABLE_MODELS=$(OPENCODE_API_KEY="${OPENCODE_API_KEY}" opencode models 2>/dev/null \
+            || echo "(model list unavailable — pick conservatively)")
+
           cat > /tmp/plan-prompt.txt << PROMPT_EOF
           You are planning the fix for GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
 
@@ -93,13 +97,14 @@ jobs:
           Follow the conventions in CLAUDE.md. Keep the plan precise and
           actionable. Do NOT make any code changes yourself.
 
-          After the plan, choose the best implementation model based on task
-          complexity and end your response with exactly this line:
+          After the plan, choose the best free/low-cost model from the list
+          below based on task complexity (prefer stronger models for multi-file
+          or architectural changes; faster models for focused single-area fixes).
+          End your response with exactly this line:
           IMPLEMENTATION_MODEL: <slug>
 
-          Available models (best to most conservative):
-          - opencode/mimo-v2.5-free       best reasoning; use for complex or multi-file changes
-          - opencode/deepseek-v4-flash-free  fast; use for focused single-area changes
+          Currently available models:
+          ${AVAILABLE_MODELS}
           PROMPT_EOF
 
       - name: Generate implementation plan
