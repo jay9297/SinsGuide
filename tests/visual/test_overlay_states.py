@@ -121,11 +121,16 @@ class TestMultiStep:
 
 class TestVisibilityToggles:
     def test_timer_hidden(self, make_overlay, assert_matches_snapshot):
-        """Timer label is absent when show_timer=False."""
-        steps = [make_step()]
+        """Timer is hidden but exp label is visible — distinct from both-hidden."""
+        steps = [make_step(zone="The Riverbank")]
         overlay = make_overlay(
             steps=steps,
-            config_overrides={"overlay.show_timer": False},
+            player_level=8,
+            config_overrides={
+                "overlay.show_timer": False,
+                "overlay.show_effective_exp": True,
+                "guide.character_name": "TestChar",
+            },
         )
         assert_matches_snapshot(_grab(overlay), "timer_hidden")
 
