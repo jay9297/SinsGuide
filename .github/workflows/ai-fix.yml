@@ -167,13 +167,17 @@ jobs:
 
       - name: Install system deps + Python deps
         run: |
-          brew update
-          brew install -y tesseract-ocr xvfb \
-            libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 \
-            libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
-            libxcb-render-util0 libxcb-shape0 libxcb-sync1 \
-            libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
-            libegl1 libopengl0
+          if command -v apt-get > /dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y tesseract-ocr xvfb \
+              libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 \
+              libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+              libxcb-render-util0 libxcb-shape0 libxcb-sync1 \
+              libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
+              libegl1 libopengl0
+          else
+            echo "apt-get not available — assuming system packages pre-installed on self-hosted runner"
+          fi
           pip install -r sin_guide/requirements.txt
           pip install pytest pytest-cov pytest-qt pytest-xvfb ruff mypy
 
