@@ -32,11 +32,13 @@ class TestResizeHandleWidget:
 
     def test_resize_handle_style_consistent_with_drag_handle(self, make_overlay):
         overlay = make_overlay(steps=[])
-        rh_bg = overlay.resize_handle.styleSheet()
-        dh_bg = overlay.drag_handle.styleSheet()
-        assert "rgba(0, 220, 220, 120)" in rh_bg
-        assert "rgba(0, 255, 255, 180)" in rh_bg
-        assert "border-radius: 3px" in rh_bg
+        rh_ss = overlay.resize_handle.styleSheet()
+        dh_ss = overlay.drag_handle.styleSheet()
+        for color in ("rgba(0, 220, 220, 120)", "rgba(0, 255, 255, 180)"):
+            assert color in rh_ss
+            assert color in dh_ss
+        assert "border-radius: 3px" in rh_ss
+        assert "border-radius: 3px" in dh_ss
 
 
 class TestOverlayWidthConstraints:
