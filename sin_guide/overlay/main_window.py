@@ -297,9 +297,9 @@ class OverlayWindow(QWidget):
             }}
         """)
 
-        self.resize(width, self.height())
         self.setMinimumWidth(180)
         self.setMaximumWidth(600)
+        self.resize(width, self.height())
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         
         screen = QApplication.primaryScreen()
