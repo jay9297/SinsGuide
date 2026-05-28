@@ -97,9 +97,11 @@ write_output() {
   printf '%s\n' "$content"
 }
 
-is_quota_or_overload_error() {
+should_try_next_model() {
+  # Returns true if the output indicates we should fall through to the next model.
+  # Covers: quota/rate limits, overload, billing issues, and model-not-found/unavailable.
   echo "$1" | grep -qiE \
-    'usage_limit|rate_limit|overloaded|insufficient_quota|429|529|billing|payment_required|reached your usage limit|quota|free.*limit|daily.*limit'
+    'usage_limit|rate_limit|overloaded|insufficient_quota|429|529|billing|payment_required|reached your usage limit|quota|free.*limit|daily.*limit|model.*not.*found|no.*such.*model|unknown.*model|invalid.*model|model.*unavailable|model.*not.*supported|unsupported.*model|does not exist'
 }
 
 log() { echo "[ai-agent] $*" >&2; }
@@ -136,7 +138,7 @@ try_claude_code() {
   exit_code=$?
   set -e
 
-  if is_quota_or_overload_error "$out" || is_quota_or_overload_error "$(cat "$stderr_tmp")"; then
+  if should_try_next_model "$out" || should_try_next_model "$(cat "$stderr_tmp")"; then
     log "claude code: quota/overload detected, falling through to tier 2"
     rm -f "$stderr_tmp"
     return 1
@@ -178,7 +180,7 @@ try_opencode_model() {
   exit_code=$?
   set -e
 
-  if is_quota_or_overload_error "$out" || is_quota_or_overload_error "$(cat "$stderr_tmp")"; then
+  if should_try_next_model "$out" || should_try_next_model "$(cat "$stderr_tmp")"; then
     log "opencode $model: quota/limit hit, trying next model"
     rm -f "$stderr_tmp"
     return 1
