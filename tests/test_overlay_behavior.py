@@ -125,19 +125,24 @@ class TestOverlayResize:
         overlay = make_overlay(steps=[])
         overlay.config.set.reset_mock()
         overlay.resize(350, overlay.height())
+        overlay._flush_pending_width()
         overlay.config.set.assert_any_call("overlay.width", 350)
 
     def test_height_not_persisted_by_resize(self, make_overlay):
         overlay = make_overlay(steps=[])
+        overlay.config.set.reset_mock()
         initial_height = overlay.height()
         overlay.resize(350, initial_height)
+        overlay._flush_pending_width()
         for call in overlay.config.set.call_args_list:
             assert call[0][0] != "overlay.height"
 
     def test_width_not_persisted_on_height_only_change(self, make_overlay):
         overlay = make_overlay(steps=[])
         overlay.config.set.reset_mock()
+        overlay._pending_width = None
         width_before_resize = overlay.width()
         overlay.resize(width_before_resize, 500)
+        overlay._flush_pending_width()
         width_calls = [c for c in overlay.config.set.call_args_list if c[0][0] == "overlay.width"]
         assert len(width_calls) == 0

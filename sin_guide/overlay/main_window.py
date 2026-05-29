@@ -118,6 +118,7 @@ class OverlayWindow(QWidget):
         self._player_level: int | None = None
         self._gem_db: dict = {}
         self._gem_widget: GemWidget | None = None
+        self._pending_width: int | None = None
         self._setup_ui()
         self._apply_config()
         self._start_refresh()
@@ -407,7 +408,13 @@ class OverlayWindow(QWidget):
         new_width = event.size().width()
         old_width = event.oldSize().width()
         if new_width != old_width:
-            self.config.set("overlay.width", new_width)
+            self._pending_width = new_width
+            QTimer.singleShot(300, self._flush_pending_width)
+
+    def _flush_pending_width(self):
+        if self._pending_width is not None:
+            self.config.set("overlay.width", self._pending_width)
+            self._pending_width = None
 
     def show_overlay(self):
         self.show()
