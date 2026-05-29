@@ -306,7 +306,7 @@ class OverlayWindow(QWidget):
         self.setMaximumWidth(600)
         self.resize(width, self.height())
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        
+
         screen = QApplication.primaryScreen()
         if x < 0 or y < 0 or not self._is_on_screen(x, y, screen):
             logger.debug(f"Saved position ({x},{y}) is off-screen — resetting to bottom-centre")

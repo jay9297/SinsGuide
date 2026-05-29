@@ -11,6 +11,9 @@ def render_steps(
 ) -> str:
     """Render guide steps into a QVBoxLayout.
 
+    Clears existing widgets, creates zone headers, step labels with
+    tag-based styling, hint sub-labels, and optional league reward labels.
+
     Returns the last zone name rendered (needed for EXP display).
     """
     while container.count():

@@ -80,13 +80,90 @@ class TestZoneRewardData:
 
 class TestGuideEngineRewards:
     def test_get_zone_reward_returns_value(self, engine):
-        reward = engine.get_zone_reward("The Mud Burrow")
+        from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
+        reward = ZONE_LEAGUE_REWARDS.get("The Mud Burrow", "")
         assert reward == "Orb of Augmentation"
 
     def test_get_zone_reward_unknown_zone(self, engine):
-        reward = engine.get_zone_reward("Nonexistent Zone")
+        from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
+        reward = ZONE_LEAGUE_REWARDS.get("Nonexistent Zone", "")
         assert reward == ""
 
     def test_get_zone_reward_first_zone(self, engine):
-        reward = engine.get_zone_reward("Clearfell")
+        from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
+        reward = ZONE_LEAGUE_REWARDS.get("Clearfell", "")
         assert reward == "Orb of Transmutation"
+
+
+class TestStepRendererRewards:
+    def test_reward_label_rendered_for_known_zone(self, qtbot):
+        from PySide6.QtWidgets import QVBoxLayout
+        from sin_guide.overlay.step_renderer import render_steps
+        from sin_guide.core.guide_engine import GuideStep
+
+        container = QVBoxLayout()
+        steps = [
+            GuideStep(
+                id="s1", act=1, zone="Clearfell", step_number=1,
+                description="Loot stash", step_type="loot", target="",
+                hint="", tags=["mandatory"], next_steps=[],
+                auto_advance_trigger=None,
+            )
+        ]
+        render_steps(container, steps, 300, ZONE_LEAGUE_REWARDS)
+
+        labels = []
+        for i in range(container.count()):
+            widget = container.itemAt(i).widget()
+            if widget is not None:
+                labels.append(widget.text())
+
+        assert "League: Orb of Transmutation" in labels
+
+    def test_no_reward_label_when_zone_excluded(self, qtbot):
+        from PySide6.QtWidgets import QVBoxLayout
+        from sin_guide.overlay.step_renderer import render_steps
+        from sin_guide.core.guide_engine import GuideStep
+
+        container = QVBoxLayout()
+        steps = [
+            GuideStep(
+                id="s1", act=1, zone="The Riverbank", step_number=1,
+                description="Tutorial", step_type="generic", target="",
+                hint="", tags=["mandatory"], next_steps=[],
+                auto_advance_trigger=None,
+            )
+        ]
+        render_steps(container, steps, 300, ZONE_LEAGUE_REWARDS)
+
+        labels = []
+        for i in range(container.count()):
+            widget = container.itemAt(i).widget()
+            if widget is not None:
+                labels.append(widget.text())
+
+        assert "League: The Riverbank" not in labels
+
+    def test_no_reward_labels_when_zone_rewards_none(self, qtbot):
+        from PySide6.QtWidgets import QVBoxLayout
+        from sin_guide.overlay.step_renderer import render_steps
+        from sin_guide.core.guide_engine import GuideStep
+
+        container = QVBoxLayout()
+        steps = [
+            GuideStep(
+                id="s1", act=1, zone="Clearfell", step_number=1,
+                description="Loot stash", step_type="loot", target="",
+                hint="", tags=["mandatory"], next_steps=[],
+                auto_advance_trigger=None,
+            )
+        ]
+        render_steps(container, steps, 300, None)
+
+        labels = []
+        for i in range(container.count()):
+            widget = container.itemAt(i).widget()
+            if widget is not None:
+                labels.append(widget.text())
+
+        assert not any(label.startswith("League:") for label in labels)

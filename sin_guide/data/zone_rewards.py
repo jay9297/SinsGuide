@@ -73,7 +73,7 @@ ZONE_LEAGUE_REWARDS: dict[str, str] = {
     # ── Interlude 3 ────────────────────────────────────────
     "Kriar Village": "Greater Rune",
     "Howling Caves": "Chaos Orb",
-    "Kriar Peaks": "Greater Orb of Transm.",
+    "Kriar Peaks": "Greater Orb of Trans",
 }
 
 ZONES_WITHOUT_REWARDS = {
