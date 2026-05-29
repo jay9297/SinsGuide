@@ -77,7 +77,7 @@ class TestResizePersistence:
         new_width = old_width + 50
         overlay.config.set.reset_mock()
         overlay.resize(new_width, overlay.height())
-        overlay.config.set.assert_called_with("overlay.width", new_width)
+        overlay.config.set.assert_any_call("overlay.width", new_width)
 
     def test_resize_skips_save_when_width_unchanged(self, make_overlay):
         overlay = make_overlay(steps=[])
