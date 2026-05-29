@@ -134,15 +134,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           source scripts/agent-lib.sh
-
           case "${{ steps.verdict.outputs.result }}" in
-            APPROVE)         EVENT="APPROVE" ;;
-            REQUEST_CHANGES) EVENT="REQUEST_CHANGES" ;;
-            *)               EVENT="COMMENT" ;;
+            APPROVE)         FLAGS="-a" ;;
+            REQUEST_CHANGES) FLAGS="-r" ;;
+            *)               FLAGS="-c" ;;
           esac
-
           retry_op 5 15 gh pr review ${{ github.event.pull_request.number }} \
-            --event "$EVENT" \
+            $FLAGS \
             --body "Verdict: **${{ steps.verdict.outputs.result }}**. See review comment above."
 
       - name: Post failure comment on total failure
