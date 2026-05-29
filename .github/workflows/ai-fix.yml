@@ -232,7 +232,7 @@ jobs:
           # pynput's dependency is satisfied without requiring kernel headers.
           pip install evdev-binary
           SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
-          EVDEV_VERSION=$(python -c "import evdev; print(evdev.__version__)")
+          EVDEV_VERSION=$(pip show evdev-binary | grep ^Version: | awk '{print $2}')
           EVDEV_DIST="$SITE_PACKAGES/evdev-${EVDEV_VERSION}.dist-info"
           if [ ! -d "$EVDEV_DIST" ]; then
             mkdir -p "$EVDEV_DIST"
