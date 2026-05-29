@@ -154,3 +154,7 @@ class GuideEngine:
     def reset(self):
         if self.steps:
             self.current_step_id = min(self.steps.keys(), key=lambda k: self.steps[k].step_number)
+
+    def get_zone_reward(self, zone: str) -> str:
+        from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
+        return ZONE_LEAGUE_REWARDS.get(zone, "")

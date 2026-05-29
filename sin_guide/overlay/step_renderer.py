@@ -3,11 +3,13 @@ from __future__ import annotations
 from PySide6.QtWidgets import QLabel, QVBoxLayout
 
 
-def render_steps(container: QVBoxLayout, steps, width: int) -> str:
+def render_steps(
+    container: QVBoxLayout,
+    steps,
+    width: int,
+    zone_rewards: dict[str, str] | None = None,
+) -> str:
     """Render guide steps into a QVBoxLayout.
-
-    Clears existing widgets, creates zone headers, step labels with
-    tag-based styling, and hint sub-labels.
 
     Returns the last zone name rendered (needed for EXP display).
     """
@@ -26,6 +28,17 @@ def render_steps(container: QVBoxLayout, steps, width: int) -> str:
                 "color: #888888; font-size: 10px; font-weight: bold; margin-top: 2px;"
             )
             container.addWidget(zone_label)
+
+            if zone_rewards and step.zone in zone_rewards:
+                reward = zone_rewards[step.zone]
+                if reward and reward != "None":
+                    reward_label = QLabel(f"League: {reward}")
+                    reward_label.setWordWrap(True)
+                    reward_label.setMinimumWidth(width - 24)
+                    reward_label.setStyleSheet(
+                        "color: #ffaa00; font-size: 10px; font-style: italic; margin-top: 1px;"
+                    )
+                    container.addWidget(reward_label)
 
         step_label = QLabel(step.description)
         step_label.setWordWrap(True)

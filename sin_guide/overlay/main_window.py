@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from sin_guide.overlay.gem_widget import GemWidget
 from sin_guide.overlay.step_renderer import render_steps
+from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
 
 logger = logging.getLogger(__name__)
 
@@ -307,7 +308,7 @@ class OverlayWindow(QWidget):
 
         steps = self.guide.get_visible_steps(league_start, show_optionals, max_lines)
 
-        current_zone = render_steps(self.steps_container, steps, self.width())
+        current_zone = render_steps(self.steps_container, steps, self.width(), ZONE_LEAGUE_REWARDS)
 
         if steps:
             self.header_label.setText(f"Act {steps[0].act}")
