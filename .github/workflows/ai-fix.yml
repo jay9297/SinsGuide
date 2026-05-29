@@ -232,7 +232,7 @@ jobs:
           # pynput's dependency is satisfied without requiring kernel headers.
           pip install evdev-binary
           SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
-          EVDEV_VERSION=$(python -c "import evdev; print(evdev.__version__)")
+          EVDEV_VERSION=$(pip show evdev-binary | grep ^Version: | awk '{print $2}')
           EVDEV_DIST="$SITE_PACKAGES/evdev-${EVDEV_VERSION}.dist-info"
           if [ ! -d "$EVDEV_DIST" ]; then
             mkdir -p "$EVDEV_DIST"
@@ -243,6 +243,11 @@ jobs:
           fi
           pip install -r sin_guide/requirements.txt
           pip install pytest pytest-cov pytest-qt pytest-xvfb ruff mypy
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
       - name: Install agent tooling if missing
         run: |
