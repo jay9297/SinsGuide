@@ -111,8 +111,7 @@ jobs:
         id: plan
         run: |
           source scripts/agent-lib.sh
-          export AGENT_OUTPUT_FILE=/tmp/plan.md
-          run_agent_with_fallback /tmp/plan-prompt.txt plan 30
+          run_agent_with_fallback /tmp/plan-prompt.txt plan 30 /tmp/plan.md
 
           [[ -f /tmp/plan.md ]] || { echo "::error::Planning agent succeeded but did not write /tmp/plan.md"; exit 1; }
 
@@ -143,12 +142,8 @@ jobs:
         run: |
           source scripts/agent-lib.sh
           IMPL_MODEL="${{ steps.plan.outputs.impl_model }}"
-          if [[ -n "$IMPL_MODEL" ]]; then
-            echo "Using planning agent's model recommendation: $IMPL_MODEL"
-            export AGENT_MODEL_OVERRIDE="$IMPL_MODEL"
-          fi
-          export AGENT_MODEL_OVERRIDE="${AGENT_MODEL_OVERRIDE:-}"
-          run_agent_with_fallback /tmp/impl-prompt.txt implement 80
+          [[ -n "$IMPL_MODEL" ]] && echo "Using planning agent's model recommendation: $IMPL_MODEL"
+          run_agent_with_fallback /tmp/impl-prompt.txt implement 80 "" "$IMPL_MODEL"
 
       - name: Commit and push branch
         id: push

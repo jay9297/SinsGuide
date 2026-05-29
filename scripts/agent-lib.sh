@@ -39,11 +39,14 @@ retry_op() {
 }
 
 # ---------------------------------------------------------------------------
-# run_agent_with_fallback <prompt_file> <mode> <max_turns>
+# run_agent_with_fallback <prompt_file> <mode> <max_turns> [output_file] [model_override]
 #
 # Calls ai-agent.sh which handles its own tier cascade internally.
 # This function adds an outer retry loop for when all tiers are exhausted
 # (typically an API outage or quota reset window).
+#
+# output_file     (optional) — write agent output to this path
+# model_override  (optional) — override the primary model (e.g. Claude's pick)
 #
 # Retry strategy:
 #   Within a cycle: up to MAX_RETRIES attempts, 30s → 60s → 120s backoff
@@ -54,6 +57,8 @@ run_agent_with_fallback() {
   local prompt_file="$1"
   local mode="$2"
   local max_turns="$3"
+  local output_file="${4:-}"
+  local model_override="${5:-}"
 
   local MAX_RETRIES=3
   local BASE_DELAY=30        # doubles each retry within a cycle
@@ -78,12 +83,13 @@ run_agent_with_fallback() {
 
     while [ $attempt -lt $MAX_RETRIES ]; do
       attempt=$((attempt + 1))
-      echo "🔄 Cycle $cycle, attempt $attempt/$MAX_RETRIES"
+      echo "🔄 Cycle $cycle, attempt $attempt/$MAX_RETRIES" >&2
+
+      local extra_args=()
+      [[ -n "$output_file" ]]    && extra_args+=(--output-file "$output_file")
+      [[ -n "$model_override" ]] && extra_args+=(--model "$model_override")
 
       local exit_code=0
-      local extra_args=()
-      [[ -n "${AGENT_OUTPUT_FILE:-}" ]] && extra_args+=(--output-file "$AGENT_OUTPUT_FILE")
-      [[ -n "${AGENT_MODEL_OVERRIDE:-}" ]] && extra_args+=(--model "$AGENT_MODEL_OVERRIDE")
       ./scripts/ai-agent.sh "$task" \
         --mode "$mode" \
         --max-turns "$max_turns" \
@@ -92,7 +98,7 @@ run_agent_with_fallback() {
 
       case $exit_code in
         0)
-          echo "✅ Agent succeeded (cycle $cycle, attempt $attempt)"
+          echo "✅ Agent succeeded (cycle $cycle, attempt $attempt)" >&2
           return 0
           ;;
         2)
@@ -106,7 +112,7 @@ run_agent_with_fallback() {
           ;;
         1)
           if [ $attempt -lt $MAX_RETRIES ]; then
-            echo "⏳ All tiers exhausted — retrying in ${delay}s..."
+            echo "⏳ All tiers exhausted — retrying in ${delay}s..." >&2
             sleep "$delay"
             delay=$((delay * 2))
           fi
@@ -121,7 +127,7 @@ run_agent_with_fallback() {
       esac
     done
 
-    echo "❌ Cycle $cycle exhausted"
+    echo "❌ Cycle $cycle exhausted" >&2
   done
 
   echo "::error::Agent failed across all $MAX_CYCLES retry cycles. Manual intervention required."
