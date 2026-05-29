@@ -1,26 +1,42 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QHBoxLayout,
-    QSlider,
-    QLineEdit,
-    QCheckBox,
-    QPushButton,
-    QGroupBox,
-    QFormLayout,
+    QDialogButtonBox,
     QFileDialog,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QMessageBox,
+    QPushButton,
+    QSlider,
+    QCheckBox,
+    QVBoxLayout,
 )
+
+if TYPE_CHECKING:
+    from sin_guide.core.regex_manager import RegexManager
+
+from sin_guide.core.regex_manager import RegexValidationError
 
 
 class SettingsPanel(QDialog):
-    def __init__(self, config_manager, parent=None):
+    def __init__(self, config_manager, parent=None, *, regex_manager: RegexManager | None = None):
         super().__init__(parent)
         self.config = config_manager
+        self._regex_manager = regex_manager
         self.setWindowTitle("Sin's Guide - Settings")
         self.setMinimumWidth(400)
         self._setup_ui()
         self._load_config()
+        if regex_manager is not None:
+            self._refresh_regex_list()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -99,6 +115,8 @@ class SettingsPanel(QDialog):
         paths_group.setLayout(paths_layout)
         layout.addWidget(paths_group)
 
+        self._setup_regex_ui(layout)
+
         layout.addStretch()
 
         close_btn = QPushButton("Close")
@@ -151,3 +169,168 @@ class SettingsPanel(QDialog):
         if path:
             self.client_txt_input.setText(path)
             self.config.set("paths.client_txt", path)
+
+    # ------------------------------------------------------------------
+    # Regex Storage
+    # ------------------------------------------------------------------
+
+    def _setup_regex_ui(self, layout: QVBoxLayout) -> None:
+        self._regex_group = QGroupBox("Regex Storage")
+        regex_layout = QVBoxLayout()
+
+        self._regex_list = QListWidget()
+        self._regex_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
+        regex_layout.addWidget(self._regex_list)
+
+        btn_layout = QHBoxLayout()
+
+        self._add_regex_btn = QPushButton("Add")
+        self._add_regex_btn.clicked.connect(self._on_add_regex)
+        btn_layout.addWidget(self._add_regex_btn)
+
+        self._edit_regex_btn = QPushButton("Edit")
+        self._edit_regex_btn.clicked.connect(self._on_edit_regex)
+        btn_layout.addWidget(self._edit_regex_btn)
+
+        self._remove_regex_btn = QPushButton("Remove")
+        self._remove_regex_btn.clicked.connect(self._on_remove_regex)
+        btn_layout.addWidget(self._remove_regex_btn)
+
+        regex_layout.addLayout(btn_layout)
+        self._regex_group.setLayout(regex_layout)
+        layout.addWidget(self._regex_group)
+
+        self._update_regex_buttons()
+
+    def _refresh_regex_list(self) -> None:
+        self._regex_list.clear()
+        if self._regex_manager is None:
+            return
+
+        for entry in self._regex_manager.list_entries():
+            pattern_preview = (
+                entry.pattern[:47] + "..."
+                if len(entry.pattern) > 50
+                else entry.pattern
+            )
+            display = f"{entry.name}  [{pattern_preview}]"
+            self._regex_list.addItem(display)
+
+    def _update_regex_buttons(self) -> None:
+        has_manager = self._regex_manager is not None
+
+        self._regex_group.setEnabled(has_manager)
+        if not has_manager:
+            return
+
+        has_selection = self._regex_list.currentRow() >= 0
+
+        self._add_regex_btn.setEnabled(True)
+        self._edit_regex_btn.setEnabled(has_selection)
+        self._remove_regex_btn.setEnabled(has_selection)
+
+    def _on_add_regex(self) -> None:
+        if self._regex_manager is None:
+            return
+        name, pattern = self._show_regex_dialog(title="Add Regex")
+        if name is None or pattern is None:
+            return
+
+        try:
+            self._regex_manager.add_entry(name, pattern)
+            self._refresh_regex_list()
+        except RegexValidationError as e:
+            QMessageBox.warning(self, "Validation Error", str(e))
+
+    def _on_edit_regex(self) -> None:
+        if self._regex_manager is None:
+            return
+        row = self._regex_list.currentRow()
+        if row < 0:
+            return
+
+        entry = self._regex_manager.get_entry(row)
+        name, pattern = self._show_regex_dialog(
+            title="Edit Regex", name=entry.name, pattern=entry.pattern
+        )
+        if name is None or pattern is None:
+            return
+
+        try:
+            self._regex_manager.update_entry(row, name, pattern)
+            self._refresh_regex_list()
+        except RegexValidationError as e:
+            QMessageBox.warning(self, "Validation Error", str(e))
+
+    def _on_remove_regex(self) -> None:
+        if self._regex_manager is None:
+            return
+        row = self._regex_list.currentRow()
+        if row < 0:
+            return
+
+        entry = self._regex_manager.get_entry(row)
+        reply = QMessageBox.question(
+            self,
+            "Confirm Removal",
+            f'Remove regex entry "{entry.name}"?',
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        self._regex_manager.remove_entry(row)
+        self._refresh_regex_list()
+
+    def _show_regex_dialog(
+        self,
+        title: str,
+        name: str = "",
+        pattern: str = "",
+    ) -> tuple[str | None, str | None]:
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        dialog.setMinimumWidth(380)
+        dialog_layout = QVBoxLayout(dialog)
+
+        name_layout = QFormLayout()
+        name_input = QLineEdit()
+        name_input.setText(name)
+        name_input.setMaxLength(50)
+        name_layout.addRow("Name:", name_input)
+        dialog_layout.addLayout(name_layout)
+
+        pattern_layout = QFormLayout()
+        pattern_input = QLineEdit()
+        pattern_input.setText(pattern)
+        pattern_input.setMaxLength(250)
+        pattern_layout.addRow("Pattern:", pattern_input)
+        dialog_layout.addLayout(pattern_layout)
+
+        hint_label = QLabel()
+        hint_label.setStyleSheet("color: #888;")
+        dialog_layout.addWidget(hint_label)
+
+        name_input.textChanged.connect(
+            lambda t: hint_label.setText(
+                f"Name: {len(t)}/50 chars, Pattern: {len(pattern_input.text())}/250 chars"
+            )
+        )
+        pattern_input.textChanged.connect(
+            lambda t: hint_label.setText(
+                f"Name: {len(name_input.text())}/50 chars, Pattern: {len(t)}/250 chars"
+            )
+        )
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        dialog_layout.addWidget(buttons)
+
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return None, None
+
+        return name_input.text(), pattern_input.text()

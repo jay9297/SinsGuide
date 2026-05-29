@@ -15,6 +15,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from sin_guide.config.manager import ConfigManager
 from sin_guide.core.guide_engine import GuideEngine
 from sin_guide.core.log_parser import LogParser, LogEventType
+from sin_guide.core.regex_manager import RegexManager
 from sin_guide.core.timer import CampaignTimer
 from sin_guide.core.exp_calculator import ExpCalculator
 from sin_guide.overlay.main_window import OverlayWindow
@@ -62,7 +63,7 @@ class LogWatcherThread(QThread):
 
     def _handle_event(self, event):
         if event.event_type == LogEventType.ENTERED_ZONE:
-            logger.debug(f"Parsed zone enter: '{event.data}'")
+            logger.debug("Parsed zone enter: '%s'", event.data)
             self.zone_entered.emit(event.data)
         elif event.event_type == LogEventType.KILLED_BOSS:
             self.boss_killed.emit(event.data)
@@ -86,6 +87,7 @@ class SinGuideApp(QObject):
         self.app.setQuitOnLastWindowClosed(False)
         self._log_platform_info()
         self.config = ConfigManager()
+        self.regex_manager = RegexManager(self.config)
         self._init_paths()
         self._init_components()
         self._init_overlay()
@@ -174,17 +176,75 @@ class SinGuideApp(QObject):
     def _init_hotkeys(self):
         try:
             from pynput import keyboard
+
             self.hotkey_listener = keyboard.GlobalHotKeys({
                 self.config.get("hotkeys.prev_step", "f3"): self._on_prev_hotkey,
                 self.config.get("hotkeys.next_step", "f4"): self._on_next_hotkey,
                 "<f5>": self._on_scan_gems,
             })
             self.hotkey_listener.start()
+
+            self._init_regex_hotkey(keyboard)
         except Exception:
             self.hotkey_listener = None
 
+    def _init_regex_hotkey(self, keyboard) -> None:
+        """Set up F6 hotkey for regex copy (release) and cycling (hold + Up/Down).
+
+        Uses a separate ``keyboard.Listener`` so we can detect F6 key-release
+        (copy to clipboard) vs. F6+Up/Down (cycle entries).  The existing
+        ``GlobalHotKeys`` fires on press, which is insufficient for the
+        dual-purpose F6 key.
+        """
+        self._regex_f6_pressed = False
+        self._regex_f6_used_modifier = False
+
+        def on_press(key):
+            try:
+                if key == keyboard.Key.f6:
+                    self._regex_f6_pressed = True
+                    self._regex_f6_used_modifier = False
+                elif self._regex_f6_pressed:
+                    if key == keyboard.Key.up:
+                        self._regex_f6_used_modifier = True
+                        QTimer.singleShot(0, self._on_regex_next)
+                    elif key == keyboard.Key.down:
+                        self._regex_f6_used_modifier = True
+                        QTimer.singleShot(0, self._on_regex_prev)
+            except Exception:
+                logger.debug("Regex hotkey press error", exc_info=True)
+
+        def on_release(key):
+            try:
+                if key == keyboard.Key.f6:
+                    if self._regex_f6_pressed and not self._regex_f6_used_modifier:
+                        QTimer.singleShot(0, self._on_regex_copy)
+                    self._regex_f6_pressed = False
+            except Exception:
+                logger.debug("Regex hotkey release error", exc_info=True)
+
+        self._regex_listener = keyboard.Listener(
+            on_press=on_press, on_release=on_release
+        )
+        self._regex_listener.start()
+
+    def _on_regex_copy(self) -> None:
+        entry = self.regex_manager.get_current()
+        if entry:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(entry.pattern)
+        self.overlay.show_regex_feedback(entry)
+
+    def _on_regex_next(self) -> None:
+        entry = self.regex_manager.next_regex()
+        self.overlay.show_regex_feedback(entry)
+
+    def _on_regex_prev(self) -> None:
+        entry = self.regex_manager.prev_regex()
+        self.overlay.show_regex_feedback(entry)
+
     def _on_zone_entered(self, zone: str):
-        logger.info(f"_on_zone_entered: zone='{zone}'")
+        logger.info("_on_zone_entered: zone='%s'", zone)
         self.overlay.handle_zone_enter(zone)
         character = self.config.get("guide.character_name", "")
         if zone.lower() in ["hideout", "your hideout"]:
@@ -214,7 +274,7 @@ class SinGuideApp(QObject):
         self.overlay.scan_gems()
 
     def show_settings(self):
-        panel = SettingsPanel(self.config)
+        panel = SettingsPanel(self.config, regex_manager=self.regex_manager)
         panel.exec()
         self.overlay.reload_config()
 
@@ -231,6 +291,8 @@ class SinGuideApp(QObject):
             self.watcher.wait(2000)
         if self.hotkey_listener:
             self.hotkey_listener.stop()
+        if hasattr(self, '_regex_listener') and self._regex_listener:
+            self._regex_listener.stop()
         self.tracker.cleanup()
 
 
