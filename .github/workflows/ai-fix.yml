@@ -59,33 +59,44 @@ jobs:
             git checkout -b "$BRANCH"
           fi
 
-      - name: Build plan prompt
+      - name: Build implementation prompt
+        id: plan
         run: |
           ISSUE_BODY=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
+          IS_RETRY="${{ steps.branch_setup.outputs.is_retry }}"
 
-          RETRY_CONTEXT=""
-          if [[ "${{ steps.branch_setup.outputs.is_retry }}" == "true" ]]; then
+          if [[ "$IS_RETRY" == "true" ]]; then
+            echo "Retry detected — skipping planning phase, building retry prompt directly"
             PREV_COMMITS=$(git log "origin/dev..HEAD" --oneline 2>/dev/null || echo "none")
-            RETRY_CONTEXT="
-          NOTE: A previous fix attempt exists on this branch. Prior commits:
-          ${PREV_COMMITS}
 
-          Take these prior changes into account. Build on correct work; correct
-          anything that is wrong. Do not revert work that is already right."
-          fi
+            {
+              printf 'You are continuing a fix for GitHub issue #%s in jay9297/SinsGuide.\n' \
+                '${{ steps.meta.outputs.issue_num }}'
+              printf 'Title: %s\n\n' '${{ steps.meta.outputs.issue_title }}'
+              printf 'A previous attempt already made changes on this branch. Prior commits:\n%s\n\n' \
+                "$PREV_COMMITS"
+              printf 'Review the existing changes and either build on them or correct them.\n'
+              printf 'Do NOT revert work that is already correct.\n'
+              printf 'Make the minimal additional change per CLAUDE.md.\n'
+              printf 'Add or update tests in tests/. Do NOT run the test suite yourself.\n'
+              printf 'If you change UI rendering, note snapshot tests may need regeneration.\n'
+            } > /tmp/impl-prompt.txt
 
-          # Fetch the live model list so Claude picks from what is actually available.
-          AVAILABLE_MODELS=$(OPENCODE_API_KEY="${OPENCODE_API_KEY}" opencode models 2>/dev/null \
-            || echo "(model list unavailable — pick conservatively)")
+            echo "impl_model=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Fresh branch — running planning phase"
 
-          cat > /tmp/plan-prompt.txt << PROMPT_EOF
+            # Fetch the live model list so Claude picks from what is actually available.
+            AVAILABLE_MODELS=$(OPENCODE_API_KEY="${OPENCODE_API_KEY}" opencode models 2>/dev/null \
+              || echo "(model list unavailable — pick conservatively)")
+
+            cat > /tmp/plan-prompt.txt << PROMPT_EOF
           You are planning the fix for GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
 
           Title: ${{ steps.meta.outputs.issue_title }}
 
           Body:
           ${ISSUE_BODY}
-          ${RETRY_CONTEXT}
 
           Explore the codebase (read-only), then write a detailed implementation
           plan that a separate coding agent will execute. Cover:
@@ -107,28 +118,23 @@ jobs:
           ${AVAILABLE_MODELS}
           PROMPT_EOF
 
-      - name: Generate plan and build implementation prompt
-        id: plan
-        run: |
-          source scripts/agent-lib.sh
-          PLAN=$(run_agent_with_fallback /tmp/plan-prompt.txt plan 30)
+            source scripts/agent-lib.sh
+            PLAN=$(run_agent_with_fallback /tmp/plan-prompt.txt plan 30)
 
-          # Extract model recommendation from plan text
-          IMPL_MODEL=$(printf '%s' "$PLAN" | grep -oP '(?<=IMPLEMENTATION_MODEL:)\s*\K\S+' 2>/dev/null || echo "")
-          echo "impl_model=${IMPL_MODEL}" >> "$GITHUB_OUTPUT"
-          echo "Planning agent chose implementation model: '${IMPL_MODEL}'"
+            IMPL_MODEL=$(printf '%s' "$PLAN" | grep -oP '(?<=IMPLEMENTATION_MODEL:)\s*\K\S+' 2>/dev/null || echo "")
+            echo "impl_model=${IMPL_MODEL}" >> "$GITHUB_OUTPUT"
+            echo "Planning agent chose implementation model: '${IMPL_MODEL}'"
 
-          # Build implementation prompt with plan embedded — use printf to avoid
-          # heredoc variable-expansion issues with plan content
-          {
-            printf 'You are implementing the fix for GitHub issue #%s in jay9297/SinsGuide.\n' \
-              '${{ steps.meta.outputs.issue_num }}'
-            printf 'Title: %s\n\n' '${{ steps.meta.outputs.issue_title }}'
-            printf 'Follow the plan below. Make the minimal correct change per CLAUDE.md.\n'
-            printf 'Add or update tests in tests/. Do NOT run the test suite yourself.\n'
-            printf 'If you change UI rendering, note snapshot tests may need regeneration.\n\n'
-            printf 'Implementation plan:\n%s\n' "$PLAN"
-          } > /tmp/impl-prompt.txt
+            {
+              printf 'You are implementing the fix for GitHub issue #%s in jay9297/SinsGuide.\n' \
+                '${{ steps.meta.outputs.issue_num }}'
+              printf 'Title: %s\n\n' '${{ steps.meta.outputs.issue_title }}'
+              printf 'Follow the plan below. Make the minimal correct change per CLAUDE.md.\n'
+              printf 'Add or update tests in tests/. Do NOT run the test suite yourself.\n'
+              printf 'If you change UI rendering, note snapshot tests may need regeneration.\n\n'
+              printf 'Implementation plan:\n%s\n' "$PLAN"
+            } > /tmp/impl-prompt.txt
+          fi
 
       - name: Execute implementation plan
         run: |
@@ -222,7 +228,19 @@ jobs:
           else
             echo "Skipping system package install — sudo unavailable or no apt-get; assuming packages pre-installed on self-hosted runner"
           fi
-          pip install evdev-binary || true
+          # Install evdev-binary (pre-built wheel) then register it as 'evdev' so
+          # pynput's dependency is satisfied without requiring kernel headers.
+          pip install evdev-binary
+          SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
+          EVDEV_VERSION=$(python -c "import evdev; print(evdev.__version__)")
+          EVDEV_DIST="$SITE_PACKAGES/evdev-${EVDEV_VERSION}.dist-info"
+          if [ ! -d "$EVDEV_DIST" ]; then
+            mkdir -p "$EVDEV_DIST"
+            printf 'Metadata-Version: 2.1\nName: evdev\nVersion: %s\n' "$EVDEV_VERSION" \
+              > "$EVDEV_DIST/METADATA"
+            printf 'pip\n' > "$EVDEV_DIST/INSTALLER"
+            touch "$EVDEV_DIST/RECORD"
+          fi
           pip install -r sin_guide/requirements.txt
           pip install pytest pytest-cov pytest-qt pytest-xvfb ruff mypy
 
