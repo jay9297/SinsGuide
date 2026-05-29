@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 
-
-
 class TestPlayerLevelTracking:
     def test_initial_player_level_is_none(self, make_overlay):
         overlay = make_overlay(steps=[])
@@ -108,3 +106,43 @@ class TestZoneLevelMapping:
         for zone, expected in self.ZONE_LEVELS.items():
             actual = overlay._estimate_zone_level(zone)
             assert actual == expected, f"{zone}: expected {expected}, got {actual}"
+
+
+class TestOverlayResize:
+    def test_overlay_has_resize_handle(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        assert hasattr(overlay, 'resize_handle')
+
+    def test_minimum_width_enforced(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        assert overlay.minimumWidth() == 180
+
+    def test_maximum_width_enforced(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        assert overlay.maximumWidth() == 600
+
+    def test_width_persists_to_config(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        overlay.config.set.reset_mock()
+        overlay.resize(350, overlay.height())
+        overlay._flush_pending_width()
+        overlay.config.set.assert_any_call("overlay.width", 350)
+
+    def test_height_not_persisted_by_resize(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        overlay.config.set.reset_mock()
+        initial_height = overlay.height()
+        overlay.resize(350, initial_height)
+        overlay._flush_pending_width()
+        for call in overlay.config.set.call_args_list:
+            assert call[0][0] != "overlay.height"
+
+    def test_width_not_persisted_on_height_only_change(self, make_overlay):
+        overlay = make_overlay(steps=[])
+        overlay.config.set.reset_mock()
+        overlay._pending_width = None
+        width_before_resize = overlay.width()
+        overlay.resize(width_before_resize, 500)
+        overlay._flush_pending_width()
+        width_calls = [c for c in overlay.config.set.call_args_list if c[0][0] == "overlay.width"]
+        assert len(width_calls) == 0
