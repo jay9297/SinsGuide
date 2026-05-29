@@ -107,36 +107,28 @@ jobs:
           ${AVAILABLE_MODELS}
           PROMPT_EOF
 
-      - name: Generate implementation plan
+      - name: Generate plan and build implementation prompt
         id: plan
         run: |
           source scripts/agent-lib.sh
-          run_agent_with_fallback /tmp/plan-prompt.txt plan 30 /tmp/plan.md
+          PLAN=$(run_agent_with_fallback /tmp/plan-prompt.txt plan 30)
 
-          [[ -f /tmp/plan.md ]] || { echo "::error::Planning agent succeeded but did not write /tmp/plan.md"; exit 1; }
-
-          # Extract model recommendation written by Claude (or planning fallback)
-          IMPL_MODEL=$(grep -oP '(?<=IMPLEMENTATION_MODEL:)\s*\K\S+' /tmp/plan.md 2>/dev/null || echo "")
+          # Extract model recommendation from plan text
+          IMPL_MODEL=$(printf '%s' "$PLAN" | grep -oP '(?<=IMPLEMENTATION_MODEL:)\s*\K\S+' 2>/dev/null || echo "")
           echo "impl_model=${IMPL_MODEL}" >> "$GITHUB_OUTPUT"
           echo "Planning agent chose implementation model: '${IMPL_MODEL}'"
 
-      - name: Build implementation prompt
-        run: |
-          PLAN=$(cat /tmp/plan.md)
-
-          cat > /tmp/impl-prompt.txt << PROMPT_EOF
-          You are implementing the fix for GitHub issue #${{ steps.meta.outputs.issue_num }} in jay9297/SinsGuide.
-
-          Title: ${{ steps.meta.outputs.issue_title }}
-
-          Follow the implementation plan below exactly. Make the minimal correct
-          change. Follow the rules in CLAUDE.md. Add or update tests in tests/.
-          Do NOT run the test suite yourself. If you change UI rendering, note
-          that snapshot tests may need regeneration.
-
-          Implementation plan:
-          ${PLAN}
-          PROMPT_EOF
+          # Build implementation prompt with plan embedded — use printf to avoid
+          # heredoc variable-expansion issues with plan content
+          {
+            printf 'You are implementing the fix for GitHub issue #%s in jay9297/SinsGuide.\n' \
+              '${{ steps.meta.outputs.issue_num }}'
+            printf 'Title: %s\n\n' '${{ steps.meta.outputs.issue_title }}'
+            printf 'Follow the plan below. Make the minimal correct change per CLAUDE.md.\n'
+            printf 'Add or update tests in tests/. Do NOT run the test suite yourself.\n'
+            printf 'If you change UI rendering, note snapshot tests may need regeneration.\n\n'
+            printf 'Implementation plan:\n%s\n' "$PLAN"
+          } > /tmp/impl-prompt.txt
 
       - name: Execute implementation plan
         run: |
