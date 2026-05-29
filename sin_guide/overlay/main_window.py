@@ -71,6 +71,43 @@ class DragHandle(QFrame):
         self.setCursor(Qt.CursorShape.OpenHandCursor)
 
 
+class ResizeHandle(QFrame):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._target: QWidget | None = None
+        self.setFixedSize(14, 14)
+        self.setCursor(Qt.CursorShape.SizeFDiagCursor)
+        self.setStyleSheet("""
+            ResizeHandle {
+                background-color: rgba(0, 220, 220, 120);
+                border: 1px solid rgba(0, 255, 255, 180);
+                border-radius: 3px;
+            }
+            ResizeHandle:hover {
+                background-color: rgba(0, 255, 255, 200);
+            }
+        """)
+        self.setToolTip("Drag to resize overlay width")
+
+    def set_target(self, target: QWidget):
+        self._target = target
+
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.MouseButton.LeftButton and self._target:
+            handle = self._target.windowHandle()
+            if handle:
+                handle.startSystemResize(
+                    Qt.Edge.RightEdge | Qt.Edge.BottomEdge
+                )
+            event.accept()
+
+    def mouseMoveEvent(self, event: QMouseEvent):
+        pass
+
+    def mouseReleaseEvent(self, event: QMouseEvent):
+        pass
+
+
 class OverlayWindow(QWidget):
     def __init__(self, config_manager, guide_engine, timer, exp_calc):
         super().__init__()
@@ -165,6 +202,10 @@ class OverlayWindow(QWidget):
         self.next_btn.setFixedSize(40, 30)
         self.next_btn.clicked.connect(self._on_next)
         nav_layout.addWidget(self.next_btn)
+
+        self.resize_handle = ResizeHandle(self.main_frame)
+        self.resize_handle.set_target(self)
+        nav_layout.addWidget(self.resize_handle, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
 
         layout.addLayout(nav_layout)
 
@@ -261,8 +302,10 @@ class OverlayWindow(QWidget):
             }}
         """)
 
-        self.setFixedWidth(width)
-        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.setMinimumWidth(180)
+        self.setMaximumWidth(600)
+        self.resize(width, self.height())
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         
         screen = QApplication.primaryScreen()
         if x < 0 or y < 0 or not self._is_on_screen(x, y, screen):
@@ -358,6 +401,13 @@ class OverlayWindow(QWidget):
         super().moveEvent(event)
         self.config.set("overlay.x", self.x())
         self.config.set("overlay.y", self.y())
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        new_width = event.size().width()
+        old_width = event.oldSize().width()
+        if new_width != old_width:
+            self.config.set("overlay.width", new_width)
 
     def show_overlay(self):
         self.show()
