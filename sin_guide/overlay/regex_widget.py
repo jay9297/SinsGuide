@@ -54,6 +54,6 @@ class RegexWidget(QLabel):
             return
 
         name: str = getattr(entry, "name", str(entry))
-        self.setText(f"\U0001F4CB {name}")
+        self.setText(f"[Regex] {name}")
         self.show()
         QTimer.singleShot(self.DISPLAY_DURATION_MS, self.hide)

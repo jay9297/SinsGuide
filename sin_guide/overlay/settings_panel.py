@@ -20,10 +20,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from sin_guide.core.regex_manager import RegexValidationError
+
 if TYPE_CHECKING:
     from sin_guide.core.regex_manager import RegexManager
-
-from sin_guide.core.regex_manager import RegexValidationError
 
 
 class SettingsPanel(QDialog):

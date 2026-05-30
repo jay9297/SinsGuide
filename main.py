@@ -12,6 +12,8 @@ from PySide6.QtCore import QObject, Signal, QThread, QTimer
 from PySide6.QtCore import qVersion as qt_version
 from PySide6.QtWidgets import QApplication, QMessageBox
 
+from typing import Any
+
 from sin_guide.config.manager import ConfigManager
 from sin_guide.core.guide_engine import GuideEngine
 from sin_guide.core.log_parser import LogParser, LogEventType
@@ -188,7 +190,7 @@ class SinGuideApp(QObject):
         except Exception:
             self.hotkey_listener = None
 
-    def _init_regex_hotkey(self, keyboard) -> None:
+    def _init_regex_hotkey(self, keyboard: Any) -> None:
         """Set up F6 hotkey for regex copy (release) and cycling (hold + Up/Down).
 
         Uses a separate ``keyboard.Listener`` so we can detect F6 key-release
@@ -199,7 +201,7 @@ class SinGuideApp(QObject):
         self._regex_f6_pressed = False
         self._regex_f6_used_modifier = False
 
-        def on_press(key):
+        def on_press(key: Any) -> None:
             try:
                 if key == keyboard.Key.f6:
                     self._regex_f6_pressed = True
@@ -214,7 +216,7 @@ class SinGuideApp(QObject):
             except Exception:
                 logger.debug("Regex hotkey press error", exc_info=True)
 
-        def on_release(key):
+        def on_release(key: Any) -> None:
             try:
                 if key == keyboard.Key.f6:
                     if self._regex_f6_pressed and not self._regex_f6_used_modifier:

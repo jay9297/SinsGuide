@@ -225,3 +225,20 @@ class TestEdgeCases:
             config_overrides={"overlay.max_visible_lines": 1},
         )
         assert_matches_snapshot(_grab(overlay), "max_visible_lines_one")
+
+
+class TestRegexWidget:
+    def test_regex_feedback_visible(self, make_overlay, assert_matches_snapshot):
+        """RegexWidget shows the active regex name when feedback is triggered."""
+        from sin_guide.core.regex_manager import RegexEntry
+
+        steps = [make_step(zone="The Riverbank")]
+        overlay = make_overlay(steps=steps)
+
+        entry = RegexEntry(
+            name="Maps",
+            pattern="Area contains #additional #type",
+            created_at="2026-01-01T00:00:00+00:00",
+        )
+        overlay.show_regex_feedback(entry)
+        assert_matches_snapshot(_grab(overlay), "regex_feedback_visible")

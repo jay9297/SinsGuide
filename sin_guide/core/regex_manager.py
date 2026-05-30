@@ -27,7 +27,6 @@ CONFIG_KEY_ENTRIES = "regexes.entries"
 CONFIG_KEY_CURRENT_INDEX = "regexes.current_index"
 MAX_PATTERN_LENGTH = 250
 MAX_NAME_LENGTH = 50
-DEFAULT_REGEXES: list[dict[str, str]] = []
 
 
 # ---------------------------------------------------------------------------
@@ -80,7 +79,7 @@ class RegexEntry:
         return cls(name=name.strip(), pattern=pattern.strip(), created_at=created_at)
 
     @classmethod
-    def from_dict(cls, data: dict[str, str]) -> RegexEntry:
+    def from_dict(cls, data: dict[str, Any]) -> RegexEntry:
         """Construct a ``RegexEntry`` from a plain dict (e.g. loaded from config).
 
         Args:
@@ -153,9 +152,7 @@ class RegexManager:
 
     def _load(self) -> None:
         """Load regex entries and current index from the config."""
-        raw_entries: list[dict[str, Any]] = self._config.get(
-            CONFIG_KEY_ENTRIES, DEFAULT_REGEXES
-        )
+        raw_entries: list[dict[str, Any]] = self._config.get(CONFIG_KEY_ENTRIES, [])
         entries: list[RegexEntry] = []
         for raw in raw_entries:
             try:
