@@ -10,6 +10,10 @@ DEFAULT_CONFIG = {
         "show_effective_exp": True,
         "max_visible_lines": 5,
     },
+    "regexes": {
+        "entries": [],
+        "current_index": 0,
+    },
     "hotkeys": {
         "prev_step": "F3",
         "next_step": "F4",

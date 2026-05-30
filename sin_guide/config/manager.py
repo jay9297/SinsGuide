@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -21,13 +22,13 @@ class ConfigManager:
                 self._config = self._merge_defaults(loaded)
             except (json.JSONDecodeError, OSError):
                 self._backup_corrupted()
-                self._config = DEFAULT_CONFIG.copy()
+                self._config = deepcopy(DEFAULT_CONFIG)
         else:
-            self._config = DEFAULT_CONFIG.copy()
+            self._config = deepcopy(DEFAULT_CONFIG)
             self._save()
 
     def _merge_defaults(self, loaded: dict) -> dict:
-        merged = DEFAULT_CONFIG.copy()
+        merged = deepcopy(DEFAULT_CONFIG)
         for key, value in merged.items():
             if isinstance(value, dict) and key in loaded:
                 merged[key] = {**value, **loaded[key]}

@@ -2,7 +2,9 @@ import json
 import logging
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QPoint, QTimer
+from collections.abc import Callable
+
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import (
     QApplication,
@@ -16,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from sin_guide.overlay.gem_widget import GemWidget
+from sin_guide.overlay.regex_widget import RegexWidget
 from sin_guide.overlay.step_renderer import render_steps
 from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
 
@@ -36,7 +39,6 @@ def _load_zone_levels() -> dict[str, int]:
 class DragHandle(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._drag_pos: QPoint | None = None
         self._target: QWidget | None = None
         self.setFixedSize(14, 14)
         self.setCursor(Qt.CursorShape.OpenHandCursor)
@@ -67,7 +69,6 @@ class DragHandle(QFrame):
         pass
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        self._drag_pos = None
         self.setCursor(Qt.CursorShape.OpenHandCursor)
 
 
@@ -115,6 +116,7 @@ class OverlayWindow(QWidget):
         self.guide = guide_engine
         self.timer = timer
         self.exp_calc = exp_calc
+        self.on_settings_requested: Callable[[], None] | None = None
         self._player_level: int | None = None
         self._gem_db: dict = {}
         self._gem_widget: GemWidget | None = None
@@ -180,6 +182,10 @@ class OverlayWindow(QWidget):
         self._gem_placeholder = QWidget()
         self._gem_placeholder.setVisible(False)
         layout.addWidget(self._gem_placeholder)
+
+        self._regex_widget = RegexWidget(self.main_frame)
+        self._regex_widget.setVisible(False)
+        layout.addWidget(self._regex_widget)
 
         self.timer_label = QLabel("0:00 | A1 | 0:00")
         self.timer_label.setObjectName("timerLabel")
@@ -310,7 +316,7 @@ class OverlayWindow(QWidget):
 
         screen = QApplication.primaryScreen()
         if x < 0 or y < 0 or not self._is_on_screen(x, y, screen):
-            logger.debug(f"Saved position ({x},{y}) is off-screen — resetting to bottom-centre")
+            logger.debug("Saved position (%d,%d) is off-screen — resetting to bottom-centre", x, y)
             self._position_bottom_center()
         else:
             self.move(x, y)
@@ -423,8 +429,12 @@ class OverlayWindow(QWidget):
     def hide_overlay(self):
         self.hide()
 
+    def show_regex_feedback(self, entry: object | None) -> None:
+        if self._regex_widget is not None:
+            self._regex_widget.show_regex(entry)
+
     def handle_zone_enter(self, zone: str):
-        logger.debug(f"handle_zone_enter('{zone}') — current_step_id={self.guide.current_step_id}, current_zone={self.guide.current_zone}")
+        logger.debug("handle_zone_enter('%s') — current_step_id=%s, current_zone=%s", zone, self.guide.current_step_id, self.guide.current_zone)
         self.guide.handle_zone_enter(zone)
         self._update_display()
 
