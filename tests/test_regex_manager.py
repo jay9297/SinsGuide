@@ -519,3 +519,49 @@ class TestRegexManagerPersistence:
         manager2 = make_manager(tmp_path)
         assert manager2.count == 0
         assert manager2.list_entries() == []
+
+
+# ---------------------------------------------------------------------------
+# Malformed config resilience
+# ---------------------------------------------------------------------------
+
+
+class TestMalformedConfig:
+    """Tests that _load() gracefully skips malformed entries."""
+
+    def _seed_raw_entries(
+        self, tmp_path: Path, raw_entries: list[dict[str, object]]
+    ) -> None:
+        """Write raw entries directly into the config (bypassing validation)."""
+        with patch("sin_guide.config.manager.Path.home", return_value=tmp_path):
+            config = ConfigManager()
+            config.set("regexes", {"entries": raw_entries, "current_index": 0})
+
+    def test_skips_entry_missing_keys(self, tmp_path: Path) -> None:
+        self._seed_raw_entries(
+            tmp_path,
+            [
+                {"name": "Maps", "pattern": "map",
+                 "created_at": "2024-01-01T00:00:00+00:00"},
+                {"name": "Bad"},
+            ],
+        )
+        manager = make_manager(tmp_path)
+        assert manager.count == 1
+        assert manager.get_entry(0).name == "Maps"
+
+    def test_preserves_valid_entries_around_malformed(self, tmp_path: Path) -> None:
+        self._seed_raw_entries(
+            tmp_path,
+            [
+                {"name": "A", "pattern": "a",
+                 "created_at": "2024-01-01T00:00:00+00:00"},
+                "not a dict",  # type: ignore[list-item]
+                {"name": "B", "pattern": "b",
+                 "created_at": "2024-01-01T00:00:00+00:00"},
+            ],
+        )
+        manager = make_manager(tmp_path)
+        assert manager.count == 2
+        assert manager.get_entry(0).name == "A"
+        assert manager.get_entry(1).name == "B"

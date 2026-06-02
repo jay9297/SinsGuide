@@ -226,15 +226,17 @@ class SinGuideApp(QObject):
             logger.debug("Regex hotkey press error", exc_info=True)
 
     def _on_regex_hotkey_release(self, key: Any, keyboard: Any) -> None:
-        if key != keyboard.Key.f6:
-            return
-        should_copy = self._regex_f6_pressed and not self._regex_f6_used_modifier
-        self._regex_f6_pressed = False
-        if should_copy:
-            try:
+        try:
+            if key != keyboard.Key.f6:
+                return
+            should_copy = (
+                self._regex_f6_pressed and not self._regex_f6_used_modifier
+            )
+            self._regex_f6_pressed = False
+            if should_copy:
                 QTimer.singleShot(0, self._on_regex_copy)
-            except Exception:
-                logger.debug("Regex hotkey release error", exc_info=True)
+        except Exception:
+            logger.debug("Regex hotkey release error", exc_info=True)
 
     def _on_regex_copy(self) -> None:
         entry = self.regex_manager.get_current()
