@@ -5,14 +5,13 @@ import os
 from pathlib import Path
 import threading
 import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 from PySide6.QtCore import QObject, Signal, QThread, QTimer
 from PySide6.QtCore import qVersion as qt_version
 from PySide6.QtWidgets import QApplication, QMessageBox
-
-from typing import Any
 
 from sin_guide.config.manager import ConfigManager
 from sin_guide.core.guide_engine import GuideEngine
@@ -205,34 +204,37 @@ class SinGuideApp(QObject):
         self._regex_f6_pressed = False
         self._regex_f6_used_modifier = False
 
-        def on_press(key: Any) -> None:
-            try:
-                if key == keyboard.Key.f6:
-                    self._regex_f6_pressed = True
-                    self._regex_f6_used_modifier = False
-                elif self._regex_f6_pressed:
-                    if key == keyboard.Key.up:
-                        self._regex_f6_used_modifier = True
-                        QTimer.singleShot(0, self._on_regex_next)
-                    elif key == keyboard.Key.down:
-                        self._regex_f6_used_modifier = True
-                        QTimer.singleShot(0, self._on_regex_prev)
-            except Exception:
-                logger.debug("Regex hotkey press error", exc_info=True)
-
-        def on_release(key: Any) -> None:
-            try:
-                if key == keyboard.Key.f6:
-                    if self._regex_f6_pressed and not self._regex_f6_used_modifier:
-                        QTimer.singleShot(0, self._on_regex_copy)
-                    self._regex_f6_pressed = False
-            except Exception:
-                logger.debug("Regex hotkey release error", exc_info=True)
-
         self._regex_listener = keyboard.Listener(
-            on_press=on_press, on_release=on_release
+            on_press=lambda k: self._on_regex_hotkey_press(k, keyboard),
+            on_release=lambda k: self._on_regex_hotkey_release(k, keyboard),
         )
         self._regex_listener.start()
+
+    def _on_regex_hotkey_press(self, key: Any, keyboard: Any) -> None:
+        try:
+            if key == keyboard.Key.f6:
+                self._regex_f6_pressed = True
+                self._regex_f6_used_modifier = False
+            elif self._regex_f6_pressed:
+                if key == keyboard.Key.up:
+                    self._regex_f6_used_modifier = True
+                    QTimer.singleShot(0, self._on_regex_next)
+                elif key == keyboard.Key.down:
+                    self._regex_f6_used_modifier = True
+                    QTimer.singleShot(0, self._on_regex_prev)
+        except Exception:
+            logger.debug("Regex hotkey press error", exc_info=True)
+
+    def _on_regex_hotkey_release(self, key: Any, keyboard: Any) -> None:
+        if key != keyboard.Key.f6:
+            return
+        should_copy = self._regex_f6_pressed and not self._regex_f6_used_modifier
+        self._regex_f6_pressed = False
+        if should_copy:
+            try:
+                QTimer.singleShot(0, self._on_regex_copy)
+            except Exception:
+                logger.debug("Regex hotkey release error", exc_info=True)
 
     def _on_regex_copy(self) -> None:
         entry = self.regex_manager.get_current()

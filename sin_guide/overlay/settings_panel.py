@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
+    QCheckBox,
     QDialog,
     QDialogButtonBox,
     QFileDialog,
@@ -16,7 +17,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QSlider,
-    QCheckBox,
     QVBoxLayout,
 )
 

@@ -249,7 +249,10 @@ class RegexManager:
         old = self._entries[index]
         self._entries[index] = entry
         self._save()
-        logger.info("Updated regex entry at index %d: '%s' -> '%s'.", index, old.name, entry.name)
+        logger.info(
+            "Updated regex entry at index %d: '%s' -> '%s'.",
+            index, old.name, entry.name,
+        )
         return entry
 
     def get_entry(self, index: int) -> RegexEntry:
