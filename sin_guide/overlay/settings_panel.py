@@ -180,6 +180,7 @@ class SettingsPanel(QDialog):
 
         self._regex_list = QListWidget()
         self._regex_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
+        self._regex_list.currentRowChanged.connect(self._update_regex_buttons)
         regex_layout.addWidget(self._regex_list)
 
         btn_layout = QHBoxLayout()

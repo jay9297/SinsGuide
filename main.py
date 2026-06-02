@@ -198,6 +198,10 @@ class SinGuideApp(QObject):
         ``GlobalHotKeys`` fires on press, which is insufficient for the
         dual-purpose F6 key.
         """
+        # Both flags are mutated only by the pynput listener thread. The Qt
+        # main thread reads them indirectly through ``QTimer.singleShot``,
+        # so CPython's GIL is sufficient today; Python 3.13 free-threaded
+        # mode would need a ``threading.Lock`` around the press/release pair.
         self._regex_f6_pressed = False
         self._regex_f6_used_modifier = False
 
