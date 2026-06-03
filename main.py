@@ -196,6 +196,7 @@ class SinGuideApp(QObject):
             )
             self.hotkey_listener.stop()
             self.hotkey_listener = None
+            self._regex_listener = None
 
     def _init_regex_hotkey(self, keyboard: Any) -> None:
         """Set up F6 hotkey for regex copy (release) and cycling (hold + Up/Down).
@@ -205,10 +206,11 @@ class SinGuideApp(QObject):
         ``GlobalHotKeys`` fires on press, which is insufficient for the
         dual-purpose F6 key.
         """
-        # Both flags are mutated only by the pynput listener thread. The Qt
-        # main thread reads them indirectly through ``QTimer.singleShot``,
-        # so CPython's GIL is sufficient today; Python 3.13 free-threaded
-        # mode would need a ``threading.Lock`` around the press/release pair.
+        # Both flags are mutated and read exclusively by the pynput listener
+        # thread. The Qt main-thread callbacks (_on_regex_copy/next/prev) do
+        # not read them directly, so CPython's GIL gives implicit atomicity for
+        # single bool assignments. Python 3.13 free-threaded mode would need a
+        # threading.Lock() around the press/release pair.
         self._regex_f6_pressed = False
         self._regex_f6_used_modifier = False
 

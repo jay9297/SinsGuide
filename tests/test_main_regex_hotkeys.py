@@ -337,3 +337,31 @@ class TestInitHotkeys:
 
         assert app.hotkey_listener is None
 
+
+class TestCleanup:
+    def test_cleanup_stops_regex_listener_when_set(self) -> None:
+        """cleanup() must call stop() on _regex_listener when it is set."""
+
+        class _CleanupDouble:
+            watcher = None
+            hotkey_listener = None
+            tracker = MagicMock()
+
+        double = _CleanupDouble()
+        double._regex_listener = MagicMock()
+
+        SinGuideApp.cleanup(double)
+
+        double._regex_listener.stop.assert_called_once()
+
+    def test_cleanup_skips_regex_listener_when_not_set(self) -> None:
+        """cleanup() must not crash when _regex_listener was never assigned."""
+
+        class _CleanupDouble:
+            watcher = None
+            hotkey_listener = None
+            tracker = MagicMock()
+
+        double = _CleanupDouble()
+        # _regex_listener deliberately not set to simulate pynput import failure
+        SinGuideApp.cleanup(double)  # must not raise
