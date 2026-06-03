@@ -8,7 +8,14 @@ from sin_guide.utils.pob_parser import GemSetup
 from tests.test_gem_widget import GEM_DB
 
 
+_SNAP_WIDTH = 300
+
+
 def _grab(widget):
+    widget.setFixedWidth(_SNAP_WIDTH)
+    QApplication.processEvents()
+    QApplication.processEvents()
+    widget.adjustSize()
     QApplication.processEvents()
     return widget.grab()
 
