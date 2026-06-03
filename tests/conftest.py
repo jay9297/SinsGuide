@@ -47,6 +47,7 @@ def _deterministic_font(qapp):
     font = QFont(families[0])
     font.setPixelSize(13)
     qapp.setFont(font)
+    yield
 
 
 # ---------------------------------------------------------------------------

@@ -89,6 +89,10 @@ class SinGuideApp(QObject):
         self._log_platform_info()
         self.config = ConfigManager()
         self.regex_manager = RegexManager(self.config)
+        self.hotkey_listener: object | None = None
+        self._regex_listener: object | None = None
+        self._regex_f6_pressed: bool = False
+        self._regex_f6_used_modifier: bool = False
         self._init_paths()
         self._init_components()
         self._init_overlay()
