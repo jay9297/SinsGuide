@@ -184,9 +184,17 @@ class SinGuideApp(QObject):
                 "<f5>": self._on_scan_gems,
             })
             self.hotkey_listener.start()
+        except Exception:
+            self.hotkey_listener = None
+            return
 
+        try:
             self._init_regex_hotkey(keyboard)
         except Exception:
+            logger.exception(
+                "Failed to init regex hotkey; stopping primary listener"
+            )
+            self.hotkey_listener.stop()
             self.hotkey_listener = None
 
     def _init_regex_hotkey(self, keyboard: Any) -> None:

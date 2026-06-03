@@ -4,6 +4,8 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from sin_guide.core.regex_manager import RegexEntry
 from main import SinGuideApp
 
@@ -254,4 +256,84 @@ class TestOnRegexHotkeyRelease:
             )
 
         assert double._regex_f6_pressed is False
+
+
+class _HotkeyAppDouble:
+    """Minimal stand-in for ``SinGuideApp`` to exercise ``_init_hotkeys``."""
+
+    def __init__(self) -> None:
+        self.config = MagicMock()
+        self.config.get.side_effect = lambda key, default: default
+        self._on_prev_hotkey = MagicMock()
+        self._on_next_hotkey = MagicMock()
+        self._on_scan_gems = MagicMock()
+        self.hotkey_listener: object | None = None
+
+    def _init_regex_hotkey(self, keyboard) -> None:
+        raise RuntimeError("simulated regex hotkey init failure")
+
+
+def _pynput_keyboard_mock() -> MagicMock:
+    """Build a MagicMock matching the small slice of pynput.keyboard we use."""
+    keyboard = MagicMock()
+    keyboard.Key = SimpleNamespace(f6="f6", up="up", down="down")
+    return keyboard
+
+
+class TestInitHotkeys:
+    def test_regex_init_failure_stops_primary_listener(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """If ``_init_regex_hotkey`` raises, the primary GlobalHotKeys
+        listener must be stopped and ``hotkey_listener`` set to ``None``
+        so that ``cleanup()`` does not orphan a running background thread.
+        """
+        import sys
+        import types
+
+        keyboard = _pynput_keyboard_mock()
+        keyboard.GlobalHotKeys.return_value = MagicMock()
+        keyboard.Listener.return_value = MagicMock()
+
+        fake_pynput = types.ModuleType("pynput")
+        fake_pynput.keyboard = keyboard
+        monkeypatch.setitem(sys.modules, "pynput", fake_pynput)
+        monkeypatch.setitem(sys.modules, "pynput.keyboard", keyboard)
+        monkeypatch.setattr("main.logger", MagicMock())
+
+        app = _HotkeyAppDouble()
+
+        SinGuideApp._init_hotkeys(app)
+
+        primary = keyboard.GlobalHotKeys.return_value
+        primary.start.assert_called_once_with()
+        primary.stop.assert_called_once_with()
+        assert app.hotkey_listener is None
+
+    def test_primary_listener_construction_failure_does_not_set_attribute(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """If the primary GlobalHotKeys listener fails to start, the
+        attribute is cleared so cleanup() is a no-op rather than
+        touching a half-constructed listener.
+        """
+        import sys
+        import types
+
+        keyboard = _pynput_keyboard_mock()
+        keyboard.GlobalHotKeys.return_value.start.side_effect = RuntimeError(
+            "boom"
+        )
+
+        fake_pynput = types.ModuleType("pynput")
+        fake_pynput.keyboard = keyboard
+        monkeypatch.setitem(sys.modules, "pynput", fake_pynput)
+        monkeypatch.setitem(sys.modules, "pynput.keyboard", keyboard)
+        monkeypatch.setattr("main.logger", MagicMock())
+
+        app = _HotkeyAppDouble()
+
+        SinGuideApp._init_hotkeys(app)
+
+        assert app.hotkey_listener is None
 

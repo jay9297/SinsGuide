@@ -108,3 +108,27 @@ class TestAutoHide:
         widget.show_regex(_entry("B"))
         assert widget.text() != first_text
         assert widget.text() == "[Regex] B"
+
+    def test_rapid_show_resets_hide_timer(self, widget) -> None:
+        """A second show_regex call must restart the auto-hide timer so
+        the new entry stays visible for the full duration rather than
+        being hidden by the queued hide from the first call.
+        """
+        widget.show_regex(_entry("A"))
+        widget.show_regex(_entry("B"))
+
+        assert widget.isVisible() is True
+        remaining = widget._hide_timer.remainingTime()
+        assert remaining > widget.DISPLAY_DURATION_MS - 100, (
+            f"Timer not reset: remainingTime={remaining}ms "
+            f"(expected >{widget.DISPLAY_DURATION_MS - 100}ms)"
+        )
+
+    def test_show_none_cancels_pending_hide(self, widget) -> None:
+        widget.show_regex(_entry("A"))
+        assert widget._hide_timer.isActive() is True
+
+        widget.show_regex(None)
+
+        assert widget.isVisible() is False
+        assert widget._hide_timer.isActive() is False

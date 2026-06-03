@@ -39,21 +39,28 @@ class RegexWidget(QLabel):
                 padding: 4px 12px;
             }
         """)
+        self._hide_timer = QTimer(self)
+        self._hide_timer.setSingleShot(True)
+        self._hide_timer.timeout.connect(self.hide)
 
     def show_regex(self, entry: object | None) -> None:
         """Display a regex entry's name briefly, then auto-hide.
 
-        If *entry* is ``None``, the widget is hidden immediately.
+        If *entry* is ``None``, the widget is hidden immediately and any
+        pending auto-hide is cancelled.  Successive calls restart the
+        auto-hide timer so the most recent entry is always shown for the
+        full display duration.
 
         Args:
             entry: A ``RegexEntry`` instance (or any object with a ``name``
                 attribute), or ``None`` to hide.
         """
         if entry is None:
+            self._hide_timer.stop()
             self.hide()
             return
 
         name: str = getattr(entry, "name", str(entry))
         self.setText(f"[Regex] {name}")
         self.show()
-        QTimer.singleShot(self.DISPLAY_DURATION_MS, self, self.hide)
+        self._hide_timer.start(self.DISPLAY_DURATION_MS)
