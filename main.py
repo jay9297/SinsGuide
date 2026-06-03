@@ -222,7 +222,7 @@ class SinGuideApp(QObject):
                 elif key == keyboard.Key.down:
                     self._regex_f6_used_modifier = True
                     QTimer.singleShot(0, self._on_regex_prev)
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError):
             logger.debug("Regex hotkey press error", exc_info=True)
 
     def _on_regex_hotkey_release(self, key: Any, keyboard: Any) -> None:
@@ -235,7 +235,7 @@ class SinGuideApp(QObject):
             self._regex_f6_pressed = False
             if should_copy:
                 QTimer.singleShot(0, self._on_regex_copy)
-        except Exception:
+        except (AttributeError, RuntimeError, TypeError):
             logger.debug("Regex hotkey release error", exc_info=True)
 
     def _on_regex_copy(self) -> None:

@@ -292,6 +292,8 @@ class RegexManager:
         if not self._entries:
             return None
         self._current_index = (self._current_index + 1) % len(self._entries)
+        # Persist only the index — _save() would re-serialise the full entry
+        # list, which is wasteful on every keypress during F6 cycling.
         self._config.set(CONFIG_KEY_CURRENT_INDEX, self._current_index)
         logger.debug("Cycled to next regex: index=%d.", self._current_index)
         return self._entries[self._current_index]

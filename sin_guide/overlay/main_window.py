@@ -120,6 +120,7 @@ class OverlayWindow(QWidget):
         self._player_level: int | None = None
         self._gem_db: dict = {}
         self._gem_widget: GemWidget | None = None
+        self._regex_widget: RegexWidget | None = None
         self._pending_width: int | None = None
         self._setup_ui()
         self._apply_config()
