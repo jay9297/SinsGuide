@@ -1,3 +1,8 @@
+# IMPORTANT: poe2_campaign.json is the canonical data source — do NOT regenerate
+# it by running this script. Acts 5-7 are not represented here, and step IDs in
+# Acts 1-4 were stabilised after manual patches; re-running would produce
+# mismatched IDs and truncate the file to ~187 steps.  Treat this file as a
+# human-readable reference and make structural changes directly to the JSON.
 import json
 
 POE2_GUIDE = {
