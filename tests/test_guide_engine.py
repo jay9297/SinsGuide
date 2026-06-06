@@ -103,14 +103,25 @@ class TestVisibleSteps:
         engine.current_step_id = None
         assert engine.get_visible_steps(True, True) == []
 
-    def test_optional_recommended_step_hidden_when_optionals_off(self, engine):
-        # Documents that ["optional", "recommended"] steps are filtered when
-        # show_optionals=False — mirrors Venom Crypts / Servi turn-in behaviour.
-        engine.current_step_id = "s3"
-        engine.current_zone = "Clearfell"
-        steps = engine.get_visible_steps(league_start=True, show_optionals=False)
-        descriptions = [s.description for s in steps]
-        assert "Loot Abandoned Stash" not in descriptions
+    def test_optional_recommended_step_hidden_when_optionals_off(self):
+        # ["optional", "recommended"] steps must be filtered the same as plain
+        # ["optional"] steps when show_optionals=False.  This mirrors the Venom
+        # Crypts / Servi turn-in steps that carry this combined tag.
+        steps_data = [
+            _step("s1", "Zone A", 1, tags=["mandatory"]),
+            _step("s2", "Zone A", 2, tags=["optional", "recommended"],
+                  description="Opt+Rec step"),
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            f.write(make_guide_json(steps_data))
+            path = Path(f.name)
+        eng = GuideEngine(path)
+        eng.current_step_id = "s1"
+        eng.current_zone = "Zone A"
+        visible = eng.get_visible_steps(league_start=True, show_optionals=False)
+        descriptions = [s.description for s in visible]
+        assert "Opt+Rec step" not in descriptions
+        path.unlink(missing_ok=True)
 
     def test_permanent_buff_step_always_visible(self, engine):
         engine.current_step_id = "s4"
@@ -191,15 +202,34 @@ class TestMatlanWaterwaysRouting:
         zones = [s.zone for s in steps]
         assert "The Azak Bog" not in zones
 
-    def test_mandatory_path_skips_azak_bog(self, act3_engine):
-        # Advancing through mandatory steps should never land in Azak Bog.
+    def test_advance_lands_on_next_step_by_step_number_regardless_of_tag(self, act3_engine):
+        # advance() picks by step_number with no tag filter.
+        # matlan_nav (step 5) → matlan_bog (step 6, optional) is next numerically.
         act3_engine.current_step_id = "matlan_nav"
         act3_engine.advance()
-        # matlan_nav (5) → next mandatory by step_number: matlan_lever (9)
-        # because matlan_bog (6) is optional and advance picks next by step_number
-        # regardless of tag — but the mandatory filter only applies to visibility.
-        # What we assert here is that the Azak Bog has no mandatory entry path.
+        assert act3_engine.current_step_id == "matlan_bog"
+
+    def test_azak_bog_has_no_mandatory_entry_path(self, act3_engine):
+        # Azak Bog is an optional side zone; no step entering it is mandatory.
         azak_steps = [
             s for s in act3_engine.steps.values() if s.zone == "The Azak Bog"
         ]
         assert all("mandatory" not in s.tags for s in azak_steps)
+
+    def test_matlan_lever_trigger_advances_to_ziggurat(self, act3_engine):
+        # Pulling the lever (matlan_lever step 9) fires an enter_area trigger
+        # for Ziggurat Encampment, which should advance to ziggurat_alva (step 10).
+        act3_engine.current_step_id = "matlan_lever"
+        act3_engine.handle_zone_enter("Ziggurat Encampment")
+        assert act3_engine.current_step_id == "ziggurat_alva"
+
+    def test_early_ziggurat_visit_does_not_jump_to_matlan_lever(self, act3_engine):
+        # Phase 2 of handle_zone_enter must NOT match a trigger on a step that is
+        # AHEAD of the current position.  Entering Ziggurat Encampment while still
+        # on an early step must not jump forward to the matlan_lever trigger.
+        act3_engine.current_step_id = "jq_boss"  # step 1 — long before matlan
+        act3_engine.handle_zone_enter("Ziggurat Encampment")
+        # Should stay on jq_boss (Phase 3 fallback finds no Ziggurat step > step 1
+        # that also has zone == "Ziggurat Encampment" in the test fixture... but
+        # what matters is it did NOT jump to matlan_lever step 9).
+        assert act3_engine.current_step_id != "matlan_lever"

@@ -129,14 +129,19 @@ class GuideEngine:
                 else:
                     logger.debug(f"Phase 1 mismatch: trigger target='{trigger.get('target_area','')}' != zone='{zone}'")
 
-        for sid, step in self.steps.items():
-            if step.auto_advance_trigger:
-                trigger = step.auto_advance_trigger
-                if trigger.get("type") == "enter_area":
-                    if trigger.get("target_area", "") == zone:
-                        logger.debug(f"Phase 2 match: step {sid} trigger -> jump to {sid}")
-                        self.current_step_id = sid
-                        return
+        forward_matches = [
+            (step.step_number, sid)
+            for sid, step in self.steps.items()
+            if step.auto_advance_trigger
+            and step.auto_advance_trigger.get("type") == "enter_area"
+            and step.auto_advance_trigger.get("target_area", "") == zone
+            and step.step_number == current.step_number + 1
+        ]
+        if forward_matches:
+            _, sid = min(forward_matches)
+            logger.debug(f"Phase 2 match: step {sid} trigger -> jump to {sid}")
+            self.current_step_id = sid
+            return
 
         if current.zone != zone:
             candidates = [
