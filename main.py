@@ -3,7 +3,6 @@ import platform
 import sys
 import os
 from pathlib import Path
-import threading
 import time
 from typing import Any
 
@@ -90,7 +89,7 @@ class SinGuideApp(QObject):
         self.config = ConfigManager()
         self.regex_manager = RegexManager(self.config)
         self.hotkey_listener: object | None = None
-        self._regex_listener: object | None = None
+        self._regex_listener: Any = None
         self._regex_f6_pressed: bool = False
         self._regex_f6_used_modifier: bool = False
         self._init_paths()

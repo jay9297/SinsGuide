@@ -102,25 +102,31 @@ class RegexEntry:
     def _validate(name: str, pattern: str) -> None:
         """Validate name and pattern constraints.
 
+        Length checks use the stripped value to match the stored form
+        (``create()`` strips before constructing the entry).
+
         Raises:
             RegexValidationError: On any constraint violation.
         """
-        if not name or not name.strip():
+        stripped_name = name.strip()
+        stripped_pattern = pattern.strip()
+
+        if not stripped_name:
             raise RegexValidationError("Regex name must be non-empty.")
 
-        if len(name) > MAX_NAME_LENGTH:
+        if len(stripped_name) > MAX_NAME_LENGTH:
             raise RegexValidationError(
                 f"Regex name exceeds {MAX_NAME_LENGTH} characters "
-                f"(got {len(name)})."
+                f"(got {len(stripped_name)})."
             )
 
-        if not pattern or not pattern.strip():
+        if not stripped_pattern:
             raise RegexValidationError("Regex pattern must be non-empty.")
 
-        if len(pattern) > MAX_PATTERN_LENGTH:
+        if len(stripped_pattern) > MAX_PATTERN_LENGTH:
             raise RegexValidationError(
                 f"Regex pattern exceeds {MAX_PATTERN_LENGTH} characters "
-                f"(got {len(pattern)})."
+                f"(got {len(stripped_pattern)})."
             )
 
 
