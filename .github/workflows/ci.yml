@@ -48,8 +48,14 @@ jobs:
       - name: Unit + functional tests
         run: xvfb-run -a pytest tests/ -v --cov=sin_guide --cov-report=term-missing --cov-report=xml
 
-      - name: Visual regression tests (informational only)
-        run: xvfb-run -a pytest tests/visual/ -v || echo "::warning::Visual snapshot diffs detected — regenerate locally with pytest --update-snapshots if intentional"
+      - name: Upload actual snapshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots-actual
+          path: tests/visual/snapshots_actual/
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Coverage threshold check
         run: |
