@@ -16,6 +16,8 @@ finish-args:
   - --socket=wayland
   # GPU access for screenshot capture (gem OCR)
   - --device=dri
+  # Tesseract training data path (installed to /app/share/tessdata/)
+  - --env=TESSDATA_PREFIX=/app/share/tessdata
   # Steam Proton prefix for Client.txt log parsing
   - --filesystem=~/.steam:ro
   - --filesystem=~/.local/share/Steam:ro
