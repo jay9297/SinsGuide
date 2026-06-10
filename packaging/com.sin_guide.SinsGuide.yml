@@ -59,17 +59,20 @@ modules:
       - /share/doc
       - /lib64/libtesseract.a
 
-  # ── Python runtime dependencies ────────────────────────────────
-  - name: python3-dependencies
+  # ── Python runtime dependencies (offline, SHA256-verified) ─────
+  - @python3-dependencies.json
+
+  # ── PySide6 (separate; flatpak-pip-generator can't handle it) ──
+  - name: python3-pyside
     buildsystem: simple
     build-options:
       build-args:
         - --share=network
     build-commands:
-      - pip3 install --prefix=${FLATPAK_DEST} --no-build-isolation -r requirements.txt
-    sources:
-      - type: file
-        path: requirements.txt
+      - pip3 install --prefix=${FLATPAK_DEST}
+        --no-build-isolation
+        PySide6-Essentials shiboken6
+    sources: []
 
   # ── Sin's Guide application ────────────────────────────────────
   - name: sins-guide
