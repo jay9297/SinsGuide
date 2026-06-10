@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -7,7 +8,8 @@ from .defaults import DEFAULT_CONFIG
 
 class ConfigManager:
     def __init__(self):
-        self.config_dir = Path.home() / ".config" / "sin_guide"
+        xdg_config = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+        self.config_dir = xdg_config / "sin_guide"
         self.config_file = self.config_dir / "config.json"
         self._config: dict[str, Any] = {}
         self._load()
