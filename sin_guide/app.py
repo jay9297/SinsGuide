@@ -12,7 +12,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 
 from sin_guide.config.manager import ConfigManager
 from sin_guide.core.guide_engine import GuideEngine
-from sin_guide.core.log_parser import LogParser, LogEventType
+from sin_guide.core.log_parser import LogEvent, LogParser, LogEventType
 from sin_guide.core.regex_manager import RegexManager
 from sin_guide.core.timer import CampaignTimer
 from sin_guide.core.exp_calculator import ExpCalculator
@@ -61,7 +61,7 @@ class LogWatcherThread(QThread):
                 logger.error("LogWatcher error: %s", e, exc_info=True)
             time.sleep(0.5)
 
-    def _handle_event(self, event):
+    def _handle_event(self, event: LogEvent) -> None:
         if event.event_type == LogEventType.ENTERED_ZONE:
             logger.debug("Parsed zone enter: '%s'", event.data)
             self.zone_entered.emit(event.data)
