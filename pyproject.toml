@@ -26,3 +26,9 @@ sins-guide = "sin_guide.app:main"
 
 [tool.setuptools.packages.find]
 include = ["sin_guide*"]
+
+# The guide, gem database, and zone tables are loaded at runtime from inside
+# the package; without this they are silently excluded from the wheel and the
+# installed app shows an empty guide.
+[tool.setuptools.package-data]
+sin_guide = ["data/**/*.json"]
