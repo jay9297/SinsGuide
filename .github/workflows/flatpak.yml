@@ -14,7 +14,10 @@ jobs:
     permissions:
       contents: write
     container:
-      image: ghcr.io/flatpak/flatpak-github-actions:gnome-46
+      # Image from flathub-infra/actions-images; the old
+      # ghcr.io/flatpak/flatpak-github-actions images no longer exist.
+      # kde-6.10 matches the manifest's org.kde.Platform runtime version.
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.10
       options: --privileged
 
     strategy:
