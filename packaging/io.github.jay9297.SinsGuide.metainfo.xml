@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.sin_guide.SinsGuide</id>
+  <id>io.github.jay9297.SinsGuide</id>
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
   <name>Sin's Guide</name>
@@ -33,5 +33,5 @@
     <release version="0.1.0" date="2026-05-24"/>
   </releases>
   <content_rating type="oars-1.1"/>
-  <launchable type="desktop-id">com.sin_guide.SinsGuide.desktop</launchable>
+  <launchable type="desktop-id">io.github.jay9297.SinsGuide.desktop</launchable>
 </component>
