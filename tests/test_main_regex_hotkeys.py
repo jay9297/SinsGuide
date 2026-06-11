@@ -1,4 +1,4 @@
-"""Tests for the F6 regex hotkey callbacks in main.py."""
+"""Tests for the F6 regex hotkey callbacks in sin_guide.app."""
 from __future__ import annotations
 
 from types import SimpleNamespace
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from sin_guide.core.regex_manager import RegexEntry
-from main import SinGuideApp
+from sin_guide.app import SinGuideApp
 
 
 def _entry(name: str = "Maps", pattern: str = "map") -> RegexEntry:
@@ -32,7 +32,7 @@ class TestOnRegexCopy:
         overlay = MagicMock()
         double = _AppDouble(manager, overlay)
 
-        with patch("main.QApplication.clipboard") as clipboard:
+        with patch("sin_guide.app.QApplication.clipboard") as clipboard:
             SinGuideApp._on_regex_copy(double)
 
         manager.get_current.assert_called_once_with()
@@ -45,7 +45,7 @@ class TestOnRegexCopy:
         overlay = MagicMock()
         double = _AppDouble(manager, overlay)
 
-        with patch("main.QApplication.clipboard") as clipboard:
+        with patch("sin_guide.app.QApplication.clipboard") as clipboard:
             SinGuideApp._on_regex_copy(double)
 
         clipboard.return_value.setText.assert_not_called()
@@ -135,7 +135,7 @@ class TestOnRegexHotkeyPress:
         double._regex_f6_pressed = True
         double._on_regex_next = MagicMock()
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_press(
                 double, keyboard.Key.up, keyboard
             )
@@ -150,7 +150,7 @@ class TestOnRegexHotkeyPress:
         double._regex_f6_pressed = True
         double._on_regex_prev = MagicMock()
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_press(
                 double, keyboard.Key.down, keyboard
             )
@@ -164,7 +164,7 @@ class TestOnRegexHotkeyPress:
         double = _AppDouble(MagicMock(), MagicMock())
         double._regex_f6_pressed = False
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_press(
                 double, keyboard.Key.up, keyboard
             )
@@ -180,7 +180,7 @@ class TestOnRegexHotkeyPress:
         double = _AppDouble(MagicMock(), MagicMock())
         double._regex_f6_pressed = True
 
-        with patch("main.QTimer.singleShot", side_effect=RuntimeError):
+        with patch("sin_guide.app.QTimer.singleShot", side_effect=RuntimeError):
             SinGuideApp._on_regex_hotkey_press(
                 double, keyboard.Key.up, keyboard
             )
@@ -194,7 +194,7 @@ class TestOnRegexHotkeyRelease:
         double._regex_f6_used_modifier = False
         double._on_regex_copy = MagicMock()
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_release(
                 double, keyboard.Key.f6, keyboard
             )
@@ -209,7 +209,7 @@ class TestOnRegexHotkeyRelease:
         double._regex_f6_pressed = True
         double._regex_f6_used_modifier = True
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_release(
                 double, keyboard.Key.f6, keyboard
             )
@@ -223,7 +223,7 @@ class TestOnRegexHotkeyRelease:
         double._regex_f6_pressed = False
         double._regex_f6_used_modifier = True
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_release(
                 double, keyboard.Key.f6, keyboard
             )
@@ -236,7 +236,7 @@ class TestOnRegexHotkeyRelease:
         double = _AppDouble(MagicMock(), MagicMock())
         double._regex_f6_pressed = True
 
-        with patch("main.QTimer.singleShot") as single_shot:
+        with patch("sin_guide.app.QTimer.singleShot") as single_shot:
             SinGuideApp._on_regex_hotkey_release(
                 double, keyboard.Key.other, keyboard
             )
@@ -250,7 +250,7 @@ class TestOnRegexHotkeyRelease:
         double._regex_f6_pressed = True
         double._regex_f6_used_modifier = False
 
-        with patch("main.QTimer.singleShot", side_effect=RuntimeError):
+        with patch("sin_guide.app.QTimer.singleShot", side_effect=RuntimeError):
             SinGuideApp._on_regex_hotkey_release(
                 double, keyboard.Key.f6, keyboard
             )
@@ -299,7 +299,7 @@ class TestInitHotkeys:
         fake_pynput.keyboard = keyboard
         monkeypatch.setitem(sys.modules, "pynput", fake_pynput)
         monkeypatch.setitem(sys.modules, "pynput.keyboard", keyboard)
-        monkeypatch.setattr("main.logger", MagicMock())
+        monkeypatch.setattr("sin_guide.app.logger", MagicMock())
 
         app = _HotkeyAppDouble()
 
@@ -329,7 +329,7 @@ class TestInitHotkeys:
         fake_pynput.keyboard = keyboard
         monkeypatch.setitem(sys.modules, "pynput", fake_pynput)
         monkeypatch.setitem(sys.modules, "pynput.keyboard", keyboard)
-        monkeypatch.setattr("main.logger", MagicMock())
+        monkeypatch.setattr("sin_guide.app.logger", MagicMock())
 
         app = _HotkeyAppDouble()
 
