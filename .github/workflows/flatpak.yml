@@ -11,6 +11,8 @@ jobs:
   flatpak:
     name: Build Flatpak
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     container:
       image: ghcr.io/flatpak/flatpak-github-actions:gnome-46
       options: --privileged
@@ -23,26 +25,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Flatpak dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/share/flatpak
-            ~/.cache/flatpak-builder
-          key: flatpak-${{ matrix.arch }}-${{ hashFiles('packaging/com.sin_guide.SinsGuide.yml') }}
+      # github.ref_name contains a slash on pull_request events ("18/merge"),
+      # which is invalid in a bundle filename — use the PR number instead.
+      - name: Compute bundle name
+        id: bundle
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=pr${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build Flatpak
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: SinsGuide-${{ github.ref_name }}.flatpak
-          manifest-path: packaging/com.sin_guide.SinsGuide.yml
-          cache-key: flatpak-${{ matrix.arch }}
+          bundle: SinsGuide-${{ steps.bundle.outputs.name }}.flatpak
+          manifest-path: packaging/io.github.jay9297.SinsGuide.yml
+          cache-key: flatpak-${{ matrix.arch }}-${{ hashFiles('packaging/io.github.jay9297.SinsGuide.yml') }}
           arch: ${{ matrix.arch }}
 
       - name: Upload Flatpak bundle
         uses: actions/upload-artifact@v4
         with:
-          name: SinsGuide-${{ github.ref_name }}-${{ matrix.arch }}
+          name: SinsGuide-${{ steps.bundle.outputs.name }}-${{ matrix.arch }}
           path: SinsGuide-*.flatpak
 
       - name: Create Release
