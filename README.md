@@ -60,6 +60,34 @@ sudo dnf install tesseract
 sudo pacman -S tesseract
 ```
 
+### Flatpak (Bazzite, Steam Deck, other immutable distros)
+
+A self-contained Flatpak bundle (Tesseract and all Python dependencies
+included) is built by CI and attached to tagged releases:
+
+```bash
+flatpak install --user SinsGuide-<version>.flatpak
+flatpak run io.github.jay9297.SinsGuide
+```
+
+To build it locally:
+
+```bash
+flatpak-builder --user --install --force-clean build-dir packaging/io.github.jay9297.SinsGuide.yml
+```
+
+Notes for Steam Deck / Bazzite:
+
+- **Steam Deck works in Desktop Mode only.** In Game Mode, gamescope
+  composites only the game's own windows, so an external overlay can never
+  appear above the game.
+- Steam libraries on SD cards and secondary drives (`/run/media`) are
+  covered by the sandbox permissions, as are native and Flatpak Steam
+  installs.
+- On Wayland desktops the overlay runs through XWayland (same as PoE2 under
+  Proton). Gem scanning (F5) captures via X11 and may not work in Wayland
+  sessions.
+
 ## Usage
 
 ```bash
@@ -109,8 +137,9 @@ Right-click the overlay or edit `~/.config/sin_guide/config.json`.
 ## Architecture
 
 ```
+main.py                     # Thin launcher (delegates to sin_guide.app)
 sin_guide/
-├── main.py                 # Entry point — app lifecycle, overlay spawning
+├── app.py                  # Entry point — app lifecycle, overlay spawning
 ├── config/
 │   ├── defaults.py         # Default configuration values
 │   └── manager.py          # Config manager with file-watch hot-reload
