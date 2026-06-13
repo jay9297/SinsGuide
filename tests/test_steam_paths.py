@@ -174,6 +174,20 @@ def _create_fake_prefix(steam_dir: Path, appid: str = _POE2_APPID) -> Path:
     return pfx
 
 
+def _create_fake_common_layout(steam_dir: Path) -> Path:
+    """Drop a Client.txt into ``steamapps/common/Path of Exile 2/logs/``.
+
+    Mirrors the layout observed on Bazzite / modern PoE2 installs where
+    the game writes its log next to the binary rather than inside the
+    Proton prefix's Documents folder.
+    """
+    from sin_guide.utils.steam_discovery import _POE2_CLIENT_TXT_COMMON_RELPATH
+    log_path = steam_dir / _POE2_CLIENT_TXT_COMMON_RELPATH
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text("2024/01/01 12:00:00 Test log entry\n")
+    return log_path
+
+
 class TestClientTxtDiscovery:
     def test_finds_client_txt(self, tmp_path):
         steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
@@ -213,6 +227,61 @@ class TestClientTxtDiscovery:
             from sin_guide.utils.steam_discovery import find_all_poe2_client_txt
             results = find_all_poe2_client_txt()
             assert len(results) == 2
+
+
+class TestClientTxtCommonLayoutDiscovery:
+    """Cover the modern PoE2 layout where ``Client.txt`` lives next to the
+    game binary under ``steamapps/common/<Game>/logs/`` rather than inside
+    the Proton prefix.  Reproduces the Bazzite install observed in
+    https://github.com/jay9297/SinsGuide (regression test for the
+    "Client.txt not detected" bug)."""
+
+    def test_finds_client_txt_in_common_logs(self, tmp_path):
+        steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
+        _create_fake_common_layout(steam_dir)
+
+        with mock.patch("sin_guide.utils.steam_discovery._resolve_steam_data_dir", return_value=steam_dir):
+            found = find_poe2_client_txt()
+            assert found is not None
+            assert found.name == "Client.txt"
+            assert "common" in found.parts
+
+    def test_finds_client_txt_on_external_library(self, tmp_path):
+        external = tmp_path / "external"
+        external.mkdir(parents=True, exist_ok=True)
+        (external / "steamapps").mkdir(parents=True, exist_ok=True)
+
+        vdf = NEW_STYLE_VDF.replace("/mnt/games/SteamLibrary", str(external))
+        steam_dir = _make_fake_steam_dir(tmp_path, vdf)
+        _create_fake_common_layout(external)
+
+        libs = [steam_dir, external]
+        with (
+            mock.patch("sin_guide.utils.steam_discovery._resolve_steam_data_dir", return_value=steam_dir),
+            mock.patch("sin_guide.utils.steam_discovery.get_steam_library_paths", return_value=libs),
+        ):
+            found = find_poe2_client_txt()
+            assert found is not None
+            assert str(found).startswith(str(external))
+
+    def test_prefix_path_wins_when_both_layouts_present(self, tmp_path):
+        """If the prefix path also exists (older install), keep preferring
+        it so the documented behaviour is preserved."""
+        from sin_guide.utils.steam_discovery import _POE2_CLIENT_TXT_RELPATH
+        steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
+        _create_fake_prefix(steam_dir)
+        _create_fake_common_layout(steam_dir)
+
+        with mock.patch("sin_guide.utils.steam_discovery._resolve_steam_data_dir", return_value=steam_dir):
+            found = find_poe2_client_txt()
+            assert found is not None
+            assert _POE2_CLIENT_TXT_RELPATH in str(found)
+
+    def test_returns_none_when_no_layout_has_client_txt(self, tmp_path):
+        steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
+
+        with mock.patch("sin_guide.utils.steam_discovery._resolve_steam_data_dir", return_value=steam_dir):
+            assert find_poe2_client_txt() is None
 
 
 class TestSteamDataDir:

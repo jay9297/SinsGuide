@@ -17,6 +17,13 @@ _POE2_APPID = "2694490"
 _POE2_CLIENT_TXT_RELPATH = (
     "drive_c/users/steamuser/Documents/My Games/Path of Exile 2/Client.txt"
 )
+# Modern PoE2 (and PoE1) writes Client.txt alongside the game binary in
+# ``steamapps/common/<Game>/logs/`` rather than the Proton prefix's
+# ``Documents/My Games/`` folder.  Older installs and a few proton setups
+# still use the prefix path above, so we try both.
+_POE2_CLIENT_TXT_COMMON_RELPATH = (
+    "steamapps/common/Path of Exile 2/logs/Client.txt"
+)
 
 # `~/.steam/steam` is a symlink shim Valve ships; it almost always resolves to the real data dir.
 _CANDIDATE_STEAM_DIRS = [
@@ -178,6 +185,23 @@ def get_steam_library_paths(steam_data_dir: Path) -> list[Path]:
     return libraries
 
 
+def _iter_client_txt_candidates() -> Iterator[Path]:
+    """Yield every plausible location for the PoE2 ``Client.txt`` log.
+
+    Tries the Proton-prefix path first (older / wine-quirky installs) then
+    the modern ``steamapps/common/<Game>/logs/`` path across every library
+    root.  Symlinks are not resolved during the iteration so the same path
+    is returned for comparison with what the user sees on disk.
+    """
+    for pfx in get_proton_prefix_dirs():
+        yield pfx / _POE2_CLIENT_TXT_RELPATH
+
+    steam_dir = _resolve_steam_data_dir()
+    if steam_dir is not None:
+        for lib in get_steam_library_paths(steam_dir):
+            yield lib / _POE2_CLIENT_TXT_COMMON_RELPATH
+
+
 def get_proton_prefix_dirs(appid: str = _POE2_APPID) -> list[Path]:
     """Return all ``compatdata/<appid>/pfx`` Proton prefix directories.
 
@@ -206,9 +230,7 @@ def find_poe2_client_txt() -> Path | None:
     Returns the first valid path found, or ``None`` if PoE2 is not
     installed or has never been launched on this machine.
     """
-    rel = _POE2_CLIENT_TXT_RELPATH
-    for pfx in get_proton_prefix_dirs():
-        candidate = pfx / rel
+    for candidate in _iter_client_txt_candidates():
         if candidate.resolve().is_file():
             return candidate
     return None
@@ -216,11 +238,9 @@ def find_poe2_client_txt() -> Path | None:
 
 def find_all_poe2_client_txt() -> list[Path]:
     """Return **all** PoE2 ``Client.txt`` files found across all prefixes."""
-    rel = _POE2_CLIENT_TXT_RELPATH
     results: list[Path] = []
-    for pfx in get_proton_prefix_dirs():
-        candidate = pfx / rel
-        if candidate.resolve().is_file():
+    for candidate in _iter_client_txt_candidates():
+        if candidate.resolve().is_file() and candidate not in results:
             results.append(candidate)
     return results
 
