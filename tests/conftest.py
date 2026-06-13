@@ -23,6 +23,21 @@ _TEST_FONT_PATH = Path(__file__).parent / "visual" / "fonts" / "DejaVuSans.ttf"
 
 
 # ---------------------------------------------------------------------------
+# Environment isolation
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(autouse=True)
+def _isolate_xdg_config(monkeypatch):
+    """Strip XDG_CONFIG_HOME so ConfigManager falls back to Path.home().
+
+    GitHub-hosted runners export XDG_CONFIG_HOME, which would bypass the
+    Path.home() patching the config tests rely on and leak state into the
+    runner's real config directory.
+    """
+    monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
+
+
+# ---------------------------------------------------------------------------
 # Deterministic font
 # ---------------------------------------------------------------------------
 
