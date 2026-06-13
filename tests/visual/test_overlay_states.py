@@ -4,13 +4,19 @@
 Run normally:
     pytest tests/visual/ -v
 
-Regenerate all baselines (first run, or after intentional UI changes):
+Regenerate all baselines after intentional UI changes by triggering the
+update-snapshots GitHub Actions workflow, or locally (in the same CI
+environment) with:
     pytest tests/visual/ --update-snapshots -v
 """
 from __future__ import annotations
 
+from PySide6.QtWidgets import QApplication
 
 from tests.conftest import make_step
+
+# Must match overlay.width in mock_config_values (conftest.py).
+_SNAP_WIDTH = 220
 
 
 # ---------------------------------------------------------------------------
@@ -18,8 +24,20 @@ from tests.conftest import make_step
 # ---------------------------------------------------------------------------
 
 def _grab(overlay):
-    """Grab the main_frame only (excludes the transparent outer widget)."""
-    return overlay.main_frame.grab()
+    """Grab main_frame at a fixed pixel width for deterministic snapshots.
+
+    Forcing the width means the rendered dimensions are controlled, so
+    baseline PNGs are portable across machines with different fonts or DPI.
+    Height is content-driven but reproducible because the bundled test font
+    (_deterministic_font fixture) gives identical glyph metrics everywhere.
+    """
+    frame = overlay.main_frame
+    frame.setFixedWidth(_SNAP_WIDTH)
+    QApplication.processEvents()
+    QApplication.processEvents()
+    frame.adjustSize()
+    QApplication.processEvents()
+    return frame.grab()
 
 
 # ---------------------------------------------------------------------------
@@ -225,3 +243,20 @@ class TestEdgeCases:
             config_overrides={"overlay.max_visible_lines": 1},
         )
         assert_matches_snapshot(_grab(overlay), "max_visible_lines_one")
+
+
+class TestRegexWidget:
+    def test_regex_feedback_visible(self, make_overlay, assert_matches_snapshot):
+        """RegexWidget shows the active regex name when feedback is triggered."""
+        from sin_guide.core.regex_manager import RegexEntry
+
+        steps = [make_step(zone="The Riverbank")]
+        overlay = make_overlay(steps=steps)
+
+        entry = RegexEntry(
+            name="Maps",
+            pattern="Area contains #additional #type",
+            created_at="2026-01-01T00:00:00+00:00",
+        )
+        overlay.show_regex_feedback(entry)
+        assert_matches_snapshot(_grab(overlay), "regex_feedback_visible")

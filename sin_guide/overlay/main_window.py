@@ -2,7 +2,9 @@ import json
 import logging
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QPoint, QTimer
+from collections.abc import Callable
+
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import (
     QApplication,
@@ -16,7 +18,9 @@ from PySide6.QtWidgets import (
 )
 
 from sin_guide.overlay.gem_widget import GemWidget
+from sin_guide.overlay.regex_widget import RegexWidget
 from sin_guide.overlay.step_renderer import render_steps
+from sin_guide.data.zone_rewards import ZONE_LEAGUE_REWARDS
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +39,6 @@ def _load_zone_levels() -> dict[str, int]:
 class DragHandle(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._drag_pos: QPoint | None = None
         self._target: QWidget | None = None
         self.setFixedSize(14, 14)
         self.setCursor(Qt.CursorShape.OpenHandCursor)
@@ -66,8 +69,44 @@ class DragHandle(QFrame):
         pass
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        self._drag_pos = None
         self.setCursor(Qt.CursorShape.OpenHandCursor)
+
+
+class ResizeHandle(QFrame):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._target: QWidget | None = None
+        self.setFixedSize(14, 14)
+        self.setCursor(Qt.CursorShape.SizeFDiagCursor)
+        self.setStyleSheet("""
+            ResizeHandle {
+                background-color: rgba(0, 220, 220, 120);
+                border: 1px solid rgba(0, 255, 255, 180);
+                border-radius: 3px;
+            }
+            ResizeHandle:hover {
+                background-color: rgba(0, 255, 255, 200);
+            }
+        """)
+        self.setToolTip("Drag to resize overlay width")
+
+    def set_target(self, target: QWidget):
+        self._target = target
+
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.MouseButton.LeftButton and self._target:
+            handle = self._target.windowHandle()
+            if handle:
+                handle.startSystemResize(
+                    Qt.Edge.RightEdge | Qt.Edge.BottomEdge
+                )
+            event.accept()
+
+    def mouseMoveEvent(self, event: QMouseEvent):
+        pass
+
+    def mouseReleaseEvent(self, event: QMouseEvent):
+        pass
 
 
 class OverlayWindow(QWidget):
@@ -77,9 +116,12 @@ class OverlayWindow(QWidget):
         self.guide = guide_engine
         self.timer = timer
         self.exp_calc = exp_calc
+        self.on_settings_requested: Callable[[], None] | None = None
         self._player_level: int | None = None
         self._gem_db: dict = {}
         self._gem_widget: GemWidget | None = None
+        self._regex_widget: RegexWidget | None = None
+        self._pending_width: int | None = None
         self._setup_ui()
         self._apply_config()
         self._start_refresh()
@@ -142,6 +184,10 @@ class OverlayWindow(QWidget):
         self._gem_placeholder.setVisible(False)
         layout.addWidget(self._gem_placeholder)
 
+        self._regex_widget = RegexWidget(self.main_frame)
+        self._regex_widget.setVisible(False)
+        layout.addWidget(self._regex_widget)
+
         self.timer_label = QLabel("0:00 | A1 | 0:00")
         self.timer_label.setObjectName("timerLabel")
         layout.addWidget(self.timer_label)
@@ -164,6 +210,10 @@ class OverlayWindow(QWidget):
         self.next_btn.setFixedSize(40, 30)
         self.next_btn.clicked.connect(self._on_next)
         nav_layout.addWidget(self.next_btn)
+
+        self.resize_handle = ResizeHandle(self.main_frame)
+        self.resize_handle.set_target(self)
+        nav_layout.addWidget(self.resize_handle, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
 
         layout.addLayout(nav_layout)
 
@@ -260,12 +310,14 @@ class OverlayWindow(QWidget):
             }}
         """)
 
-        self.setFixedWidth(width)
-        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-        
+        self.setMinimumWidth(180)
+        self.setMaximumWidth(600)
+        self.resize(width, self.height())
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+
         screen = QApplication.primaryScreen()
         if x < 0 or y < 0 or not self._is_on_screen(x, y, screen):
-            logger.debug(f"Saved position ({x},{y}) is off-screen — resetting to bottom-centre")
+            logger.debug("Saved position (%d,%d) is off-screen — resetting to bottom-centre", x, y)
             self._position_bottom_center()
         else:
             self.move(x, y)
@@ -307,7 +359,7 @@ class OverlayWindow(QWidget):
 
         steps = self.guide.get_visible_steps(league_start, show_optionals, max_lines)
 
-        current_zone = render_steps(self.steps_container, steps, self.width())
+        current_zone = render_steps(self.steps_container, steps, self.width(), ZONE_LEAGUE_REWARDS)
 
         if steps:
             self.header_label.setText(f"Act {steps[0].act}")
@@ -358,6 +410,19 @@ class OverlayWindow(QWidget):
         self.config.set("overlay.x", self.x())
         self.config.set("overlay.y", self.y())
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        new_width = event.size().width()
+        old_width = event.oldSize().width()
+        if new_width != old_width:
+            self._pending_width = new_width
+            QTimer.singleShot(300, self._flush_pending_width)
+
+    def _flush_pending_width(self):
+        if self._pending_width is not None:
+            self.config.set("overlay.width", self._pending_width)
+            self._pending_width = None
+
     def show_overlay(self):
         self.show()
         self.raise_()
@@ -365,8 +430,12 @@ class OverlayWindow(QWidget):
     def hide_overlay(self):
         self.hide()
 
+    def show_regex_feedback(self, entry: object | None) -> None:
+        if self._regex_widget is not None:
+            self._regex_widget.show_regex(entry)
+
     def handle_zone_enter(self, zone: str):
-        logger.debug(f"handle_zone_enter('{zone}') — current_step_id={self.guide.current_step_id}, current_zone={self.guide.current_zone}")
+        logger.debug("handle_zone_enter('%s') — current_step_id=%s, current_zone=%s", zone, self.guide.current_step_id, self.guide.current_zone)
         self.guide.handle_zone_enter(zone)
         self._update_display()
 

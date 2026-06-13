@@ -1,4 +1,6 @@
 import json
+import os
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -7,7 +9,9 @@ from .defaults import DEFAULT_CONFIG
 
 class ConfigManager:
     def __init__(self):
-        self.config_dir = Path.home() / ".config" / "sin_guide"
+        # An empty XDG_CONFIG_HOME must be treated as unset (XDG basedir spec).
+        xdg_config = Path(os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config"))
+        self.config_dir = xdg_config / "sin_guide"
         self.config_file = self.config_dir / "config.json"
         self._config: dict[str, Any] = {}
         self._load()
@@ -21,13 +25,13 @@ class ConfigManager:
                 self._config = self._merge_defaults(loaded)
             except (json.JSONDecodeError, OSError):
                 self._backup_corrupted()
-                self._config = DEFAULT_CONFIG.copy()
+                self._config = deepcopy(DEFAULT_CONFIG)
         else:
-            self._config = DEFAULT_CONFIG.copy()
+            self._config = deepcopy(DEFAULT_CONFIG)
             self._save()
 
     def _merge_defaults(self, loaded: dict) -> dict:
-        merged = DEFAULT_CONFIG.copy()
+        merged = deepcopy(DEFAULT_CONFIG)
         for key, value in merged.items():
             if isinstance(value, dict) and key in loaded:
                 merged[key] = {**value, **loaded[key]}
