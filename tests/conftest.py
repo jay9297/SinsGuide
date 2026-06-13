@@ -17,6 +17,37 @@ from PIL import Image, ImageChops
 from sin_guide.core.guide_engine import GuideStep
 
 SNAPSHOTS_DIR = Path(__file__).parent / "visual" / "snapshots"
+# Actual renders written here on comparison failure so CI can upload them.
+ACTUAL_SNAPSHOTS_DIR = Path(__file__).parent / "visual" / "snapshots_actual"
+_TEST_FONT_PATH = Path(__file__).parent / "visual" / "fonts" / "DejaVuSans.ttf"
+
+
+# ---------------------------------------------------------------------------
+# Deterministic font
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(scope="session", autouse=True)
+def _deterministic_font(qapp):
+    """Load the bundled DejaVu Sans at a fixed *pixel* size so that text
+    metrics are identical on every machine.
+
+    Point sizes are scaled by DPI, which varies between CI runners and
+    developer desktops; pixel sizes are not.  The bundled TTF ensures the
+    same glyph metrics regardless of which fonts happen to be installed on
+    the host.
+    """
+    from PySide6.QtGui import QFont, QFontDatabase
+    font_id = QFontDatabase.addApplicationFont(str(_TEST_FONT_PATH))
+    if font_id < 0:
+        pytest.fail(
+            f"Could not load test font {_TEST_FONT_PATH}. "
+            "Check that tests/visual/fonts/DejaVuSans.ttf is committed."
+        )
+    families = QFontDatabase.applicationFontFamilies(font_id)
+    font = QFont(families[0])
+    font.setPixelSize(13)
+    qapp.setFont(font)
+    yield
 
 
 # ---------------------------------------------------------------------------
@@ -198,10 +229,17 @@ def assert_matches_snapshot(request):
     """
     Fixture that provides a callable: assert_matches_snapshot(pixmap, name).
 
-    On first run (no baseline exists) the pixmap is saved as the baseline and
-    the test passes.  On subsequent runs it compares against the baseline.
+    Compares the rendered pixmap against a committed baseline PNG.  On
+    mismatch the actual render is written to tests/visual/snapshots_actual/
+    so CI can upload it as an artifact for inspection.
 
-    Pass --update-snapshots to pytest to regenerate all baselines:
+    A missing baseline is a hard failure — it is NOT silently created.  To
+    add or regenerate baselines, trigger the update-snapshots GitHub Actions
+    workflow (or run `pytest --update-snapshots tests/visual/` locally).
+    This prevents the self-comparison trap where auto-creating a baseline in
+    the same run that tests it makes every test trivially pass.
+
+    Pass --update-snapshots to regenerate all baselines:
         pytest --update-snapshots tests/visual/
     """
     update = request.config.getoption("--update-snapshots", default=False)
@@ -211,16 +249,27 @@ def assert_matches_snapshot(request):
         baseline_path = SNAPSHOTS_DIR / f"{name}.png"
         actual = _qpixmap_to_pil(pixmap)
 
-        if update or not baseline_path.exists():
+        if update:
             actual.save(baseline_path)
-            return  # Baseline created/updated -- pass unconditionally.
+            return  # Baseline updated — pass unconditionally.
+
+        if not baseline_path.exists():
+            pytest.fail(
+                f"No baseline snapshot '{name}' found at {baseline_path}. "
+                "Trigger the update-snapshots workflow or run "
+                "`pytest --update-snapshots tests/visual/` to create it."
+            )
 
         baseline = Image.open(baseline_path).convert("RGBA")
         match, ratio = _images_match(actual, baseline, tolerance)
+        if not match:
+            ACTUAL_SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+            actual.save(ACTUAL_SNAPSHOTS_DIR / f"{name}_actual.png")
         assert match, (
             f"Visual snapshot '{name}' differs by {ratio:.1%} "
-            f"(tolerance {tolerance:.1%}).  "
-            f"Run `pytest --update-snapshots` to regenerate baselines."
+            f"(tolerance {tolerance:.1%}). "
+            f"Actual saved to tests/visual/snapshots_actual/{name}_actual.png. "
+            f"Trigger the update-snapshots workflow if the change is intentional."
         )
 
     return _assert
