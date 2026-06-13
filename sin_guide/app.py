@@ -4,6 +4,7 @@ import platform
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 from PySide6.QtCore import QObject, QThread, Signal, QTimer
 from PySide6.QtCore import qVersion as qt_version
@@ -12,6 +13,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from sin_guide.config.manager import ConfigManager
 from sin_guide.core.guide_engine import GuideEngine
 from sin_guide.core.log_parser import LogParser, LogEventType
+from sin_guide.core.regex_manager import RegexManager
 from sin_guide.core.timer import CampaignTimer
 from sin_guide.core.exp_calculator import ExpCalculator
 from sin_guide.overlay.main_window import OverlayWindow
@@ -84,6 +86,11 @@ class SinGuideApp(QObject):
         self.app.setQuitOnLastWindowClosed(False)
         self._log_platform_info()
         self.config = ConfigManager()
+        self.regex_manager = RegexManager(self.config)
+        self.hotkey_listener: object | None = None
+        self._regex_listener: Any = None
+        self._regex_f6_pressed: bool = False
+        self._regex_f6_used_modifier: bool = False
         self._init_paths()
         self._init_components()
         self._init_overlay()
@@ -178,6 +185,82 @@ class SinGuideApp(QObject):
             self.hotkey_listener.start()
         except Exception:
             self.hotkey_listener = None
+            return
+
+        try:
+            self._init_regex_hotkey(keyboard)
+        except Exception:
+            logger.exception(
+                "Failed to init regex hotkey; stopping primary listener"
+            )
+            self.hotkey_listener.stop()
+            self.hotkey_listener = None
+            self._regex_listener = None
+
+    def _init_regex_hotkey(self, keyboard: Any) -> None:
+        """Set up F6 hotkey for regex copy (release) and cycling (hold + Up/Down).
+
+        Uses a separate ``keyboard.Listener`` so we can detect F6 key-release
+        (copy to clipboard) vs. F6+Up/Down (cycle entries).  The existing
+        ``GlobalHotKeys`` fires on press, which is insufficient for the
+        dual-purpose F6 key.
+        """
+        # Both flags are mutated and read exclusively by the pynput listener
+        # thread. The Qt main-thread callbacks (_on_regex_copy/next/prev) do
+        # not read them directly, so CPython's GIL gives implicit atomicity for
+        # single bool assignments. Python 3.13 free-threaded mode would need a
+        # threading.Lock() around the press/release pair.
+        self._regex_f6_pressed = False
+        self._regex_f6_used_modifier = False
+
+        self._regex_listener = keyboard.Listener(
+            on_press=lambda k: self._on_regex_hotkey_press(k, keyboard),
+            on_release=lambda k: self._on_regex_hotkey_release(k, keyboard),
+        )
+        self._regex_listener.start()
+
+    def _on_regex_hotkey_press(self, key: Any, keyboard: Any) -> None:
+        try:
+            if key == keyboard.Key.f6:
+                self._regex_f6_pressed = True
+                self._regex_f6_used_modifier = False
+            elif self._regex_f6_pressed:
+                if key == keyboard.Key.up:
+                    self._regex_f6_used_modifier = True
+                    QTimer.singleShot(0, self._on_regex_next)
+                elif key == keyboard.Key.down:
+                    self._regex_f6_used_modifier = True
+                    QTimer.singleShot(0, self._on_regex_prev)
+        except (AttributeError, RuntimeError, TypeError):
+            logger.debug("Regex hotkey press error", exc_info=True)
+
+    def _on_regex_hotkey_release(self, key: Any, keyboard: Any) -> None:
+        try:
+            if key != keyboard.Key.f6:
+                return
+            should_copy = (
+                self._regex_f6_pressed and not self._regex_f6_used_modifier
+            )
+            self._regex_f6_pressed = False
+            if should_copy:
+                QTimer.singleShot(0, self._on_regex_copy)
+        except (AttributeError, RuntimeError, TypeError):
+            logger.debug("Regex hotkey release error", exc_info=True)
+
+    def _on_regex_copy(self) -> None:
+        entry = self.regex_manager.get_current()
+        if entry:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(entry.pattern)
+        self.overlay.show_regex_feedback(entry)
+
+    def _on_regex_next(self) -> None:
+        entry = self.regex_manager.next_regex()
+        self.overlay.show_regex_feedback(entry)
+
+    def _on_regex_prev(self) -> None:
+        entry = self.regex_manager.prev_regex()
+        self.overlay.show_regex_feedback(entry)
 
     def _on_zone_entered(self, zone: str):
         self.overlay.handle_zone_enter(zone)
@@ -209,7 +292,7 @@ class SinGuideApp(QObject):
         self.overlay.scan_gems()
 
     def show_settings(self):
-        panel = SettingsPanel(self.config)
+        panel = SettingsPanel(self.config, regex_manager=self.regex_manager)
         panel.exec()
         self.overlay.reload_config()
 
@@ -223,8 +306,11 @@ class SinGuideApp(QObject):
             self._raise_timer.stop()
         if self.watcher:
             self.watcher.stop()
+            self.watcher.wait(2000)
         if self.hotkey_listener:
             self.hotkey_listener.stop()
+        if hasattr(self, "_regex_listener") and self._regex_listener:
+            self._regex_listener.stop()
         self.tracker.cleanup()
 
 
