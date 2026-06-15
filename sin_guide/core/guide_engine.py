@@ -151,6 +151,17 @@ class GuideEngine:
 
         logger.debug(f"No advancement for zone='{zone}'")
 
+    def jump_to_zone(self, zone: str) -> None:
+        """Jump to the first guide step whose zone matches the given zone name."""
+        candidates = [
+            (step.step_number, sid)
+            for sid, step in self.steps.items()
+            if step.zone == zone
+        ]
+        if candidates:
+            _, step_id = min(candidates)
+            self.current_step_id = step_id
+
     def reset(self):
         if self.steps:
             self.current_step_id = min(self.steps.keys(), key=lambda k: self.steps[k].step_number)

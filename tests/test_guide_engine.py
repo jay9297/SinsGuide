@@ -102,3 +102,23 @@ class TestVisibleSteps:
     def test_empty_when_no_current_step(self, engine):
         engine.current_step_id = None
         assert engine.get_visible_steps(True, True) == []
+
+
+class TestJumpToZone:
+    def test_jumps_to_first_step_in_zone(self, engine):
+        engine.jump_to_zone("Clearfell")
+        assert engine.current_step_id == "s3"
+
+    def test_jumps_to_lowest_step_number_when_multiple_steps(self, engine):
+        # Clearfell has s3 (step 3) and s4 (step 4); must land on s3
+        engine.jump_to_zone("Clearfell")
+        assert engine.steps[engine.current_step_id].step_number == 3
+
+    def test_unknown_zone_leaves_step_unchanged(self, engine):
+        engine.current_step_id = "s2"
+        engine.jump_to_zone("Nonexistent Zone")
+        assert engine.current_step_id == "s2"
+
+    def test_jump_to_single_step_zone(self, engine):
+        engine.jump_to_zone("The Mud Burrow")
+        assert engine.current_step_id == "s5"
