@@ -277,6 +277,25 @@ class TestClientTxtCommonLayoutDiscovery:
             assert found is not None
             assert _POE2_CLIENT_TXT_RELPATH in str(found)
 
+    def test_find_all_returns_both_layouts(self, tmp_path):
+        """A prefix-layout and a common-layout Client.txt in the same
+        library are distinct candidates — find_all must return both,
+        prefix first (matching find_poe2_client_txt's preference)."""
+        from sin_guide.utils.steam_discovery import (
+            _POE2_CLIENT_TXT_RELPATH,
+            find_all_poe2_client_txt,
+        )
+        steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
+        _create_fake_prefix(steam_dir)
+        common = _create_fake_common_layout(steam_dir)
+
+        with mock.patch("sin_guide.utils.steam_discovery._resolve_steam_data_dir", return_value=steam_dir):
+            results = find_all_poe2_client_txt()
+
+        assert len(results) == 2
+        assert _POE2_CLIENT_TXT_RELPATH in str(results[0])
+        assert results[1] == common
+
     def test_returns_none_when_no_layout_has_client_txt(self, tmp_path):
         steam_dir = _make_fake_steam_dir(tmp_path, NEW_STYLE_VDF)
 
