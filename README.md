@@ -154,8 +154,7 @@ sin_guide/
 │   ├── gems/
 │   │   └── poe2_gems.json  # 280+ gem database (skill/spirit/support)
 │   ├── guides/
-│   │   ├── poe2_campaign.json  # 281-step campaign guide (acts 1-7)
-│   │   └── generate_guide.py   # Guide data generator
+│   │   └── poe2_campaign.json  # 281-step campaign guide (acts 1-7)
 │   └── zones.json          # 60+ zone-to-level mappings for EXP calc
 ├── overlay/
 │   ├── main_window.py      # PySide6 overlay window (431 lines)

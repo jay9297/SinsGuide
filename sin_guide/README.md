@@ -69,8 +69,7 @@ sin_guide/
 │   ├── gems/
 │   │   └── poe2_gems.json  # Gem database (skill/spirit/support)
 │   ├── guides/
-│   │   ├── poe2_campaign.json  # Campaign guide
-│   │   └── generate_guide.py   # Guide data generator
+│   │   └── poe2_campaign.json  # Campaign guide
 │   └── zones.json          # Zone-to-level mappings
 ├── overlay/
 │   ├── main_window.py      # PySide6 overlay UI
