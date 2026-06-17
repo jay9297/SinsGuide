@@ -12,7 +12,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from sin_guide.app import LogWatcherThread, SinGuideApp, _configure_platform, main
+from sin_guide.app import (
+    LogWatcherThread,
+    SinGuideApp,
+    _configure_platform,
+    _detect_startup_zone,
+    main,
+)
 from sin_guide.core.log_parser import LogEvent, LogEventType
 
 
@@ -90,6 +96,41 @@ class TestLogWatcherRun:
         self._stop_after_first_sleep(watcher, monkeypatch)
 
         watcher.run()  # must not raise
+
+
+class TestLogWatcherStartOffset:
+    def _stop_after_first_sleep(self, watcher, monkeypatch):
+        def fake_sleep(_):
+            watcher.running = False
+        monkeypatch.setattr("sin_guide.app.time.sleep", fake_sleep)
+
+    def test_start_offset_skips_earlier_content(self, tmp_path, monkeypatch):
+        client_txt = tmp_path / "Client.txt"
+        earlier = "2026/01/01 10:00:00 1 [SCENE] Set Source [Clearfell]\n"
+        later = "2026/01/01 10:00:05 1 [SCENE] Set Source [The Mud Burrow]\n"
+        client_txt.write_text(earlier + later)
+
+        offset = len(earlier.encode())
+        watcher = LogWatcherThread(str(client_txt), start_offset=offset)
+        self._stop_after_first_sleep(watcher, monkeypatch)
+        zones: list[str] = []
+        watcher.zone_entered.connect(zones.append)
+
+        watcher.run()
+
+        assert zones == ["The Mud Burrow"]
+
+    def test_default_offset_reads_all_content(self, tmp_path, monkeypatch):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text("2026/01/01 10:00:00 1 [SCENE] Set Source [Clearfell]\n")
+        watcher = LogWatcherThread(str(client_txt))
+        self._stop_after_first_sleep(watcher, monkeypatch)
+        zones: list[str] = []
+        watcher.zone_entered.connect(zones.append)
+
+        watcher.run()
+
+        assert zones == ["Clearfell"]
 
 
 # ---------------------------------------------------------------------------
@@ -235,6 +276,7 @@ class TestInitWatcher:
         config.get.return_value = str(client_txt)
         double = SimpleNamespace(
             config=config,
+            _startup_offset=0,
             _on_zone_entered=MagicMock(),
             _on_level_up=MagicMock(),
             _on_loading=MagicMock(),
@@ -243,7 +285,7 @@ class TestInitWatcher:
         with patch("sin_guide.app.LogWatcherThread") as thread_cls:
             SinGuideApp._init_watcher(double)
 
-        thread_cls.assert_called_once_with(str(client_txt))
+        thread_cls.assert_called_once_with(str(client_txt), start_offset=0)
         double.watcher.start.assert_called_once_with()
 
     def test_no_watcher_when_client_txt_missing(self):
@@ -254,6 +296,104 @@ class TestInitWatcher:
         SinGuideApp._init_watcher(double)
 
         assert double.watcher is None
+
+
+class TestDetectStartupZone:
+    def _zone_line(self, zone: str) -> str:
+        return f"2026/01/01 10:00:00 1 [SCENE] Set Source [{zone}]\n"
+
+    def test_returns_none_when_file_missing(self, tmp_path):
+        zone, offset = _detect_startup_zone(str(tmp_path / "missing.txt"))
+        assert zone is None
+        assert offset == 0
+
+    def test_returns_none_when_no_zone_entries(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text("2026/01/01 10:00:00 1 some other log line\n")
+        zone, offset = _detect_startup_zone(str(client_txt))
+        assert zone is None
+        assert offset == client_txt.stat().st_size
+
+    def test_returns_last_non_hideout_zone(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text(
+            self._zone_line("Clearfell")
+            + self._zone_line("The Mud Burrow")
+        )
+        zone, _ = _detect_startup_zone(str(client_txt))
+        assert zone == "The Mud Burrow"
+
+    def test_skips_hideout_zones(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text(
+            self._zone_line("Clearfell")
+            + self._zone_line("Hideout")
+        )
+        zone, _ = _detect_startup_zone(str(client_txt))
+        assert zone == "Clearfell"
+
+    def test_returns_file_size_as_offset(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        content = self._zone_line("Clearfell")
+        client_txt.write_text(content)
+        _, offset = _detect_startup_zone(str(client_txt))
+        assert offset == client_txt.stat().st_size
+
+    def test_reads_tail_when_file_exceeds_64kb(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        padding = "x" * 70_000
+        client_txt.write_text(
+            padding + self._zone_line("Clearfell") + self._zone_line("The Mud Burrow")
+        )
+        zone, offset = _detect_startup_zone(str(client_txt))
+        assert zone == "The Mud Burrow"
+        assert offset == client_txt.stat().st_size
+
+    def test_returns_none_none_zero_when_open_raises(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text(self._zone_line("Clearfell"))
+        with patch("builtins.open", side_effect=PermissionError("denied")):
+            zone, offset = _detect_startup_zone(str(client_txt))
+        assert zone is None
+        assert offset == 0
+
+
+class TestInitStartupZone:
+    def test_jumps_guide_and_returns_file_size(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text(
+            "2026/01/01 10:00:00 1 [SCENE] Set Source [Clearfell]\n"
+        )
+        config = MagicMock()
+        config.get.return_value = str(client_txt)
+        guide = MagicMock()
+        double = SimpleNamespace(config=config, guide=guide)
+
+        offset = SinGuideApp._init_startup_zone(double)
+
+        guide.jump_to_zone.assert_called_once_with("Clearfell")
+        assert offset == client_txt.stat().st_size
+
+    def test_does_not_jump_when_no_zone_detected(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text("no zone lines here\n")
+        config = MagicMock()
+        config.get.return_value = str(client_txt)
+        guide = MagicMock()
+        double = SimpleNamespace(config=config, guide=guide)
+
+        SinGuideApp._init_startup_zone(double)
+
+        guide.jump_to_zone.assert_not_called()
+
+    def test_returns_zero_when_no_client_txt_configured(self):
+        config = MagicMock()
+        config.get.return_value = ""
+        double = SimpleNamespace(config=config, guide=MagicMock())
+
+        offset = SinGuideApp._init_startup_zone(double)
+
+        assert offset == 0
 
 
 class TestInitRegexHotkeyDirect:

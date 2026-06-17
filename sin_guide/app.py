@@ -24,6 +24,39 @@ from sin_guide.utils.steam_discovery import get_client_txt_path
 logger = logging.getLogger(__name__)
 
 
+_HIDEOUT_ZONES = frozenset({"hideout", "your hideout"})
+_TAIL_BYTES = 65536  # 64 KB covers a typical session's recent log entries
+
+
+def _detect_startup_zone(client_txt_path: str) -> tuple[str | None, int]:
+    """Scan the tail of Client.txt for the most recent non-hideout zone.
+
+    Returns (zone_name, file_size). file_size is used as the watcher's
+    start_offset so it tails from the current end rather than replaying history.
+    """
+    try:
+        path = Path(client_txt_path)
+        if not path.exists():
+            return None, 0
+        file_size = path.stat().st_size
+        offset = max(0, file_size - _TAIL_BYTES)
+        parser = LogParser()
+        last_zone: str | None = None
+        with open(client_txt_path, "r", encoding="utf-8", errors="ignore") as f:
+            f.seek(offset)
+            if offset > 0:
+                f.readline()  # discard partial first line at seek boundary
+            for line in f:
+                event = parser.parse_line(line.strip())
+                if event and event.event_type == LogEventType.ENTERED_ZONE:
+                    if event.data.lower() not in _HIDEOUT_ZONES:
+                        last_zone = event.data
+        return last_zone, file_size
+    except Exception:
+        logger.exception("Failed to detect startup zone")
+        return None, 0
+
+
 class LogWatcherThread(QThread):
     zone_entered = Signal(str)
     boss_killed = Signal(str)
@@ -32,15 +65,16 @@ class LogWatcherThread(QThread):
     generating_area = Signal(str)
     connecting = Signal()
 
-    def __init__(self, client_txt_path: str):
+    def __init__(self, client_txt_path: str, start_offset: int = 0):
         super().__init__()
         self.client_txt_path = client_txt_path
+        self._start_offset = start_offset
         self.running = False
         self.parser = LogParser()
 
     def run(self):
         self.running = True
-        last_size = 0
+        last_size = self._start_offset
         while self.running:
             try:
                 if not os.path.exists(self.client_txt_path):
@@ -94,6 +128,7 @@ class SinGuideApp(QObject):
         self._regex_f6_used_modifier: bool = False
         self._init_paths()
         self._init_components()
+        self._startup_offset = self._init_startup_zone()
         self._init_overlay()
         self._init_watcher()
         self._init_hotkeys()
@@ -126,6 +161,17 @@ class SinGuideApp(QObject):
         self.timer = CampaignTimer(self.config.config_dir / "exports")
         self.exp_calc = ExpCalculator()
         self.tracker = WindowTracker()
+
+    def _init_startup_zone(self) -> int:
+        """Jump the guide to the last known zone and return the file offset for the watcher."""
+        client_txt = self.config.get("paths.client_txt", "")
+        if not client_txt:
+            return 0
+        startup_zone, file_size = _detect_startup_zone(client_txt)
+        if startup_zone:
+            logger.info("Startup zone detected: '%s' — pre-positioning guide", startup_zone)
+            self.guide.jump_to_zone(startup_zone)
+        return file_size
 
     def _init_overlay(self):
         self.overlay = OverlayWindow(self.config, self.guide, self.timer, self.exp_calc)
@@ -171,7 +217,7 @@ class SinGuideApp(QObject):
     def _init_watcher(self):
         client_txt = self.config.get("paths.client_txt", "")
         if client_txt and os.path.exists(client_txt):
-            self.watcher = LogWatcherThread(client_txt)
+            self.watcher = LogWatcherThread(client_txt, start_offset=self._startup_offset)
             self.watcher.zone_entered.connect(self._on_zone_entered)
             self.watcher.level_up.connect(self._on_level_up)
             self.watcher.connecting.connect(self._on_loading)
