@@ -152,7 +152,12 @@ class GuideEngine:
         logger.debug(f"No advancement for zone='{zone}'")
 
     def jump_to_zone(self, zone: str) -> None:
-        """Jump to the first guide step whose zone matches the given zone name."""
+        """Jump to the first guide step whose zone matches the given zone name.
+
+        Also sets ``current_zone`` so that ``get_visible_steps`` resolves the
+        target zone from the new position rather than the stale value left by
+        a previous ``handle_zone_enter`` call.
+        """
         candidates = [
             (step.step_number, sid)
             for sid, step in self.steps.items()
@@ -161,6 +166,7 @@ class GuideEngine:
         if candidates:
             _, step_id = min(candidates)
             self.current_step_id = step_id
+            self.current_zone = zone
 
     def reset(self):
         if self.steps:

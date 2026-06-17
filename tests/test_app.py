@@ -339,6 +339,24 @@ class TestDetectStartupZone:
         _, offset = _detect_startup_zone(str(client_txt))
         assert offset == client_txt.stat().st_size
 
+    def test_reads_tail_when_file_exceeds_64kb(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        padding = "x" * 70_000
+        client_txt.write_text(
+            padding + self._zone_line("Clearfell") + self._zone_line("The Mud Burrow")
+        )
+        zone, offset = _detect_startup_zone(str(client_txt))
+        assert zone == "The Mud Burrow"
+        assert offset == client_txt.stat().st_size
+
+    def test_returns_none_none_zero_when_open_raises(self, tmp_path):
+        client_txt = tmp_path / "Client.txt"
+        client_txt.write_text(self._zone_line("Clearfell"))
+        with patch("builtins.open", side_effect=PermissionError("denied")):
+            zone, offset = _detect_startup_zone(str(client_txt))
+        assert zone is None
+        assert offset == 0
+
 
 class TestInitStartupZone:
     def test_jumps_guide_and_returns_file_size(self, tmp_path):

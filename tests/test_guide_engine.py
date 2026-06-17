@@ -122,3 +122,10 @@ class TestJumpToZone:
     def test_jump_to_single_step_zone(self, engine):
         engine.jump_to_zone("The Mud Burrow")
         assert engine.current_step_id == "s5"
+
+    def test_updates_current_zone_for_visible_steps(self, engine):
+        engine.current_zone = "The Riverbank"
+        engine.jump_to_zone("Clearfell")
+        assert engine.current_zone == "Clearfell"
+        visible = engine.get_visible_steps(league_start=True, show_optionals=True)
+        assert {s.zone for s in visible} == {"Clearfell"}
